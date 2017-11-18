@@ -23,7 +23,8 @@ The repo, as is, contains four examples for you to try out and expand. Lets' tak
 
 ## Cloning the Repo
 You can clone the repo locally using Git Bash/Shell as follows:
-```
+```bash
+cd <to the your workspace folder>
 git clone git@ada.csse.rose-hulman.edu:CSSE374-Public/RevEngD.git
 ```
 
@@ -31,13 +32,13 @@ git clone git@ada.csse.rose-hulman.edu:CSSE374-Public/RevEngD.git
 You can import the cloned folder as a Gradle project in Eclipse or IntelliJ IDEs.
 
 ## Running the Examples
-###Running From Command Line
-```
-cd <to the RevEngD folder>
+### Running From Command Line
+```bash
+cd RevEngD
 ./gradlew run
 ```
-It should present a prompt:
-```
+It should present the following prompt:
+```bash
 ========================= Your choices ========================= 
 1 - E1SimpleDirectoryLoading
 2 - E2TypeHierarchy
@@ -46,8 +47,8 @@ It should present a prompt:
 ========================== End choices ========================= 
 Please enter your choice (number) or press q to quit: 
 ```
-Enter the number corresponding to the example that you want to run, sit back, and enjoy the ride.
+Enter the number corresponding to the example that you want to run, sit back, and enjoy the ride. Make sure you review the code in the project before running the examples. 
 
-###Running From Eclipse/IntelliJ
+### Running From Eclipse/IntelliJ
 In your IDE, open the Gradle Tasks view and double-click on the **run** task under **application**. 
 

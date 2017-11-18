@@ -20,6 +20,7 @@ The repo, as is, contains four examples for you to try out and expand. Lets' tak
    * **ExamplesDriver** - Implements REPL to drive the above four examples from command prompt.
 3. [Fixtures](/src/main/java/csse374/revengd/examples/fixtures) - Contains a sample calculator application for running test and examples.
 
+Each example has some **TODOs** for you to complete. Please complete them to solidify your understanding of the concepts.
 
 ## Cloning the Repo
 You can clone the repo locally using Git Bash/Shell as follows:
@@ -52,3 +53,5 @@ Enter the number corresponding to the example that you want to run, sit back, an
 ### Running From Eclipse/IntelliJ
 In your IDE, open the Gradle Tasks view and double-click on the **run** task under **application**. 
 
+## Other Notes
+The project is configured to use Log4J, which you can also use for your own classes. See [SceneBuilder API](/src/main/java/csse374/revengd/soot/SceneBuilder.java) for an example. 

@@ -140,7 +140,7 @@ public class SceneBuilderTest {
 
 	@Test
 	public void testProcessDirShouldAnalyzeAllClassesInDir() {
-		Path path = Paths.get("build", "classes", "java", "test");
+		Path path = Paths.get("build", "classes", "main");
 		if(!path.toFile().exists()) {
 			path = Paths.get("bin");
 			

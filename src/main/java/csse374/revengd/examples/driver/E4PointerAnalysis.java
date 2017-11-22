@@ -48,9 +48,10 @@ public class E4PointerAnalysis implements Runnable {
 		
 		// Let's  get hold of the CalculatorApp.performMultiply() method first
 		SootClass calculatorApp = scene.getSootClass("csse374.revengd.examples.fixtures.CalculatorApp");
-		SootMethod mainMethod = calculatorApp.getMethodByName("performMultiply");
+		SootMethod performMulMethod = calculatorApp.getMethodByName("performMultiply");
 		
-		Body body = mainMethod.retrieveActiveBody();
+		// Let's retrieve the body of the performMultiply() method
+		Body body = performMulMethod.retrieveActiveBody();
 		UnitGraph cfg = new ExceptionalUnitGraph(body);
 		prettyPrint("Statements in the CalculatorApp.performMultiply() method", cfg);
 		

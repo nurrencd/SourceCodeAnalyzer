@@ -73,7 +73,8 @@ public class E4PointerAnalysis implements Runnable {
 			}
 		});
 		
-		// TODO: Can you find who which method(s) call CalculatorA.add()?
+		// TODO: Can you find which method(s) call CalculatorA.add()?
+		// You will need to show the name of the declaring class as well.
 	}
 	
 	// This is context-insensitive analysis

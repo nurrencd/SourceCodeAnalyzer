@@ -12,6 +12,7 @@ import soot.Unit;
 import soot.Value;
 import soot.jimple.AssignStmt;
 import soot.jimple.InvokeExpr;
+import soot.jimple.InvokeStmt;
 import soot.tagkit.LineNumberTag;
 import soot.tagkit.Tag;
 import soot.toolkits.graph.ExceptionalUnitGraph;
@@ -57,15 +58,26 @@ public class E3ControlFlowGraph implements Runnable {
 					if(method.getName().equals("nextBoolean") &&
 							method.getDeclaringClass().getName().equals("java.util.Random")) {
 						System.out.println("Found call to Random.nextBoolean() at line number: " + this.getLineNumber(stmt));
-					}					
+					}
 				}
 			}
 		});
 		
 		// TODO: Can you find (line number) call to CalculatorApp.performAdd()?
 		// HINT: performAdd() does not return any value, so you should be looking for InvokeStmt (not AssignStmt)
+		System.out.println("Looking up calls to the CalculatorApp.performAdd() method ...");
+		cfg.forEach(stmt -> {
+			if(stmt instanceof InvokeStmt) {
+				// If a method returns a value, then we should look for AssignStmt whose right hand side is InvokeExpr
+				InvokeExpr invkExpr = ((InvokeStmt) stmt).getInvokeExpr();
+				SootMethod method = invkExpr.getMethod();
+				if(method.getName().equals("performAdd") &&
+						method.getDeclaringClass().getName().equals("csse374.revengd.examples.fixtures.CalculatorApp")) {
+					System.out.println("Found call to CalculatorApp.performAdd() at line number: " + this.getLineNumber(stmt));
+				}
+			}
+		});
 	}
-	
 	
 	void prettyPrint(String title, Iterable<Unit> stmts) {
 		System.out.println("-------------------------------------------------");

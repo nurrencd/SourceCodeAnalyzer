@@ -40,9 +40,10 @@ public class E3ControlFlowGraph implements Runnable {
 		SootClass calculatorApp = scene.getSootClass("csse374.revengd.examples.fixtures.CalculatorApp");
 		SootMethod mainMethod = calculatorApp.getMethodByName("main");
 		
+		// Let's retrieve the body of the main method
 		Body body = mainMethod.retrieveActiveBody();
-		UnitGraph cfg = new ExceptionalUnitGraph(body);
-		prettyPrint("Statements in the Calculator.main() method", cfg);
+		UnitGraph cfg = new ExceptionalUnitGraph(body);						// Creates a Control-Flow Graph from the body
+		prettyPrint("Statements in the Calculator.main() method", cfg);		// Prints the statements in the control flow graph
 		
 		// Suppose we want to find a call to Random.nextBoolean(), how do we do that? Here is how:
 		System.out.println("Looking up call to the Random.nextBoolean() method ...");
@@ -62,7 +63,7 @@ public class E3ControlFlowGraph implements Runnable {
 		});
 		
 		// TODO: Can you find (line number) call to CalculatorApp.performAdd()?
-		// HINT: performAdd() does not return any value, so you should be looking for InvokeStmt
+		// HINT: performAdd() does not return any value, so you should be looking for InvokeStmt (not AssignStmt)
 	}
 	
 	

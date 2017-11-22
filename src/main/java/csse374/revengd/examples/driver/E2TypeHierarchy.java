@@ -1,8 +1,10 @@
 package csse374.revengd.examples.driver;
 
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 
 import csse374.revengd.soot.SceneBuilder;
 import soot.Hierarchy;
@@ -41,7 +43,34 @@ public class E2TypeHierarchy implements Runnable {
 		// classes and interfaces, of CalculatorC?
 		// HINT: This is not as straightforward as it sounds using the Hierarchy API.
 		// See if there are methods in the SootClass that can help.
+		SootClass calculatorC = scene.getSootClass("csse374.revengd.examples.fixtures.CalculatorC");
+		Collection<SootClass> allSuperTypes = new HashSet<>();
+		this.computeAllSuperTypes(calculatorC, allSuperTypes);		
+		this.prettyPrint("Super types of CalcualtorC using the SootClass API:", allSuperTypes);
 	}
+	
+	void computeAllSuperTypes(final SootClass clazz, final Collection<SootClass> allSuperTypes) {
+		if(clazz.getName().equals("java.lang.Object"))
+			return;
+		
+		Collection<SootClass> directSuperTypes = new ArrayList<SootClass>();
+
+		SootClass superClazz = clazz.getSuperclass();
+		if(superClazz != null)
+			directSuperTypes.add(superClazz);
+		
+		if(clazz.getInterfaceCount() > 0)
+			directSuperTypes.addAll(clazz.getInterfaces());
+
+		directSuperTypes.forEach(aType -> {
+			if(!allSuperTypes.contains(aType)) {
+				allSuperTypes.add(aType);
+				this.computeAllSuperTypes(aType, allSuperTypes);					
+			}
+		});
+	}
+	
+	
 	
 	<T> void prettyPrint(String title, Iterable<T> iterable) {
 		System.out.println("-------------------------------------------------");

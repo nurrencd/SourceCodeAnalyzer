@@ -37,5 +37,8 @@ public class CalculatorApp {
 		CalculatorApp app = new CalculatorApp(calc);
 		app.performAdd();
 		app.performMultiply();
+		
+		UnrelatedClass anotherApp = new UnrelatedClass();
+		anotherApp.sayConditionalHello(true);
 	}
 }

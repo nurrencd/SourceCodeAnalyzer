@@ -75,7 +75,26 @@ public class E4PointerAnalysis implements Runnable {
 		
 		// TODO: Can you find which method(s) call CalculatorA.add()?
 		// You will need to show the name of the declaring class as well.
+		SootClass calculatorA = scene.getSootClass("csse374.revengd.examples.fixtures.CalculatorA");
+		SootMethod addMethod = calculatorA.getMethodByName("add");
+		this.performReferenceAnalysis(scene, addMethod);
 	}
+	
+	void performReferenceAnalysis(Scene scene, SootMethod method) {
+		System.out.println("Performing reference analysis for " + method.getName() + "() ...");
+		CallGraph callGraph = scene.getCallGraph();
+		
+		Collection<SootMethod> srcMethods = new ArrayList<>();
+		callGraph.edgesInto(method).forEachRemaining(edge -> {
+			MethodOrMethodContext methodOrCntxt = edge.getSrc();
+			SootMethod srcMethod = methodOrCntxt.method();
+			if(srcMethod != null) {
+				srcMethods.add(srcMethod);
+			}
+		});
+		this.prettyPrintMethods("Reference anaylysis resolution for", method, srcMethods);
+	}
+	
 	
 	// This is context-insensitive analysis
 	void performCHAPointerAnalysis(Scene scene, SootMethod method) {

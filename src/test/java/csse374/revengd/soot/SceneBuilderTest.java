@@ -12,6 +12,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.mockito.Mockito.*;
+
 import csse374.revengd.soot.SceneBuilder;
 import soot.Scene;
 
@@ -98,13 +100,21 @@ public class SceneBuilderTest {
 	}
 
 	@Test
-	public void testSetEntryMethod() {
-		String entryMethod = "main";
-
-		builder.setEntryMethod(entryMethod);
-		assertEquals(entryMethod, builder.entryMethodToLoad);
+	public void testAddEnterPointMatcher() {
+		List<IEntryPointMatcher> matchers = Arrays.asList(mock(IEntryPointMatcher.class), mock(IEntryPointMatcher.class));
+		matchers.forEach(matcher -> builder.addEntryPointMatcher(matcher));
+		
+		assertEquals(matchers, builder.matchers);
 	}
 
+	@Test
+	public void testAddEnterPointMatchers() {
+		List<IEntryPointMatcher> matchers = Arrays.asList(mock(IEntryPointMatcher.class), mock(IEntryPointMatcher.class));
+		builder.addEntryPointMatchers(matchers);
+		
+		assertEquals(matchers, builder.matchers);
+	}
+	
 	@Test
 	public void testAddExclusion() {
 		List<String> exclusions = Arrays.asList("abc.*", "def.abc.*");
@@ -126,7 +136,7 @@ public class SceneBuilderTest {
 		final Scene scene = SceneBuilder.create()
 				.addExclusions(Arrays.asList("sun.*", "soot.*", "polygot.*"))
 				.setEntryClass("csse374.revengd.examples.fixtures.CalculatorApp")
-				.setEntryMethod("main")
+				.addEntryPointMatcher(new MainMethodMatcher("csse374.revengd.examples.fixtures.CalculatorApp"))
 				.build();
 
 		this.allRechableClassesFromEntry.forEach(clazz -> {
@@ -155,7 +165,7 @@ public class SceneBuilderTest {
 		final Scene scene = SceneBuilder.create()
 				.addExclusions(Arrays.asList("sun.*", "soot.*", "polygot.*"))
 				.setEntryClass("csse374.revengd.examples.fixtures.CalculatorApp")
-				.setEntryMethod("main")
+				.addEntryPointMatcher(new MainMethodMatcher("csse374.revengd.examples.fixtures.CalculatorApp"))
 				.addDirectory(path.toAbsolutePath().toString())
 				.build();
 

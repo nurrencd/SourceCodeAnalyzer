@@ -3,6 +3,7 @@ package csse374.revengd.examples.driver;
 import java.nio.file.Paths;
 import java.util.Arrays;
 
+import csse374.revengd.soot.MainMethodMatcher;
 import csse374.revengd.soot.SceneBuilder;
 import soot.Body;
 import soot.Scene;
@@ -29,7 +30,7 @@ public class E3ControlFlowGraph implements Runnable {
 		Scene scene = SceneBuilder.create()
 				.addDirectory(dirToLoad)												// Add the directory from which to load the file or jars
 				.setEntryClass("csse374.revengd.examples.fixtures.CalculatorApp")		// Sets the entry point class for the application under analysis
-				.setEntryMethod("main")												// The main method
+				.addEntryPointMatcher(new MainMethodMatcher("csse374.revengd.examples.fixtures.CalculatorApp"))	// Matches main method of CalculatorApp
 				.addExclusions(Arrays.asList("java.*", "javax.*", "sun.*")) 			// Exclude JDK classes from analysis
 				.addExclusions(Arrays.asList("soot.*", "polygot.*"))					// Exclude SOOT classes from analysis 
 				.addExclusions(Arrays.asList("org.*", "com.*"))						// Exclude other library classes from analysis 

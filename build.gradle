@@ -9,10 +9,10 @@ repositories {
         url "https://maven.csse.rose-hulman.edu/artifactory/libs-release"
     }
     maven {
-	    url "http://soot-build.cs.uni-paderborn.de/nexus/repository/soot-release"
+	    url "https://soot-build.cs.uni-paderborn.de/nexus/repository/soot-release"
     }
     maven {
-	    url "http://soot-build.cs.uni-paderborn.de/nexus/repository/soot-snapshot"
+	    url "https://soot-build.cs.uni-paderborn.de/nexus/repository/soot-snapshot"
     }
 }
 

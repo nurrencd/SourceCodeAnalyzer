@@ -21,13 +21,13 @@ import soot.options.Options;
  * This class is a thin wrapper to help with setting up SOOT for whole-program analysis.
  * The API can be used by calling {@link #create()} followed by calls to other config
  * methods, such as, {@link #addDirectory(String)}, {@link #setEntryClass(String)}, and
- * {@link #setEntryMethod(String)}, and then finally calling {@link #build()} to acquire 
+ * {@link #addEntryMethod(String)}, and then finally calling {@link #build()} to acquire 
  * the {@link soot.Scene} object, which has the result of the analysis. Here is a sample use:
  * <pre>
 		Scene scene = SceneBuilder.create()
 				.addDirectory(pathToBinOrSrcDir)										
 				.setEntryClass("class.with.Main")									
-				.setEntryMethod("main")												
+				.addEntryPointMatcher(new MainMethodMatcher("class.with.Main"))
 				.addExclusions(Arrays.asList("java.*", "javax.*", "sun.*")) 			
 				.addExclusions(Arrays.asList("soot.*", "polygot.*"))					 
 				.addExclusions(Arrays.asList("org.*", "com.*"))						 
@@ -53,6 +53,7 @@ public class SceneBuilder {
 	List<String> classesToLoad;
 	List<String> dirsToProcess;
 	List<String> exclusions;
+	List<IEntryPointMatcher> matchers;
 	
 	String entryClassToLoad;
 	String entryMethodToLoad;
@@ -75,6 +76,7 @@ public class SceneBuilder {
 		this.classesToLoad = new ArrayList<>();
 		this.dirsToProcess = new ArrayList<>();
 		this.exclusions = new ArrayList<>();
+		this.matchers = new ArrayList<>();
 		this.nameToClassMap = new HashMap<>();
 	}
 	
@@ -153,16 +155,28 @@ public class SceneBuilder {
 	}
 	
 	/**
-	 * The {@link SceneBuilder} API is designed to help setup SOOT for the whole program analysis.
-	 * The whole-program analysis needs a class(s) with the <tt>main</tt> method as the starting point.
-	 * Use this method to set the entry method of the main class (typically <tt>main</tt> itself).
+	 * Adds an {@link IEntryPointMatcher} to {@link SceneBuilder}. The entry points ({@link SootMethod}s)
+	 * is used to construct call-graph.
 	 * 
-	 * @param method The name of the method, e.g., <tt>main, run, actionPerformed</tt>
+	 * @param matcher An {@link IEntryPointMatcher} to be added
 	 * @return {@link SceneBuilder} The builder object being used to build a {@link Scene}.
 	 */
-	public SceneBuilder setEntryMethod(String method) {
-		this.entryMethodToLoad = method;
-		logger.debug("Entry method set - " + method);		
+	public SceneBuilder addEntryPointMatcher(IEntryPointMatcher matcher) {
+		this.matchers.add(matcher);
+		logger.debug("Entry method matcher added");		
+		return this;
+	}
+	
+	/**
+	 * Adds a collection of {@link IEntryPointMatcher} to {@link SceneBuilder}. The entry points 
+	 * ({@link SootMethod}s) is used to construct call-graph.
+	 * 
+	 * @param matchers A collection of {@link IEntryPointMatcher} to be added
+	 * @return {@link SceneBuilder} The builder object being used to build a {@link Scene}.
+	 */
+	public SceneBuilder addEntryPointMatchers(Collection<IEntryPointMatcher> matchers) {
+		this.matchers.addAll(matchers);
+		logger.debug("Entry method matchers added");
 		return this;
 	}
 
@@ -235,15 +249,16 @@ public class SceneBuilder {
 		
 		Scene scene = Scene.v();
 		
-		SootClass mainClass = this.loadMainClass(this.entryClassToLoad);
-		List<SootMethod> entryPointList = new ArrayList<>();
-		entryPointList.add(mainClass.getMethodByName(this.entryMethodToLoad));
-		scene.setEntryPoints(entryPointList);
-
 		for(String clazz : this.classesToLoad) {
 			this.loadClass(clazz);
 		}
-	
+
+		this.loadMainClass(this.entryClassToLoad);
+//		SootClass mainClass = this.loadMainClass(this.entryClassToLoad);
+//		List<SootMethod> entryPointList = new ArrayList<>();
+//		entryPointList.add(mainClass.getMethodByName(this.entryMethodToLoad));
+		scene.setEntryPoints(this.computeEntryPoints(scene));
+		
 		try {
 			scene.loadNecessaryClasses();
 		}
@@ -258,6 +273,22 @@ public class SceneBuilder {
 		logger.info("SOOT analysis complete!");
 
 		return scene;
+	}
+	
+	private List<SootMethod> computeEntryPoints(Scene scene) {
+		List<SootMethod> methods = new ArrayList<SootMethod>();
+		for(SootClass clazz: scene.getApplicationClasses()) {
+			for(IEntryPointMatcher matcher: this.matchers) {
+				if(matcher.match(clazz) && clazz.getMethodCount() > 0) {
+					for(SootMethod method: clazz.getMethods()) {
+						if(matcher.match(method)) {
+							methods.add(method);
+						}
+					}
+				}
+			}
+		}
+		return methods;
 	}
 	
 	private String buildClassPath() {

@@ -147,7 +147,7 @@ public class SceneBuilderTest {
 			assertFalse(scene.containsClass(clazz));
 		});
 	}
-
+	
 	@Test
 	public void testProcessDirShouldAnalyzeAllClassesInDir() {
 		Path path = Paths.get("build", "classes", "main");

@@ -50,7 +50,6 @@ public class SceneBuilder {
 	private static final Logger logger = LogManager.getLogger(SceneBuilder.class.getName());
 
 	List<String> classPaths;
-	List<String> classesToLoad;
 	List<String> dirsToProcess;
 	List<String> exclusions;
 	List<IEntryPointMatcher> matchers;
@@ -73,7 +72,6 @@ public class SceneBuilder {
 
 	private SceneBuilder() {
 		this.classPaths = new ArrayList<>();
-		this.classesToLoad = new ArrayList<>();
 		this.dirsToProcess = new ArrayList<>();
 		this.exclusions = new ArrayList<>();
 		this.matchers = new ArrayList<>();
@@ -249,14 +247,7 @@ public class SceneBuilder {
 		
 		Scene scene = Scene.v();
 		
-		for(String clazz : this.classesToLoad) {
-			this.loadClass(clazz);
-		}
-
 		this.loadMainClass(this.entryClassToLoad);
-//		SootClass mainClass = this.loadMainClass(this.entryClassToLoad);
-//		List<SootMethod> entryPointList = new ArrayList<>();
-//		entryPointList.add(mainClass.getMethodByName(this.entryMethodToLoad));
 		scene.setEntryPoints(this.computeEntryPoints(scene));
 		
 		try {
@@ -309,20 +300,6 @@ public class SceneBuilder {
 		});
 
 		return builder.toString();
-	}
-	
-	/**
-	 * Loads a class to the soot.
-	 * 
-	 * @param name The qualified name of the class to be loaded in Soot.
-	 * @return {@link SootClass} after loading.
-	 */
-	private SootClass loadClass(String name) {
-		SootClass sootClass = this.loadAppClass(name);
-		if(sootClass != null) {
-			this.nameToClassMap.put(name, sootClass);
-		}
-		return sootClass;
 	}
 	
 	// Load class here returns null so we might expect a null pointer exception somewhere

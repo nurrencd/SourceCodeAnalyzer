@@ -248,7 +248,6 @@ public class SceneBuilder {
 		Scene scene = Scene.v();
 		
 		this.loadMainClass(this.entryClassToLoad);
-		scene.setEntryPoints(this.computeEntryPoints(scene));
 		
 		try {
 			scene.loadNecessaryClasses();
@@ -258,9 +257,11 @@ public class SceneBuilder {
 			throw e;
 		}
 
+		scene.setEntryPoints(this.computeEntryPoints(scene));
+
 		logger.info("Running SOOT analysis ...");
 		PackManager manager = PackManager.v(); 
-		manager.runPacks();		
+		manager.runPacks();
 		logger.info("SOOT analysis complete!");
 
 		return scene;

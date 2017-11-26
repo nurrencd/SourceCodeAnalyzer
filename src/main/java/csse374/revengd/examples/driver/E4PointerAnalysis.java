@@ -33,6 +33,7 @@ public class E4PointerAnalysis implements Runnable {
 				.addDirectory(dirToLoad)												// Add the directory from which to load the file or jars
 				.setEntryClass("csse374.revengd.examples.fixtures.CalculatorApp")		// Sets the entry point class for the application under analysis
 				.addEntryPointMatcher(new MainMethodMatcher("csse374.revengd.examples.fixtures.CalculatorApp"))	// Matches main method of CalculatorApp
+//				.addEntryPointMatcher(new PublicMethodsMatcher("csse374.revengd.examples.fixtures.UnrelatedClass")) // Match all public method of UnrelatedClass
 				.addExclusions(Arrays.asList("java.*", "javax.*", "sun.*")) 			// Exclude JDK classes from analysis
 				.addExclusions(Arrays.asList("soot.*", "polygot.*"))					// Exclude SOOT classes from analysis 
 				.addExclusions(Arrays.asList("org.*", "com.*"))						// Exclude other library classes from analysis 
@@ -93,6 +94,14 @@ public class E4PointerAnalysis implements Runnable {
 				srcMethods.add(srcMethod);
 			}
 		});
+
+		// NOTE: The first time you run this, it will ignore the UnrelatedClass class in the fixtures package.
+		// This is because UnrelatedClass is not reachable from the main method of CalculatorApp.
+		// To make sure that we include classes such as this one in the call graph, we have to tell soot to 
+		// include it as an entry point. Uncomment line #35 above to do so.
+		//
+		// This is a typical scenario for library classes that are supposed to
+		// be used by another application.
 		this.prettyPrintMethods("Reference anaylysis resolution for", method, srcMethods);
 	}
 	

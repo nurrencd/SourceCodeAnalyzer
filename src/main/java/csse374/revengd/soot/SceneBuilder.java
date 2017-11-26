@@ -48,6 +48,7 @@ public class SceneBuilder {
 	private static final Logger logger = LogManager.getLogger(SceneBuilder.class.getName());
 
 	List<String> classPaths;
+	List<String> classes;
 	List<String> dirsToProcess;
 	List<String> exclusions;
 	List<IEntryPointMatcher> matchers;
@@ -69,6 +70,7 @@ public class SceneBuilder {
 
 	private SceneBuilder() {
 		this.classPaths = new ArrayList<>();
+		this.classes = new ArrayList<>();
 		this.dirsToProcess = new ArrayList<>();
 		this.exclusions = new ArrayList<>();
 		this.matchers = new ArrayList<>();
@@ -95,15 +97,44 @@ public class SceneBuilder {
 	 * Use it to add custom entries (directories or jars) as class path entries for
 	 * SOOT to find the classes that need loading.
 	 * 
-	 * @param classPath
-	 *            A list of class path entries.
-	 * @return {@link SceneBuilder} The builder object being used to build a
-	 *         {@link Scene}.
+	 * @param classPaths A list of class path entries.
+	 * @return {@link SceneBuilder} The builder object being used to build a {@link Scene}.
 	 * @see {@link #addDirectory(String)}, {@link #addDirectories(Collection)}
 	 */
 	public SceneBuilder addClassPaths(Collection<String> classPaths) {
 		this.classPaths.addAll(classPaths);
 		logger.debug("Classpaths added - " + classPaths);
+		return this;
+	}
+	
+	/**
+	 * Use it to add a class to be loaded for analysis by SOOT. You can use this method of
+	 * adding class if you want to have a fine-grained control over what classes you want
+	 * to load in SOOT for analysis. If you want to load all classes in a folder(s), then use
+	 * {@link #addDirectory(String)} or {@link #addDirectories(Collection)} methods. 
+	 * 
+	 * @param clazz A fully-qualified class class name.
+	 * @return {@link SceneBuilder} The builder object being used to build a {@link Scene}.
+	 */
+	public SceneBuilder addClass(String clazz) {
+		this.classes.add(clazz);
+		logger.debug("Class added for loading - " + clazz);
+		return this;
+	}
+	
+	/**
+	 * Use it to add a collection of classes to be loaded for analysis by SOOT. 
+	 * You can use this method of adding classes if you want to have a fine-grained control 
+	 * over what classes you want to load in SOOT for analysis. If you want to load all classes 
+	 * in a folder(s), then use {@link #addDirectory(String)} or {@link #addDirectories(Collection)} 
+	 * methods. 
+	 * 
+	 * @param classes A collection of class names.
+	 * @return {@link SceneBuilder} The builder object being used to build a {@link Scene}.
+	 */
+	public SceneBuilder addClasses(Collection<String> classes) {
+		this.classes.addAll(classes);
+		logger.debug("Class added for loading - " + classes);
 		return this;
 	}
 
@@ -269,6 +300,10 @@ public class SceneBuilder {
 
 		Scene scene = Scene.v();
 
+		for(String className: this.classes) {
+			scene.addBasicClass(className, SootClass.BODIES);
+		}
+		
 		this.loadMainClass(this.entryClassToLoad);
 		try {
 			scene.loadNecessaryClasses();
@@ -322,10 +357,9 @@ public class SceneBuilder {
 
 		return builder.toString();
 	}
-
-	// Load class here returns null so we might expect a null pointer exception
-	// somewhere
-	private synchronized SootClass loadAppClass(String name) {
+	
+	// Load class here returns null so we might expect a null pointer exception somewhere
+	private SootClass loadAppClass(String name) {
 		try {
 			logger.info("Loading " + name + " ...");
 			SootClass c = Scene.v().loadClassAndSupport(name);
@@ -336,10 +370,9 @@ public class SceneBuilder {
 			throw e;
 		}
 	}
-
-	// Load class here returns null so we might expect a null pointer exception
-	// somewhere
-	private synchronized SootClass loadMainClass(String name) {
+	
+	// Load class here returns null so we might expect a null pointer exception somewhere
+	private SootClass loadMainClass(String name) {
 		SootClass c = this.loadAppClass(name);
 		if (c != null) {
 			try {

@@ -325,14 +325,16 @@ public class SceneBuilder {
 		String projectClassPath = System.getProperty("java.class.path");		
 		builder.append(projectClassPath);
 		
+		final String sep = System.getProperty("os.name").toLowerCase().contains("windows") ? ";" : ":";
+		
 		if(!projectClassPath.contains("rt.jar")) {
 			String defaultClassPath = Scene.v().defaultClassPath();
-			builder.append(":");
+			builder.append(sep);
 			builder.append(defaultClassPath);
 		}
 		
 		this.classPaths.forEach(path -> {
-			builder.append(":");
+			builder.append(sep);
 			builder.append(path);
 		});
 

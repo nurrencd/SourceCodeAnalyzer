@@ -5,19 +5,28 @@ apply plugin: 'idea'
 apply plugin: 'application'
 
 repositories {
-    maven {
-        url "https://maven.csse.rose-hulman.edu/artifactory/libs-release"
+    maven {  
+    	url "https://maven.csse.rose-hulman.edu/artifactory/libs-release"
     }
-    flatDir {
-       dirs 'libs'
+    maven {
+	    url "https://soot-build.cs.uni-paderborn.de/nexus/repository/soot-release"
+    }
+    maven {
+	    url "https://soot-build.cs.uni-paderborn.de/nexus/repository/soot-snapshot"
     }
 }
 
 sourceCompatibility = 1.8
 version = "1.0.0-SNAPSHOT"
+eclipse {
+    classpath {
+        downloadJavadoc = true
+        downloadSources = true
+    }
+}
 
 dependencies {
-	compile name: 'soot-3.0.0-jar-with-dependencies'
+	compile 'ca.mcgill.sable:soot:3.+'
 	compile 'org.apache.logging.log4j:log4j-api:2.+'
 	compile 'org.apache.logging.log4j:log4j-core:2.+'
     testCompile 'junit:junit:4.+'

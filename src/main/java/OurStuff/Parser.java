@@ -22,5 +22,13 @@ public class Parser {
 		Subject system = new FileSystem();
 		system.makeFile(text);
 	}
+	
+	public void setCompiler(Compiler p){
+		
+	}
+	
+	public void setFilter(Filter f){
+		
+	}
 
 }

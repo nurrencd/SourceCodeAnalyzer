@@ -1,0 +1,69 @@
+Our design is good and nicely decomposed.
+Maybe a little weird observer pattern use.
+
+need to work with the first principle
+Our code has a good amount of abstraction, but it is on the wrong level
+
+What will change?
+- What kinds of information will change  (May try to filter out all classes that have getFilter method)
+- What type of analysis we will do on those classes
+- Need an output of one analyzer be the input of another analyzer
+   - Should create a pipeline of different Analyzers
+
+Won't change?
+- Will be reading from and parsing Java code.  (Need to do Soot Analysis)
+   -  We will always need soot classes and the analysis of them
+   -  No matter what we do, we are going to analyze a lot of Soot Classes and perform analysis on them
+   
+Need to form a hierarchy around what changes.
+Our hierarchy is at the second level.  We need to focus more on the fact that the analysis will change
+According to us, there are two tyoes of analysis, compiler and filter
+We want to be at the analyzer level, whether it be a filter analyzer or a code geenerator analyzer
+Now we can not include UML generator and it still works without changing anything
+
+Create IAnalyzer interface.  Instead of compile method we will need analyze method
+first analyzer is the SootLoader (needs to have config arguments)
+in main, pass arguments to Preprocessor class which will create a Map object (key, flag, value)
+create Data as a class that will work as the input and output of all of the classes
+  - fields (list of SootClasses, config object (Config Map), Scene Object)
+create IRelation (SootClass from, SootClass to, enum type)
+
+1. configure anaylyzer in preprocessor
+  - -r flag means recursive analyzer
+  - -f filter analyzer
+  - Consume flags and generate SootClasses
+  - Give these to next analyzer
+
+2.  Recursive Analyzer
+  - Go over suit class and find out all soot classes that need to be included for code generation
+  - Add those classes to data object
+  
+Need Relationship analyzer
+  - analyze all of the relationships and build the IRelationObjects
+  
+3.  Public Filter
+  - 2 ways
+    - filter at the end
+      - go to final rendering analyzer
+      - take list of Soot
+    - filter early on
+    
+4.  Code Generator/rendering analyzer
+  - takes in the SootClasses and builds the code for that object
+  - 3 classes (generate(SootClass) generate(SootMethod) generate(SootField)) each generates UML for that object
+  - may need to have a series of IFilters
+  - for all SootClasses, ignore class if any of the filters say to ignore it, ignore it
+  - for all not ignored SootClasses, do the same thing on the Methods and Fields
+  - for everything left, generate the code for the information
+  
+IFilter methods
+  - ignore(SootClass) ignore(SootMethod) ignore(SootField)  each returns whether to ignore the parameter or not
+     - in public filter
+          boolean ignore(SootClass){
+              return !SootClass.isPublic();
+          }
+
+Abstraction is now valid
+
+Preprocessor is the only thing that keeps changing, but that is similar to a config file
+  

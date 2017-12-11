@@ -1,13 +1,20 @@
 package ourStuff;
 
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import csse374.revengd.soot.MainMethodMatcher;
 import csse374.revengd.soot.SceneBuilder;
 import soot.Scene;
 
 public class RecursiveAnalyzer implements Analyzer {
+	private List<Filter> filters;
+	
+	public RecursiveAnalyzer() {
+		this.filters = new ArrayList<Filter>();
+	}
 
 	@Override
 	public Data analyze(Data data) {
@@ -22,14 +29,14 @@ public class RecursiveAnalyzer implements Analyzer {
 				.addExclusions(Arrays.asList("sun.*", "soot.*", "polygot.*", "org.*", "com.*"))
 				.build();
 		
-			
-		
-		return null;
+		data.scene = scene;	
+		data.classes = scene.getApplicationClasses();
+		return data;
 	}
 
 	@Override
 	public void addFilter(Filter filter) {
-		// TODO Auto-generated method stub
+		this.filters.add(filter);
 		
 	}
 

@@ -2,6 +2,7 @@ package csse374.revengd.examples.driver;
 
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.List;
 
 import csse374.revengd.soot.MainMethodMatcher;
 import csse374.revengd.soot.SceneBuilder;
@@ -28,17 +29,25 @@ public class E1SimpleDirectoryLoading implements Runnable {
 		
 		// Let's list all of the classes we have loaded from the supplied directory. 
 		// These classes are called application classes in SOOT
-		System.out.println("==============================================================");
-		System.out.println("Application classes loaded by SOOT:");
-		scene.getApplicationClasses().forEach(clazz -> {
-			System.out.println(clazz.getName() );
-		});
-
-		// We can also lookup a class using the Scene API, see below
-		SootClass appClass = scene.getSootClass("csse374.revengd.examples.fixtures.CalculatorApp");
-		print(appClass);
+//		System.out.println("==============================================================");
+//		System.out.println("Application classes loaded by SOOT:");
+//		scene.getApplicationClasses().forEach(clazz -> {
+//			System.out.println(clazz.getName() );
+//		});
+//
+//		// We can also lookup a class using the Scene API, see below
+//		SootClass appClass = scene.getSootClass("csse374.revengd.examples.fixtures.CalculatorApp");
+//		print(appClass);
 		
 		// TODO: 2. Can you print methods of CalculatorB? 
+		SootClass unrelated = scene.getSootClass("csse374.revengd.examples.fixtures.UnrelatedClass");
+		List<SootMethod> methods = unrelated.getMethods();
+		for (SootMethod m : methods) {
+			System.out.println(m.getName());
+			System.out.println(m.isPublic());
+			System.out.println(m.isProtected());
+			System.out.println(m.isPrivate());
+		}
 	}
 	
 	void print(SootClass clazz) {

@@ -4,6 +4,14 @@ public class UnrelatedClass {
 
 	public UnrelatedClass() {
 	}
+	
+	private void doPrivateNothing() {
+		return;
+	}
+	
+	protected void doProtectedNothing() {
+		return;
+	}
 
 	public void sayConditionalHello(boolean goodMood) {
 		if(goodMood)

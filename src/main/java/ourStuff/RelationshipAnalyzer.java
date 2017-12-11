@@ -15,6 +15,7 @@ public class RelationshipAnalyzer implements Analyzer {
 
 	@Override
 	public Data analyze(Data data) {
+		System.out.println("Relationship drcccrcrcrcrcrrcrcdrcdrcdrcdrcdrcd---------");
 //		for (SootClass c : data.classes) {
 //			data.relationships
 //		}

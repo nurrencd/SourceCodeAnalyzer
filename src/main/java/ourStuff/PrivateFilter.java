@@ -8,17 +8,17 @@ public class PrivateFilter implements Filter {
 
 	@Override
 	public boolean ignore(SootClass c) {
-		return !c.isPrivate();
+		return false;
 	}
 
 	@Override
 	public boolean ignore(SootMethod m) {
-		return !m.isPrivate();
+		return false;
 	}
 
 	@Override
 	public boolean ignore(SootField f) {
-		return !f.isPrivate();
+		return false;
 	}
 
 }

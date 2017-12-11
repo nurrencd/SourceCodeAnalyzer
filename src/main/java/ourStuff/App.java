@@ -15,8 +15,9 @@ public class App {
 		Collection<Analyzer> analyzerCollection = pre.makePileline(args, data);
 	
 		data.path = Paths.get(path);
+		Iterator<Analyzer> iterator = analyzerCollection.iterator();
 		for (int i = 0; i < analyzerCollection.size(); i++){
-			Iterator<Analyzer> iterator = analyzerCollection.iterator();
+			
 			data = iterator.next().analyze(data);
 		}
 		

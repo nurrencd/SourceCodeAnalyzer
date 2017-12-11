@@ -18,6 +18,7 @@ public class CodeGenAnalyzer implements Analyzer {
 	@Override
 	public Data analyze(Data data) {
 		StringBuilder code = new StringBuilder();
+		System.out.println("CodeGen drcccrcrcrcrcrrcrcdrcdrcdrcdrcdrcd---------");
 		code.append("@startuml \n");
 		for(SootClass c : data.classes){
 			if(filterClass(c)){
@@ -26,10 +27,11 @@ public class CodeGenAnalyzer implements Analyzer {
 		}
 		code.append("@enduml");
 		System.out.println(code.toString());
-		return null;
+		return data;
 	}
 	
 	private String genString(SootClass c, Data data){
+		
 		StringBuilder code = new StringBuilder();
 		code.append("class " + c.getName());
 		for(Relationship r : data.relationships){
@@ -73,6 +75,7 @@ public class CodeGenAnalyzer implements Analyzer {
 			code.append(m.getReturnType().toString() + " ");
 			code.append(m.getName() + " \n");
 		}
+		code.append("}");
 		return code.toString();
 	}
 

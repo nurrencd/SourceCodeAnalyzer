@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class Preprocessor {
 	
-	Collection<Analyzer> makePileline(String[] args, Data data){
+	public Collection<Analyzer> makePileline(String[] args, Data data){
 		Map<String, String> config  = configGen(args);
 		data.config = config;
 		Collection<Analyzer> listOfAnalyzers = new ArrayList<>();
@@ -17,6 +17,7 @@ public class Preprocessor {
 			CodeGenAnalyzer cGen = new CodeGenAnalyzer();
 			listOfAnalyzers.add(cGen);
 			if(config.containsKey("-f")){
+				
 				String instruction = config.get("-f");
 				if(instruction.equals("public")){
 					cGen.addFilter(new PublicFilter());
@@ -42,6 +43,7 @@ public class Preprocessor {
 										// E.g. -u For generating UML
 			}else{
 				config.put(flag, e);
+				System.out.println(flag + " " + e);
 			}
 		}
 		return config;

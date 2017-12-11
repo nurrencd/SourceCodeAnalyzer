@@ -1,7 +1,9 @@
 package ourStuff;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 
 import soot.Scene;
@@ -13,5 +15,11 @@ public class Data {
 	public Map<String, String> config;
 	public Scene scene;
 	public Path path;
+	
+	public Data() {
+		classes = new ArrayList<>();
+		relationships = new ArrayList<>();
+		config = new HashMap<>();
+	}
 	
 }

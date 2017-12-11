@@ -7,8 +7,9 @@ import java.util.Map;
 
 public class Preprocessor {
 	
-	Collection<Analyzer> makePileline(String[] args){
+	Collection<Analyzer> makePileline(String[] args, Data data){
 		Map<String, String> config  = configGen(args);
+		data.config = config;
 		Collection<Analyzer> listOfAnalyzers = new ArrayList<>();
 		listOfAnalyzers.add(new RecursiveAnalyzer());
 		if(config.containsKey("-u")){
@@ -33,7 +34,8 @@ public class Preprocessor {
 	Map<String, String> configGen(String[] args){
 		Map<String, String> config =  new HashMap<String, String>();
 		String flag = "";
-		for(String e : args){
+		for(int i = 1; i < args.length; i++){
+			String e = args[i];
 			if(e.startsWith("-")){
 				flag = e;
 				config.put(flag, ""); //For flags that don't have a filter/value associated with it

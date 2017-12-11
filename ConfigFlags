@@ -1,5 +1,6 @@
 -gf [globalFilters...]  --> apply filters to first thing
 -f  [filters...]        --> apply filters (rework ideology)
 -u                      --> generate UML
-
+-j                      --> include java files
+-e [exclusions]         --> exclude file types
 -m mainClass

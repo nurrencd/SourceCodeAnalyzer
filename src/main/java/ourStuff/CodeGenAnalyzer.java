@@ -33,13 +33,13 @@ public class CodeGenAnalyzer implements Analyzer {
 	private String genString(SootClass c, Data data){
 		
 		StringBuilder code = new StringBuilder();
-		code.append("class " + c.getName());
+		code.append("class " + c.getShortName());
 		for(Relationship r : data.relationships){
 			if(r.from.equals(c)){
 				if(r.type == RelationshipType.INHERITANCE){
-					code.append(" extends " + r.to.getName());
+					code.append(" extends " + r.to.getShortName());
 				}else if(r.type == RelationshipType.IMPLEMENTATION){
-					code.append(" implements " + r.to.getName());
+					code.append(" implements " + r.to.getShortName());
 				}
 			}
 		} //Relations have been added
@@ -55,8 +55,8 @@ public class CodeGenAnalyzer implements Analyzer {
 			if(f.isStatic()){
 				code.append("{static} ");
 			}
-			code.append(f.getType().toString() + " ");
-			code.append(f.getName() + " \n");
+			code.append(f.getType().toQuotedString() + " ");
+			code.append(f.getName()+ " \n");
 		}
 		for(SootMethod m : c.getMethods()){
 			if(m.isPublic()){

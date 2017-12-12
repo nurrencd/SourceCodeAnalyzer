@@ -23,9 +23,12 @@ public class Integration {
 			"C:/Users/moormaet/Documents/GitHub/term-project/src/main/java/ourStuff",
 			"-u",
 			"-m",
-			"OurStuff.App",
+			"ourStuff.App",
 			"-f",
-			"private"
+			"private",
+			"-j",
+			"-e",
+			"csse374.*"
 		};
 		String path = args[0];
 		Preprocessor pre = new Preprocessor();

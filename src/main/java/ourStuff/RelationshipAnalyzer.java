@@ -15,24 +15,40 @@ public class RelationshipAnalyzer implements Analyzer {
 
 	@Override
 	public Data analyze(Data data) {
-		System.out.println("Relationship drcccrcrcrcrcrrcrcdrcdrcdrcdrcdrcd---------");
-//		for (SootClass c : data.classes) {
-//			data.relationships
-//		}
-		data.classes.forEach( (c)-> 
-			{data.relationships.addAll(this.getRelationships(c));});
+		// System.out.println("Relationship
+		// drcccrcrcrcrcrrcrcdrcdrcdrcdrcdrcd---------");
+		data.classes.forEach((c) -> {
+			data.relationships.addAll(this.getRelationships(c));
+		});
 		return data;
 	}
 
 	private Collection<Relationship> getRelationships(SootClass c) {
 		Collection<Relationship> relationships = new ArrayList<Relationship>();
 		Collection<SootClass> interfaces = c.getInterfaces();
-
+		//add interface relationships
+		boolean ignore = false;
 		for (SootClass sc : interfaces) {
-			relationships.add(new Relationship(c, sc, Relationship.RelationshipType.IMPLEMENTATION));
+			for (Filter f : this.filters) {
+				if (f.ignore(sc)) {
+					ignore = true;
+				}
+			}
+			if (!ignore) {
+				relationships.add(new Relationship(c, sc, Relationship.RelationshipType.IMPLEMENTATION));
+			}
+			ignore = false;
 		}
+		// add super class relationship
 		SootClass superclass = c.getSuperclass();
-		if (superclass != null) {
+		ignore = false;
+		for (Filter f : this.filters) {
+			
+			if (f.ignore(superclass)) {
+				ignore = true;
+			}
+		}
+		if (!ignore) {
 			relationships.add(new Relationship(c, superclass, Relationship.RelationshipType.INHERITANCE));
 		}
 

@@ -20,14 +20,14 @@ public class RecursiveAnalyzer implements Analyzer {
 	public Data analyze(Data data) {
 //		System.out.println("Recursive drcccrcrcrcrcrrcrcdrcdrcdrcdrcdrcd---------");
 		String path = data.path.toFile().getAbsolutePath();
-		String dirToLoad = Paths.get(System.getProperty("user.dir"),  "build", "classes", "main").toString();
+//		String dirToLoad = Paths.get(System.getProperty("user.dir"),  "build", "classes", "main").toString();
 		if (!data.config.containsKey("-m")){
 			throw new IllegalArgumentException();
 		}
 		String mainClass = data.config.get("-m").get(0);
 		System.out.println(mainClass);
 		SceneBuilder sb = SceneBuilder.create()
-				.addDirectory(dirToLoad)
+				.addDirectory(path)
 				.setEntryClass(mainClass)
 				.addEntryPointMatcher(new MainMethodMatcher(mainClass))
 				.addExclusions(Arrays.asList("sun.*", "soot.*", "polygot.*", "org.*", "com.*"));

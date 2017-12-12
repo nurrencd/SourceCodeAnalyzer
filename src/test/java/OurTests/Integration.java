@@ -20,7 +20,7 @@ public class Integration {
 	@Test
 	public void systemTest() {
 		String[] args = new String[] {
-			"C:/Users/moormaet/Documents/GitHub/term-project/src/main/java/ourStuff",
+			"C:/Users/agarwaa/Desktop/Everything/Rose-Hulman/CSSE/374/New folder/term-project/src/main/java",
 			"-u",
 			"-m",
 			"ourStuff.App",

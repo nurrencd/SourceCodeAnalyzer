@@ -18,7 +18,7 @@ public class CodeGenAnalyzer implements Analyzer {
 	@Override
 	public Data analyze(Data data) {
 		StringBuilder code = new StringBuilder();
-		System.out.println("CodeGen drcccrcrcrcrcrrcrcdrcdrcdrcdrcdrcd---------");
+//		System.out.println("CodeGen drcccrcrcrcrcrrcrcdrcdrcdrcdrcdrcd---------");
 		code.append("@startuml \n");
 		for(SootClass c : data.classes){
 			if(filterClass(c)){

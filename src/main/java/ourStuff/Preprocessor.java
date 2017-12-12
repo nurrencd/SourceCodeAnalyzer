@@ -10,6 +10,9 @@ public class Preprocessor {
 	public Collection<Analyzer> makePileline(String[] args, Data data){
 		Map<String, String> config  = configGen(args);
 		data.config = config;
+		if (!data.config.containsKey("-m") || data.config.get("-m").equals("")){
+			throw new IllegalArgumentException();
+		}
 		Collection<Analyzer> listOfAnalyzers = new ArrayList<>();
 		listOfAnalyzers.add(new RecursiveAnalyzer());
 		if(config.containsKey("-u")){

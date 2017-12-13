@@ -1,13 +1,14 @@
 package ourStuff;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.sourceforge.plantuml.SourceStringReader;
 import ourStuff.Relationship.RelationshipType;
 import soot.SootClass;
 import soot.SootField;
 import soot.SootMethod;
-
 public class CodeGenAnalyzer implements Analyzer {
 	private List<Filter> filters;
 
@@ -17,6 +18,7 @@ public class CodeGenAnalyzer implements Analyzer {
 
 	@Override
 	public Data analyze(Data data) {
+	
 		StringBuilder code = new StringBuilder();
 //		System.out.println("CodeGen drcccrcrcrcrcrrcrcdrcdrcdrcdrcdrcd---------");
 		code.append("@startuml \n");
@@ -27,6 +29,13 @@ public class CodeGenAnalyzer implements Analyzer {
 		}
 		code.append("@enduml");
 		System.out.println(code.toString());
+		FileCreator f = new FileCreator();
+		try {
+			f.getPNG(code.toString());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return data;
 	}
 	

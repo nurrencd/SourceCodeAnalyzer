@@ -42,6 +42,7 @@ public class E1SimpleDirectoryLoading implements Runnable {
 		// TODO: 2. Can you print methods of CalculatorB? 
 		SootClass unrelated = scene.getSootClass("csse374.revengd.examples.fixtures.UnrelatedClass");
 		List<SootMethod> methods = unrelated.getMethods();
+		unrelated.getField("Blah").getType();
 		for (SootMethod m : methods) {
 			System.out.println(m.getName());
 			System.out.println(m.isPublic());

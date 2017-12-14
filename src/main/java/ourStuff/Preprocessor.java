@@ -8,10 +8,10 @@ import java.util.Map;
 
 public class Preprocessor {
 	
-	public Collection<Analyzer> makePileline(String[] args, Data data){
+	public AnalyzerChain makePileline(String[] args, Data data){
 		Map<String, ArrayList<String>> config  = configGen(args);
 		data.config = config;
-		Collection<Analyzer> listOfAnalyzers = new ArrayList<>();
+		AnalyzerChain listOfAnalyzers = new AnalyzerChain();
 		listOfAnalyzers.add(new SootClassAnalyzer());
 		if (data.config.containsKey("-r")) {
 			listOfAnalyzers.add(new RecursiveAnalyzer());

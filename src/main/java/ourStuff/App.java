@@ -12,14 +12,10 @@ public class App {
 		String path = args[0];
 		Preprocessor pre = new Preprocessor();
 		Data data = new Data();
-		Collection<Analyzer> analyzerCollection = pre.makePileline(args, data);
+		AnalyzerChain analyzerCollection = pre.makePileline(args, data);
 	
 		data.path = Paths.get(path);
-		Iterator<Analyzer> iterator = analyzerCollection.iterator();
-		for (int i = 0; i < analyzerCollection.size(); i++){
-			
-			data = iterator.next().analyze(data);
-		}
+		analyzerCollection.run(data);
 		
 	}
 

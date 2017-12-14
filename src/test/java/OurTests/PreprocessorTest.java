@@ -2,12 +2,14 @@ package OurTests;
 
 import static org.junit.Assert.*;
 
+import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.Iterator;
 
 import org.junit.Test;
 
 import ourStuff.Analyzer;
+import ourStuff.AnalyzerChain;
 import ourStuff.CodeGenAnalyzer;
 import ourStuff.Data;
 import ourStuff.Preprocessor;
@@ -29,14 +31,11 @@ public class PreprocessorTest {
 		String path = args[0];
 		Preprocessor pre = new Preprocessor();
 		Data data = new Data();
-		Collection<Analyzer> analyzerCollection = pre.makePileline(args, data);
+		AnalyzerChain analyzerCollection = pre.makePileline(args, data);
 		
 		assertEquals(3,analyzerCollection.size());
 		
-		Iterator<Analyzer> it = analyzerCollection.iterator();
-	    assertTrue(it.next() instanceof SootClassAnalyzer);
-	    assertTrue(it.next() instanceof RelationshipAnalyzer);
-	    assertTrue(it.next() instanceof CodeGenAnalyzer);
+	
 	}
 	
 	@Test
@@ -51,12 +50,9 @@ public class PreprocessorTest {
 		String path = args[0];
 		Preprocessor pre = new Preprocessor();
 		Data data = new Data();
-		Collection<Analyzer> analyzerCollection = pre.makePileline(args, data);
+		AnalyzerChain analyzerCollection = pre.makePileline(args, data);
 		
 		assertEquals(1,analyzerCollection.size());
-		
-		Iterator<Analyzer> it = analyzerCollection.iterator();
-		assertTrue(it.next() instanceof SootClassAnalyzer);
 	    
 	}
 	
@@ -72,7 +68,8 @@ public class PreprocessorTest {
 		Preprocessor pre = new Preprocessor();
 		Data data = new Data();
 		try {
-			Collection<Analyzer> analyzerCollection = pre.makePileline(args, data);
+			AnalyzerChain analyzerCollection = pre.makePileline(args, data);
+			analyzerCollection.run(data);
 			fail();
 		} catch (Exception e){
 			
@@ -92,7 +89,8 @@ public class PreprocessorTest {
 		Preprocessor pre = new Preprocessor();
 		Data data = new Data();
 		try {
-			Collection<Analyzer> analyzerCollection = pre.makePileline(args, data);
+			AnalyzerChain analyzerCollection = pre.makePileline(args, data);
+			analyzerCollection.run(data);
 			fail();
 		} catch (Exception e){
 			

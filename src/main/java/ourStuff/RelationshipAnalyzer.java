@@ -40,16 +40,19 @@ public class RelationshipAnalyzer implements Analyzer {
 			ignore = false;
 		}
 		// add super class relationship
-		SootClass superclass = c.getSuperclass();
-		ignore = false;
-		for (Filter f : this.filters) {
+		if(c.hasSuperclass()){
+			SootClass superclass = c.getSuperclass();
 			
-			if (f.ignore(superclass)) {
-				ignore = true;
+			ignore = false;
+			for (Filter f : this.filters) {
+				
+				if (f.ignore(superclass)) {
+					ignore = true;
+				}
 			}
-		}
-		if (!ignore) {
-			relationships.add(new Relationship(c, superclass, Relationship.RelationshipType.INHERITANCE));
+			if (!ignore) {
+				relationships.add(new Relationship(c, superclass, Relationship.RelationshipType.INHERITANCE));
+			}
 		}
 
 		return relationships;

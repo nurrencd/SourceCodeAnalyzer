@@ -1,0 +1,14 @@
+Lab 1-1 : java -jar uml.jar "C:\\Users\\moormaet\\workspace\\CSSE 374\\Lab1-1\\bin" -u -m problem.DataStandardizerApp -e headfirst.*
+
+String : java -jar uml.jar "C:\\Users\\moormaet\\workspace\\CSSE 374\\Lab1-1\\bin" -u -c java.lang.String -j -r -e headfirst.*
+
+JComponent : java -jar uml.jar "C:\\Users\\moormaet\\workspace\\CSSE 374\\Lab1-1\\bin" -u -c javax.swing.JComponent -j -r -e headfirst.* -f public
+
+Integration : java -jar uml.jar "C:\Users\moormaet\workspace\CSSE 374\term-project\src\main\java" -u -m ourStuff.App -e csse374.* -f private
+
+Note:  Modify Directories as needed
+
+To make runnable jar:
+
+Make run configuration for that main method
+Now make runnable jar, the main method will appear

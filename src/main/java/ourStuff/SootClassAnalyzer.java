@@ -50,9 +50,8 @@ public class SootClassAnalyzer implements Analyzer {
 			sb.addExclusions(data.config.get("-e"));
 		}
 		//other configs
-		System.out.println("Here");
 		//build scene
-		Scene scene = sb.build();		
+		Scene scene = sb.build();
 		data.scene = scene;	
 		data.classes = scene.getApplicationClasses();
 		return data;

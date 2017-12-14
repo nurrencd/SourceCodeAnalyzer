@@ -18,7 +18,7 @@ public class RecursiveAnalyzer implements Analyzer {
 		//get superClasses
 		for (SootClass c1 : data.classes) {
 			if (c1.hasSuperclass() && !data.classes.contains(c1.getSuperclass())){
-				System.out.println(c1.getShortName() + "   " + c1.getSuperclass().getShortName());
+//				System.out.println(c1.getShortName() + "   " + c1.getSuperclass().getShortName());
 				classesToAdd.add(c1.getSuperclass());
 			}
 		}
@@ -29,7 +29,7 @@ public class RecursiveAnalyzer implements Analyzer {
 					continue;
 				}
 				if (!data.classes.contains(c2)){
-					System.out.println("Interface: " + c1.getShortName() + "   " + c2.getShortName());
+//					System.out.println("Interface: " + c1.getShortName() + "   " + c2.getShortName());
 					classesToAdd.add(c2);
 				}
 			}

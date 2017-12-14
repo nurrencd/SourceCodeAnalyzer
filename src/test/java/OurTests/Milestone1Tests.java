@@ -43,7 +43,7 @@ public class Milestone1Tests {
 	@Test
 	public void testTeamatesCode() {
 		String[] args = new String[] {
-			"C:/Users/moormaet/workspace/CSSE 374/Lab1-1/src/main/java",
+			"C:\\Users\\nurrencd\\Documents\\1-Rose-Hulman\\CSSE\\374\\Lab1\\bin",
 			"-u",
 			"-m",
 			"problem.DataStandardizerApp",

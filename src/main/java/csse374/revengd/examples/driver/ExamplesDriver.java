@@ -53,8 +53,8 @@ public class ExamplesDriver {
 		}		
 	}
 	
-	public static void main(String[] args) throws Exception {
-		ExamplesDriver driver = new ExamplesDriver();
-		driver.repl();
-	}
+//	public static void main(String[] args) throws Exception {
+//		ExamplesDriver driver = new ExamplesDriver();
+//		driver.repl();
+//	}
 }

@@ -1,12 +1,22 @@
 package ourStuff;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Preprocessor {
+	private Map<String, Filter> filterMap;
+	
+	public Preprocessor() {
+		filterMap = new HashMap<>();
+		filterMap.put("public", new PublicFilter());
+		filterMap.put("protected", new ProtectedFilter());
+		filterMap.put("private", new PrivateFilter());
+		filterMap.put("java", new JDKFilter());
+		
+	}
+	
 	
 	public AnalyzerChain makePileline(String[] args, Data data){
 		Map<String, ArrayList<String>> config  = configGen(args);
@@ -24,14 +34,9 @@ public class Preprocessor {
 			listOfAnalyzers.add(cGen);
 			if(config.containsKey("-f")){
 				
-				String instruction = config.get("-f").get(0);
-				if(instruction.equals("public")){
-					cGen.addFilter(new PublicFilter());
-				}else if(instruction.equals("protected")){
-					cGen.addFilter(new ProtectedFilter());
-				}else if(instruction.equals("private")){
-					cGen.addFilter(new PrivateFilter());
-				}
+				List<String> instructions = config.get("-f");
+				for (String s : instructions)
+					cGen.addFilter(this.filterMap.get(s));
 			}
 			if (!config.containsKey("-j")) {
 				relAnal.addFilter(new JDKFilter());
@@ -58,5 +63,9 @@ public class Preprocessor {
 			}
 		}
 		return config;
+	}
+	
+	public void addFilter(String key, Filter filter) {
+		this.filterMap.put(key, filter);
 	}
 }

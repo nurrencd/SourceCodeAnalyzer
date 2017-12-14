@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sourceforge.plantuml.SourceStringReader;
 import ourStuff.Relationship.RelationshipType;
 import soot.SootClass;
 import soot.SootField;
@@ -42,7 +41,16 @@ public class CodeGenAnalyzer implements Analyzer {
 	private String genString(SootClass c, Data data){
 		
 		StringBuilder code = new StringBuilder();
-		code.append("class " + c.getShortName());
+		if (c.isInterface()) {
+			code.append("interface ");
+		}
+		else if (c.isAbstract()){
+			code.append("abstract ");
+		}
+		else {
+			code.append("class ");
+		}
+		code.append(c.getShortName());
 		for(Relationship r : data.relationships){
 			if(r.from.equals(c)){
 				if(r.type == RelationshipType.INHERITANCE){
@@ -82,10 +90,21 @@ public class CodeGenAnalyzer implements Analyzer {
 				code.append("{abstract} ");
 			}
 			code.append(m.getReturnType().toString() + " ");
-			code.append(m.getName() + " \n");
+			code.append(this.genMethodDeclaration(m));
 		}
 		code.append("}");
 		return code.toString();
+	}
+	
+	private String genMethodDeclaration(SootMethod m) {
+		StringBuilder sb = new StringBuilder();
+		sb.append(m.getReturnType().toString() + " ");
+		String[] ar = m.getSignature().split(" ");
+		System.out.println(ar[ar.length-1]);
+		sb.append(ar[ar.length-1]);
+		sb.deleteCharAt(sb.length()-1);
+		sb.append("\n");
+		return sb.toString();
 	}
 
 	private boolean filterClass(SootClass c) {

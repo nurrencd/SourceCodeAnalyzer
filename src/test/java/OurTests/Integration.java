@@ -12,7 +12,7 @@ import ourStuff.Analyzer;
 import ourStuff.CodeGenAnalyzer;
 import ourStuff.Data;
 import ourStuff.Preprocessor;
-import ourStuff.RecursiveAnalyzer;
+import ourStuff.SootClassAnalyzer;
 import ourStuff.RelationshipAnalyzer;
 
 public class Integration {
@@ -20,7 +20,7 @@ public class Integration {
 	@Test
 	public void systemTest() {
 		String[] args = new String[] {
-			"C:/Users/moormaet/Documents/GitHub/term-project/src/main/java",
+			"./src/main/java",
 			"-u",
 			"-m",
 			"ourStuff.App",
@@ -38,7 +38,7 @@ public class Integration {
 		assertEquals(3,analyzerCollection.size());
 		
 		Iterator<Analyzer> it = analyzerCollection.iterator();
-	    assertTrue(it.next() instanceof RecursiveAnalyzer);
+	    assertTrue(it.next() instanceof SootClassAnalyzer);
 	    assertTrue(it.next() instanceof RelationshipAnalyzer);
 	    assertTrue(it.next() instanceof CodeGenAnalyzer);
 		

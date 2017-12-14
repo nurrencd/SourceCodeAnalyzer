@@ -1,58 +1,44 @@
 package ourStuff;
 
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
-import csse374.revengd.soot.MainMethodMatcher;
-import csse374.revengd.soot.SceneBuilder;
-import soot.Scene;
+import soot.Hierarchy;
+import soot.SootClass;
 
 public class RecursiveAnalyzer implements Analyzer {
-	private List<Filter> filters;
 	
-	public RecursiveAnalyzer() {
-		this.filters = new ArrayList<Filter>();
-	}
+	private List<Filter> filters;
 
 	@Override
 	public Data analyze(Data data) {
-//		System.out.println("Recursive drcccrcrcrcrcrrcrcdrcdrcdrcdrcdrcd---------");
-		String path = data.path.toFile().getAbsolutePath();
-//		String dirToLoad = Paths.get(System.getProperty("user.dir"),  "build", "classes", "main").toString();
-		if (!data.config.containsKey("-m")){
-			throw new IllegalArgumentException();
+		Hierarchy h = data.scene.getActiveHierarchy();
+		Collection<SootClass> superclasses;
+		//get superClasses
+		for (SootClass c1 : data.classes) {
+			for (SootClass c2 : h.getSuperclassesOf(c1)) {
+				if (!data.classes.contains(c2)){
+					data.classes.add(c2);
+				}
+			}
 		}
-		String mainClass = data.config.get("-m").get(0);
-		System.out.println(mainClass);
-		SceneBuilder sb = SceneBuilder.create()
-				.addDirectory(path)
-				.setEntryClass(mainClass)
-				.addEntryPointMatcher(new MainMethodMatcher(mainClass))
-				.addExclusions(Arrays.asList("sun.*", "soot.*", "polygot.*", "org.*", "com.*"));
+		//getSuperInterfaces
+		for (SootClass c1 : data.classes) {
+			for (SootClass c2 : h.getSuperinterfacesOf(c1)) {
+				if (!data.classes.contains(c2)){
+					data.classes.add(c2);
+				}
+			}
+		}
 		
-		//add extra exclusions
 		
-		if (!data.config.containsKey("-j")) {
-			sb.addExclusions(Arrays.asList("java.*", "javax.*"));
-		}
-		if (data.config.containsKey("-e")) {
-			sb.addExclusions(data.config.get("-e"));
-		}
-		//other configs
-
-		//build scene
-		Scene scene = sb.build();		
-		data.scene = scene;	
-		data.classes = scene.getApplicationClasses();
-		return data;
+		return null;
 	}
 
 	@Override
 	public void addFilter(Filter filter) {
-		this.filters.add(filter);
 		
+
 	}
 
 }

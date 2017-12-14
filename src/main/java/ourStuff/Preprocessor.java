@@ -15,7 +15,10 @@ public class Preprocessor {
 			throw new IllegalArgumentException();
 		}
 		Collection<Analyzer> listOfAnalyzers = new ArrayList<>();
-		listOfAnalyzers.add(new RecursiveAnalyzer());
+		listOfAnalyzers.add(new SootClassAnalyzer());
+		if (data.config.containsKey("-r")) {
+			listOfAnalyzers.add(new RecursiveAnalyzer());
+		}
 		//TODO: refactor
 		if(config.containsKey("-u")){
 			Analyzer relAnal = new RelationshipAnalyzer();

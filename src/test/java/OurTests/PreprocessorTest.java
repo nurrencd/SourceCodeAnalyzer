@@ -11,7 +11,7 @@ import ourStuff.Analyzer;
 import ourStuff.CodeGenAnalyzer;
 import ourStuff.Data;
 import ourStuff.Preprocessor;
-import ourStuff.RecursiveAnalyzer;
+import ourStuff.SootClassAnalyzer;
 import ourStuff.RelationshipAnalyzer;
 
 public class PreprocessorTest {
@@ -34,7 +34,7 @@ public class PreprocessorTest {
 		assertEquals(3,analyzerCollection.size());
 		
 		Iterator<Analyzer> it = analyzerCollection.iterator();
-	    assertTrue(it.next() instanceof RecursiveAnalyzer);
+	    assertTrue(it.next() instanceof SootClassAnalyzer);
 	    assertTrue(it.next() instanceof RelationshipAnalyzer);
 	    assertTrue(it.next() instanceof CodeGenAnalyzer);
 	}
@@ -56,7 +56,7 @@ public class PreprocessorTest {
 		assertEquals(1,analyzerCollection.size());
 		
 		Iterator<Analyzer> it = analyzerCollection.iterator();
-		assertTrue(it.next() instanceof RecursiveAnalyzer);
+		assertTrue(it.next() instanceof SootClassAnalyzer);
 	    
 	}
 	

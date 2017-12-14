@@ -13,6 +13,7 @@ import ourStuff.CodeGenAnalyzer;
 import ourStuff.Data;
 import ourStuff.Preprocessor;
 import ourStuff.SootClassAnalyzer;
+import soot.SootClass;
 import ourStuff.RelationshipAnalyzer;
 
 public class Integration {
@@ -25,8 +26,7 @@ public class Integration {
 			"-m",
 			"ourStuff.App",
 			"-f",
-			"private",
-			"-j",
+			"public",
 			"-e",
 			"csse374.*"
 		};

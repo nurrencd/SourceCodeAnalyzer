@@ -2,6 +2,7 @@ package ourStuff;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import ourStuff.Relationship.RelationshipType;
@@ -51,16 +52,29 @@ public class CodeGenAnalyzer implements Analyzer {
 			code.append("class ");
 		}
 		code.append(c.getShortName());
+		Collection<SootClass> interfaces = new ArrayList<>();
 		for(Relationship r : data.relationships){
 			if(r.from.equals(c)){
 				if(r.type == RelationshipType.INHERITANCE){
 					code.append(" extends " + r.to.getShortName());
 				}else if(r.type == RelationshipType.IMPLEMENTATION){
-					code.append(" implements " + r.to.getShortName());
+					interfaces.add(r.to);
 				}
 			}
-		} //Relations have been added
-		code.append("{ \n");
+		} 
+		if (interfaces.size() > 0){ 
+			code.append(" implements ");
+			interfaces.forEach( (i) -> {
+					code.append(i.getShortName() + ", ");
+			});
+			code.deleteCharAt(code.length() - 1);
+			code.deleteCharAt(code.length() - 1);
+		}
+	
+		
+		//Relations have been added
+		
+		code.append(" { \n");
 		for(SootField f : c.getFields()){
 			if(f.isPublic()){
 				code.append("  + ");
@@ -80,7 +94,7 @@ public class CodeGenAnalyzer implements Analyzer {
 				code.append("  + ");
 			}else if(m.isProtected()){
 				code.append("  # ");
-			}else{
+			}else{ 
 				code.append("  - ");
 			}
 			if(m.isStatic()){
@@ -89,7 +103,6 @@ public class CodeGenAnalyzer implements Analyzer {
 			if(m.isAbstract()){
 				code.append("{abstract} ");
 			}
-			code.append(m.getReturnType().toString() + " ");
 			code.append(this.genMethodDeclaration(m));
 		}
 		code.append("}");
@@ -100,7 +113,6 @@ public class CodeGenAnalyzer implements Analyzer {
 		StringBuilder sb = new StringBuilder();
 		sb.append(m.getReturnType().toString() + " ");
 		String[] ar = m.getSignature().split(" ");
-		System.out.println(ar[ar.length-1]);
 		sb.append(ar[ar.length-1]);
 		sb.deleteCharAt(sb.length()-1);
 		sb.append("\n");
@@ -115,20 +127,29 @@ public class CodeGenAnalyzer implements Analyzer {
 			}
 		}
 		//filter things from soot classes
+		Collection<SootMethod> methodsToRemove = new ArrayList<>();
 		for (SootMethod m : c.getMethods()) {
 			for (Filter filter :this.filters) {
 				if (filter.ignore(m)) {
-					c.removeMethod(m);
+					methodsToRemove.add(m);
 				}
 			}
 		}
+		methodsToRemove.forEach((m) -> {
+			c.removeMethod(m);
+		});
+		
+		Collection<SootField> fieldsToRemove = new ArrayList<>();
 		for (SootField f : c.getFields()) {
 			for (Filter filter :this.filters) {
 				if (filter.ignore(f)) {
-					c.removeField(f);
+					fieldsToRemove.add(f);
 				}
 			}
 		}
+		fieldsToRemove.forEach((f) -> {
+			c.removeField(f);
+		});
 		//done filtering
 		
 		

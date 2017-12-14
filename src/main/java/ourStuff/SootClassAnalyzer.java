@@ -25,10 +25,10 @@ public class SootClassAnalyzer implements Analyzer {
 		if(data.config.containsKey("-m")){
 			String mainClass = data.config.get("-m").get(0);
 			System.out.println(mainClass);
-					sb.addDirectory(path)
-					.setEntryClass(mainClass)
-					.addEntryPointMatcher(new MainMethodMatcher(mainClass))
-					.addExclusions(Arrays.asList("soot.*", "polygot.*", "org.*", "com.*"));
+			sb.addDirectory(path)
+				.setEntryClass(mainClass)
+				.addEntryPointMatcher(new MainMethodMatcher(mainClass))
+				.addExclusions(Arrays.asList("soot.*", "polygot.*", "org.*", "com.*"));
 		}else if(data.config.containsKey("-c")){
 			List<String> arrayOfClasses = data.config.get("-c");
 			for(String s : arrayOfClasses){
@@ -50,7 +50,7 @@ public class SootClassAnalyzer implements Analyzer {
 			sb.addExclusions(data.config.get("-e"));
 		}
 		//other configs
-
+		System.out.println("Here");
 		//build scene
 		Scene scene = sb.build();		
 		data.scene = scene;	

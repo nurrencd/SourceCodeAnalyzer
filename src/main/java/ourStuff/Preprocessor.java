@@ -33,7 +33,7 @@ public class Preprocessor {
 					cGen.addFilter(new PrivateFilter());
 				}
 			}
-			if (config.containsKey("-j")) {
+			if (!config.containsKey("-j")) {
 				relAnal.addFilter(new JDKFilter());
 			}
 		}

@@ -8,17 +8,17 @@ public class ProtectedFilter implements Filter {
 
 	@Override
 	public boolean ignore(SootClass c) {
-		return !c.isProtected();
+		return !(c.isProtected() || c.isPublic());
 	}
 
 	@Override
 	public boolean ignore(SootMethod m) {
-		return!m.isProtected();
+		return!(m.isProtected() || m.isPublic());
 	}
 
 	@Override
 	public boolean ignore(SootField f) {
-		return !f.isProtected();
+		return !(f.isProtected() || f.isPublic());
 	}
 
 }

@@ -34,7 +34,7 @@ public class RelationshipAnalyzer implements Analyzer {
 					ignore = true;
 				}
 			}
-			if (!ignore) {
+			if (!ignore && !sc.getShortName().contains("$")) {
 				relationships.add(new Relationship(c, sc, Relationship.RelationshipType.IMPLEMENTATION));
 			}
 			ignore = false;

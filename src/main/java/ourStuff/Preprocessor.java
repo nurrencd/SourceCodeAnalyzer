@@ -26,7 +26,6 @@ public class Preprocessor {
 		if (data.config.containsKey("-r")) {
 			listOfAnalyzers.add(new RecursiveAnalyzer());
 		}
-		//TODO: refactor
 		if(config.containsKey("-u")){
 			Analyzer relAnal = new RelationshipAnalyzer();
 			listOfAnalyzers.add(relAnal);

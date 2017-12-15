@@ -13,7 +13,7 @@ public class App {
 		Preprocessor pre = new Preprocessor();
 		Data data = new Data();
 		AnalyzerChain analyzerCollection = pre.makePileline(args, data);
-	
+		
 		data.path = Paths.get(path);
 		analyzerCollection.run(data);
 		

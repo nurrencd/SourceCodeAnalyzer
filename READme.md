@@ -1,4 +1,3 @@
-
 This software generates an uml depiction for the java file at the given directory.  It will save the svg file of the uml and will also bring up the svg on completion.
 
 How to use it in command line:
@@ -36,5 +35,10 @@ Eric:
 Chris:
 
 Abu:
-
+ - Wrote/helped test to check if our code worked in UML
+ - Pair programmed with teammates for the whole of milestone 1
+ - Worked in CodeGen
+ - Helped with file writing
+ - Worked with Preprocessor and App class
+ - Made the project skeleton (Which was almost completely refactored after design review)
 

@@ -13,7 +13,7 @@ NOTE:  you must either have the -m flag followed by a main method or a -c follow
 
 
 Flags:
--gf [globalFilters...]  --> apply filters to first thing
+-gf [globalFilters...]  --> apply filters to first thing #NOT IMPLEMENTED
 -f  [filters...]        --> apply filters (rework ideology)
 -u                      --> generate UML
 -j                      --> include java files
@@ -33,6 +33,12 @@ Eric:
 - pair programmed for entire implementation of the milestone
 
 Chris:
+ - Recursive Analyzer
+ - Separated SootClassAnalyzer ideology from recursive analyzer ideology
+ - Refactored and opimized code in preprocessor
+ - designed most of flag system
+ - Relationship Analyzer
+ - Initial Design refactoring
 
 Abu:
  - Wrote/helped test to check if our code worked in UML

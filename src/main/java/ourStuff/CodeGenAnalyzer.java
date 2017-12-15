@@ -18,9 +18,7 @@ public class CodeGenAnalyzer implements Analyzer {
 
 	@Override
 	public Data analyze(Data data) {
-	
 		StringBuilder code = new StringBuilder();
-//		System.out.println("CodeGen drcccrcrcrcrcrrcrcdrcdrcdrcdrcdrcd---------");
 		code.append("@startuml \n");
 		for(SootClass c : data.classes){
 			if(filterClass(c)){
@@ -28,7 +26,6 @@ public class CodeGenAnalyzer implements Analyzer {
 			}
 		}
 		code.append("@enduml");
-		System.out.println(code.toString());
 		FileCreator f = new FileCreator();
 		try {
 			f.getPNG(code.toString());
@@ -72,7 +69,7 @@ public class CodeGenAnalyzer implements Analyzer {
 		}
 	
 		
-		//Relations have been added
+		//Classes/Relations have been added
 		
 		code.append(" { \n");
 		for(SootField f : c.getFields()){
@@ -89,6 +86,9 @@ public class CodeGenAnalyzer implements Analyzer {
 			code.append(f.getType().toQuotedString() + " ");
 			code.append(f.getName()+ " \n");
 		}
+		
+		//Fields added
+		
 		for(SootMethod m : c.getMethods()){
 			if(m.isPublic()){
 				code.append("  + ");
@@ -105,6 +105,7 @@ public class CodeGenAnalyzer implements Analyzer {
 			}
 			code.append(this.genMethodDeclaration(m));
 		}
+		//Methods added
 		code.append("}");
 		return code.toString();
 	}

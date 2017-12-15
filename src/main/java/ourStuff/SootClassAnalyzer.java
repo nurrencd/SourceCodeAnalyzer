@@ -20,7 +20,7 @@ public class SootClassAnalyzer implements Analyzer {
 	@Override
 	public Data analyze(Data data) {
 		String path = data.path.toFile().getAbsolutePath();
-//		String dirToLoad = Paths.get(System.getProperty("user.dir"),  "build", "classes", "main").toString();
+
 		SceneBuilder sb = SceneBuilder.create();
 		System.out.println("In SootClass");
 		if(data.config.containsKey("-m")){

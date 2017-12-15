@@ -14,7 +14,6 @@ public class Preprocessor {
 		filterMap.put("protected", new ProtectedFilter());
 		filterMap.put("private", new PrivateFilter());
 		filterMap.put("java", new JDKFilter());
-		
 	}
 	
 	
@@ -23,9 +22,13 @@ public class Preprocessor {
 		data.config = config;
 		AnalyzerChain listOfAnalyzers = new AnalyzerChain();
 		listOfAnalyzers.add(new SootClassAnalyzer());
+		
+		//Should recursively iterate
 		if (data.config.containsKey("-r")) {
 			listOfAnalyzers.add(new RecursiveAnalyzer());
 		}
+		
+		//Create a Uml
 		if(config.containsKey("-u")){
 			Analyzer relAnal = new RelationshipAnalyzer();
 			listOfAnalyzers.add(relAnal);

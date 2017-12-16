@@ -1,3 +1,4 @@
+-------------------------------- Week 1 -------------------------------------
 Our design is good and nicely decomposed.
 Maybe a little weird observer pattern use.
 
@@ -66,4 +67,17 @@ IFilter methods
 Abstraction is now valid
 
 Preprocessor is the only thing that keeps changing, but that is similar to a config file
-  
+ ----------------------------- Week 2 -----------------------------------------
+ 
+ 1. Code is fine
+ 2. UML Design is fine
+ 3. Readme needs to be updated
+    - Readme needs to include notes on how to build our project, this 
+        this includes instructions to get Soot, GraphViz and PlantUML.
+    - Notes on how contributers can customize/add to the project to suit their own 
+        needs. This would mean a link to the UML class diagram followed with a
+        blurb explaining it.
+    - Instructions on how to run the project on their computer, what instructions
+    they need to type etc.
+    
+ 

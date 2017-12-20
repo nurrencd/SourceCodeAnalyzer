@@ -30,10 +30,16 @@ public class Preprocessor {
 		
 		//Create a Uml
 		if(config.containsKey("-u")){
-			Analyzer relAnal = new RelationshipAnalyzer();
-			listOfAnalyzers.add(relAnal);
-			CodeGenAnalyzer cGen = new CodeGenAnalyzer();
+			Analyzer impAnal = new ImplementationAnalyzer();
+			Analyzer inhAnal = new InheritenceAnalyzer();
+			listOfAnalyzers.add(impAnal);
+			listOfAnalyzers.add(inhAnal);
+			Analyzer cGen = new ClassCodeGenAnalyzer();
+			Analyzer fc = new FileCreatorAnalyzer();
+			
+			
 			listOfAnalyzers.add(cGen);
+			listOfAnalyzers.add(fc);
 			if(config.containsKey("-f")){
 				
 				List<String> instructions = config.get("-f");
@@ -41,7 +47,9 @@ public class Preprocessor {
 					cGen.addFilter(this.filterMap.get(s));
 			}
 			if (!config.containsKey("-j")) {
-				relAnal.addFilter(new JDKFilter());
+				Filter jdk = new JDKFilter();
+				impAnal.addFilter(jdk);
+				inhAnal.addFilter(jdk);
 			}
 		}
 		

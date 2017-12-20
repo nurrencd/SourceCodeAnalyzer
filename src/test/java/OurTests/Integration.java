@@ -10,12 +10,12 @@ import org.junit.Test;
 
 import ourStuff.Analyzer;
 import ourStuff.AnalyzerChain;
-import ourStuff.CodeGenAnalyzer;
+import ourStuff.ClassCodeGenAnalyzer;
 import ourStuff.Data;
 import ourStuff.Preprocessor;
 import ourStuff.SootClassAnalyzer;
 import soot.SootClass;
-import ourStuff.RelationshipAnalyzer;
+import ourStuff.ImplementationAnalyzer;
 
 public class Integration {
 
@@ -27,7 +27,7 @@ public class Integration {
 			"-m",
 			"ourStuff.App",
 			"-f",
-			"public",
+			"private",
 			"-e",
 			"csse374.*"
 		};
@@ -36,7 +36,7 @@ public class Integration {
 		Data data = new Data();
 		AnalyzerChain analyzerCollection = pre.makePileline(args, data);
 		
-		assertEquals(3,analyzerCollection.size());
+		assertEquals(5,analyzerCollection.size());
 		
 		data.path = Paths.get(path);
 		analyzerCollection.run(data);

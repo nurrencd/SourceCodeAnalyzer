@@ -10,10 +10,10 @@ import org.junit.Test;
 
 import ourStuff.Analyzer;
 import ourStuff.AnalyzerChain;
-import ourStuff.CodeGenAnalyzer;
+import ourStuff.ClassCodeGenAnalyzer;
 import ourStuff.Data;
 import ourStuff.Preprocessor;
-import ourStuff.RelationshipAnalyzer;
+import ourStuff.ImplementationAnalyzer;
 import ourStuff.SootClassAnalyzer;
 
 public class Milestone1Tests {

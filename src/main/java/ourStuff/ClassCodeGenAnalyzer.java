@@ -9,10 +9,10 @@ import ourStuff.Relationship.RelationshipType;
 import soot.SootClass;
 import soot.SootField;
 import soot.SootMethod;
-public class CodeGenAnalyzer implements Analyzer {
+public class ClassCodeGenAnalyzer implements Analyzer {
 	private List<Filter> filters;
 
-	public CodeGenAnalyzer() {
+	public ClassCodeGenAnalyzer() {
 		this.filters = new ArrayList<Filter>();
 	}
 
@@ -26,13 +26,7 @@ public class CodeGenAnalyzer implements Analyzer {
 			}
 		}
 		code.append("@enduml");
-		FileCreator f = new FileCreator();
-		try {
-			f.getPNG(code.toString());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		data.addString("class-diagram-code", code.toString());
 		return data;
 	}
 	

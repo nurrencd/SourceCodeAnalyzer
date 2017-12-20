@@ -6,22 +6,22 @@ import java.util.List;
 
 import soot.SootClass;
 
-public class RelationshipAnalyzer implements Analyzer {
+public class ImplementationAnalyzer implements Analyzer {
 	private List<Filter> filters;
 
-	public RelationshipAnalyzer() {
+	public ImplementationAnalyzer() {
 		this.filters = new ArrayList<Filter>();
 	}
 
 	@Override
 	public Data analyze(Data data) {
 		data.classes.forEach((c) -> {
-			data.relationships.addAll(this.getRelationships(c));
+			data.relationships.addAll(this.getImplementations(c));
 		});
 		return data;
 	}
 
-	private Collection<Relationship> getRelationships(SootClass c) {
+	private Collection<Relationship> getImplementations(SootClass c) {
 		Collection<Relationship> relationships = new ArrayList<Relationship>();
 		Collection<SootClass> interfaces = c.getInterfaces();
 		//add interface relationships
@@ -37,22 +37,6 @@ public class RelationshipAnalyzer implements Analyzer {
 			}
 			ignore = false;
 		}
-		// add super class relationship
-		if(c.hasSuperclass()){
-			SootClass superclass = c.getSuperclass();
-			
-			ignore = false;
-			for (Filter f : this.filters) {
-				
-				if (f.ignore(superclass)) {
-					ignore = true;
-				}
-			}
-			if (!ignore) {
-				relationships.add(new Relationship(c, superclass, Relationship.RelationshipType.INHERITANCE));
-			}
-		}
-
 		return relationships;
 	}
 

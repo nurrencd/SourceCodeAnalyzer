@@ -11,9 +11,7 @@ import net.sourceforge.plantuml.FileFormat;
 import net.sourceforge.plantuml.FileFormatOption;
 import net.sourceforge.plantuml.SourceStringReader;
 
-public class FileCreatorAnalyzer implements Analyzer{
-	
-	private List<Filter> filters;
+public class FileCreator{
 
 	public void getSVG(String text) throws IOException{
 		SourceStringReader read = new SourceStringReader(text);
@@ -26,18 +24,5 @@ public class FileCreatorAnalyzer implements Analyzer{
 		Desktop.getDesktop().open(file);
 	}
 
-	@Override
-	public Data analyze(Data data) {
-		try {
-			this.getSVG(data.stringMap.get("class-diagram-code"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return data;
-	}
-
-	@Override
-	public void addFilter(Filter filter) {
-		this.filters.add(filter);
-	}
+	
 }

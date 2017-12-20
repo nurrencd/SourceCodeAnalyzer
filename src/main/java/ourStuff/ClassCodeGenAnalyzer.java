@@ -26,7 +26,12 @@ public class ClassCodeGenAnalyzer implements Analyzer {
 			}
 		}
 		code.append("@enduml");
-		data.addString("class-diagram-code", code.toString());
+		try {
+			FileCreator fc= new FileCreator();
+			fc.getSVG(code.toString());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		return data;
 	}
 	

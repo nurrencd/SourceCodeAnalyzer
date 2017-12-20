@@ -15,18 +15,12 @@ public class Data {
 	public Map<String, ArrayList<String>> config;
 	public Scene scene;
 	public Path path;
-	public Map<String, String> stringMap;
 	// ADD PRIVATE FILTER METHOD TO ANALYZERS TO CLEAN UP DA CODE
 	
 	public Data() {
 		classes = new ArrayList<>();
 		relationships = new ArrayList<>();
 		config = new HashMap<>();
-		stringMap = new HashMap<>();
-	}
-	
-	public void addString(String key, String value) {
-		this.stringMap.put(key, value);
 	}
 	
 }

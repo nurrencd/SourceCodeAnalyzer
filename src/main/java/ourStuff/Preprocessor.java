@@ -35,11 +35,9 @@ public class Preprocessor {
 			listOfAnalyzers.add(impAnal);
 			listOfAnalyzers.add(inhAnal);
 			Analyzer cGen = new ClassCodeGenAnalyzer();
-			Analyzer fc = new FileCreatorAnalyzer();
 			
 			
 			listOfAnalyzers.add(cGen);
-			listOfAnalyzers.add(fc);
 			if(config.containsKey("-f")){
 				
 				List<String> instructions = config.get("-f");

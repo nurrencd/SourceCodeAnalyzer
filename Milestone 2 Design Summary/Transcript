@@ -1,0 +1,35 @@
+ERIC: Stuff we added since last time: 
+        A New Method call container which will have a FROM / TO for sequence diagrams, call types.
+        
+CHANDAN: Who creates that relation?
+
+ERIC: We have an analyzer that will recursively go through methods and follow the call trace and make the Call objects as it goes.
+
+CHANDAN: You should have an abstract class for the analyzers, since they all have 
+filters. Don't repeat the same filter addition logic again and again
+You also need a way to maintain the sequence of calls throughout the sequence diagram code.
+
+ERIC: We would use a list.
+
+CHANDAN: You edited Data as well?
+
+ERIC: Yes.
+
+CHANDAN: I am generally against you adding new things to old classes, unless there's a justified reason.
+See if there is a way to the sequence diagram without adding to Data.
+The Data has the classes, and it has the scene, which you can use to generate the call graph.
+All you need to think about here is creating a Sequence Code Analyzer to recursively
+go from the entry method, and check each statement, are you assignment statement?
+right hand side. Is it invokestatement? then give me your sot method.
+Or there's a void method, which needs invokestatement which gives you invokeExpression
+which gives you sootMethod.
+
+Then you need to go the given call depth. That logic is repeated for the further methods,
+which is called recursively until a given depth. Create a helper method that creates the body of the
+plantUML itself. Create code for each particular section.
+
+That should be the extent of the change you made. Your design should only need one extra class
+or helpers. If you can do something in a simple way, you don't need a complex way.
+Ask yourself if anything violates OCD, does it violate Dependency Inversion Principle?
+
+Don't create things beyond what Soot Gives you if it's not necessary.

@@ -10,14 +10,13 @@ import csse374.revengd.soot.SceneBuilder;
 import soot.Scene;
 import soot.SootClass;
 
-public class SootClassAnalyzer implements Analyzer {
+public class SootClassAnalyzer extends AbstractAnalyzer {
 	private List<Filter> filters;
 	
 	public SootClassAnalyzer() {
 		this.filters = new ArrayList<Filter>();
 	}
 
-	@Override
 	public Data analyze(Data data) {
 		String path = data.path.toFile().getAbsolutePath();
 
@@ -56,12 +55,6 @@ public class SootClassAnalyzer implements Analyzer {
 		data.scene = scene;	
 		data.classes = scene.getApplicationClasses();
 		return data;
-	}
-
-	@Override
-	public void addFilter(Filter filter) {
-		this.filters.add(filter);
-		
 	}
 
 }

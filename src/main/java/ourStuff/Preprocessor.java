@@ -30,11 +30,13 @@ public class Preprocessor {
 		
 		//Create a Uml
 		if(config.containsKey("-u")){
-			Analyzer impAnal = new ImplementationAnalyzer();
-			Analyzer inhAnal = new InheritenceAnalyzer();
+			AbstractAnalyzer impAnal = new ImplementationAnalyzer();
+			AbstractAnalyzer inhAnal = new InheritenceAnalyzer();
+			AbstractAnalyzer assAnal = new AssociationAnalyzer();
 			listOfAnalyzers.add(impAnal);
 			listOfAnalyzers.add(inhAnal);
-			Analyzer cGen = new ClassCodeGenAnalyzer();
+			listOfAnalyzers.add(assAnal);
+			AbstractAnalyzer cGen = new ClassCodeGenAnalyzer();
 			
 			
 			listOfAnalyzers.add(cGen);

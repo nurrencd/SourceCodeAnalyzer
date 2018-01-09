@@ -7,11 +7,8 @@ import java.util.List;
 import soot.Hierarchy;
 import soot.SootClass;
 
-public class RecursiveAnalyzer implements Analyzer {
-	
-	private List<Filter> filters;
+public class RecursiveAnalyzer extends AbstractAnalyzer {
 
-	@Override
 	public Data analyze(Data data) {
 		
 		Collection<SootClass> classesToAdd = new ArrayList<>();
@@ -40,12 +37,6 @@ public class RecursiveAnalyzer implements Analyzer {
 		}
 		
 		return data;
-	}
-
-	@Override
-	public void addFilter(Filter filter) {
-		
-
 	}
 
 }

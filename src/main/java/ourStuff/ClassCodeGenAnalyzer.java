@@ -9,8 +9,7 @@ import ourStuff.Relationship.RelationshipType;
 import soot.SootClass;
 import soot.SootField;
 import soot.SootMethod;
-public class ClassCodeGenAnalyzer implements Analyzer {
-	private List<Filter> filters;
+public class ClassCodeGenAnalyzer extends AbstractAnalyzer {
 
 	public ClassCodeGenAnalyzer() {
 		this.filters = new ArrayList<Filter>();
@@ -19,13 +18,16 @@ public class ClassCodeGenAnalyzer implements Analyzer {
 	@Override
 	public Data analyze(Data data) {
 		StringBuilder code = new StringBuilder();
-		code.append("@startuml \n");
+		code.append("@startuml\n");
 		for(SootClass c : data.classes){
 			if(filterClass(c)){
 				code.append(genString(c, data) + "\n");
 			}
 		}
+		//draw arrows
+		code.append(this.addAssociationArrows(data));
 		code.append("@enduml");
+		System.out.println(code.toString());
 		try {
 			FileCreator fc= new FileCreator();
 			fc.getSVG(code.toString());
@@ -105,6 +107,7 @@ public class ClassCodeGenAnalyzer implements Analyzer {
 			code.append(this.genMethodDeclaration(m));
 		}
 		//Methods added
+		
 		code.append("}");
 		return code.toString();
 	}
@@ -155,10 +158,20 @@ public class ClassCodeGenAnalyzer implements Analyzer {
 		
 		return true;
 	}
-
-	@Override
-	public void addFilter(Filter filter) {
-		this.filters.add(filter);
+	
+	private String addAssociationArrows(Data data) {
+		StringBuilder sb = new StringBuilder();
+		for (Relationship r : data.relationships) {
+			if (r.type==RelationshipType.ONE_TO_MANY) {
+				sb.append(r.from.getName() + " --> \"*\" " + r.to.getName());
+				sb.append('\n');
+			}
+			else if (r.type == RelationshipType.ONE_TO_ONE) {
+				sb.append(r.from.getName() + " --> " + r.to.getName());
+				sb.append('\n');
+			}
+		}
+		return sb.toString();
 	}
 
 }

@@ -8,7 +8,7 @@ import java.util.Iterator;
 
 import org.junit.Test;
 
-import ourStuff.Analyzer;
+import ourStuff.AbstractAnalyzer;
 import ourStuff.AnalyzerChain;
 import ourStuff.ClassCodeGenAnalyzer;
 import ourStuff.Data;

@@ -6,8 +6,7 @@ import java.util.List;
 
 import soot.SootClass;
 
-public class ImplementationAnalyzer implements Analyzer {
-	private List<Filter> filters;
+public class ImplementationAnalyzer extends AbstractAnalyzer {
 
 	public ImplementationAnalyzer() {
 		this.filters = new ArrayList<Filter>();
@@ -40,10 +39,5 @@ public class ImplementationAnalyzer implements Analyzer {
 		return relationships;
 	}
 
-	@Override
-	public void addFilter(Filter filter) {
-		this.filters.add(filter);
-
-	}
 
 }

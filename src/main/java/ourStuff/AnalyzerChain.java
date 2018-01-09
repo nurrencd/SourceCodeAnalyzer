@@ -6,18 +6,18 @@ import java.util.List;
 
 public class AnalyzerChain {
 
-	private List<Analyzer> analyzerCollection;
+	private List<AbstractAnalyzer> analyzerCollection;
 	
 	public AnalyzerChain(){
 		analyzerCollection = new ArrayList<>();
 	}
 	
-	public void add(Analyzer a){
+	public void add(AbstractAnalyzer a){
 		this.analyzerCollection.add(a);
 	}
 	
 	public void run(Data data){
-		Iterator<Analyzer> iterator = analyzerCollection.iterator();
+		Iterator<AbstractAnalyzer> iterator = analyzerCollection.iterator();
 		for (int i = 0; i < analyzerCollection.size(); i++){
 			
 			data = iterator.next().analyze(data);

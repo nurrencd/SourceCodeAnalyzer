@@ -7,7 +7,7 @@ public class Relationship {
 	public RelationshipType type;
 	
 	public enum RelationshipType{
-		INHERITANCE, IMPLEMENTATION, ASSOCIATION, DEPENDENCY
+		INHERITANCE, IMPLEMENTATION, ONE_TO_ONE, ONE_TO_MANY, DEPENDENCY
 	};
 	
 	public Relationship(SootClass from, SootClass to, RelationshipType r) {

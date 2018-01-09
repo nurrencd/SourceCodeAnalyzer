@@ -6,13 +6,12 @@ import java.util.List;
 
 import soot.SootClass;
 
-public class InheritenceAnalyzer implements Analyzer {
-	private List<Filter> filters;
+public class InheritenceAnalyzer extends AbstractAnalyzer {
 	
 	public InheritenceAnalyzer() {
 		filters = new ArrayList<Filter>();
 	}
-	@Override
+	
 	public Data analyze(Data data) {
 		data.classes.forEach((c) -> {
 			data.relationships.addAll(this.getInheritance(c));
@@ -38,11 +37,6 @@ public class InheritenceAnalyzer implements Analyzer {
 			}
 		}
 		return rels;
-	}
-
-	@Override
-	public void addFilter(Filter filter) {
-		this.filters.add(filter);
 	}
 
 }

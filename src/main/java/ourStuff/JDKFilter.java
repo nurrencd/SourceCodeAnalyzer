@@ -11,7 +11,7 @@ public class JDKFilter implements Filter {
 		if (c.isJavaLibraryClass()) {
 			System.out.println("JDKFilter is ignoring " + c.getName());
 		}
-		return c.isJavaLibraryClass();
+		return c.isJavaLibraryClass() || c.getName().contains("java.");
 	}
 
 	@Override

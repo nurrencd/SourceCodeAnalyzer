@@ -26,6 +26,7 @@ public class ClassCodeGenAnalyzer extends AbstractAnalyzer {
 		}
 		//draw arrows
 		code.append(this.addAssociationArrows(data));
+		code.append(this.addDependencyArrows(data));
 		code.append("@enduml");
 		System.out.println(code.toString());
 		try {
@@ -49,12 +50,12 @@ public class ClassCodeGenAnalyzer extends AbstractAnalyzer {
 		else {
 			code.append("class ");
 		}
-		code.append(c.getShortName());
+		code.append(c.getName());
 		Collection<SootClass> interfaces = new ArrayList<>();
 		for(Relationship r : data.relationships){
 			if(r.from.equals(c)){
 				if(r.type == RelationshipType.INHERITANCE){
-					code.append(" extends " + r.to.getShortName());
+					code.append(" extends " + r.to.getName());
 				}else if(r.type == RelationshipType.IMPLEMENTATION){
 					interfaces.add(r.to);
 				}
@@ -63,7 +64,7 @@ public class ClassCodeGenAnalyzer extends AbstractAnalyzer {
 		if (interfaces.size() > 0){ 
 			code.append(" implements ");
 			interfaces.forEach( (i) -> {
-					code.append(i.getShortName() + ", ");
+					code.append(i.getName() + ", ");
 			});
 			code.deleteCharAt(code.length() - 1);
 			code.deleteCharAt(code.length() - 1);
@@ -159,15 +160,30 @@ public class ClassCodeGenAnalyzer extends AbstractAnalyzer {
 		return true;
 	}
 	
+	private String addDependencyArrows(Data data){
+		StringBuilder sb = new StringBuilder();
+		for (Relationship r : data.relationships) {
+			if (r.type==RelationshipType.DEPENDENCY_ONE_TO_MANY) {
+				sb.append(r.from.getName() + " ..> \"*\" " + r.to.getName());
+				sb.append('\n');
+			}
+			else if (r.type == RelationshipType.DEPENDENCY_ONE_TO_ONE) {
+				sb.append(r.from.getName() + " ..> " + r.to.getName());
+				sb.append('\n');
+			}
+		}
+		return sb.toString();
+	}
+	
 	private String addAssociationArrows(Data data) {
 		StringBuilder sb = new StringBuilder();
 		for (Relationship r : data.relationships) {
-			if (r.type==RelationshipType.ONE_TO_MANY) {
-				sb.append(r.from.getShortName() + " --> \"*\" " + r.to.getShortName());
+			if (r.type==RelationshipType.ASSOCIATION_ONE_TO_MANY) {
+				sb.append(r.from.getName() + " --> \"*\" " + r.to.getName());
 				sb.append('\n');
 			}
-			else if (r.type == RelationshipType.ONE_TO_ONE) {
-				sb.append(r.from.getShortName() + " --> " + r.to.getShortName());
+			else if (r.type == RelationshipType.ASSOCIATION_ONE_TO_ONE) {
+				sb.append(r.from.getName() + " --> " + r.to.getName());
 				sb.append('\n');
 			}
 		}

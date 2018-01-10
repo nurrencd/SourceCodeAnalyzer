@@ -52,8 +52,10 @@ public class SootClassAnalyzer extends AbstractAnalyzer {
 		//other configs
 		//build scene
 		Scene scene = sb.build();
+		
 		data.scene = scene;	
 		data.classes = scene.getApplicationClasses();
+		
 		return data;
 	}
 

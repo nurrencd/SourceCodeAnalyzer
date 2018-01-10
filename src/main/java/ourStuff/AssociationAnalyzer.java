@@ -10,7 +10,7 @@ import soot.SootClass;
 import soot.SootField;
 import soot.tagkit.Tag;
 import soot.util.Chain;
-
+//TODO: Add filter checks
 public class AssociationAnalyzer extends AbstractAnalyzer{
 
 	@Override
@@ -30,20 +30,36 @@ public class AssociationAnalyzer extends AbstractAnalyzer{
 				GenericType gt = fe.getType();
 				Collection<String> containerTypes = gt.getAllContainerTypes();
 				Collection<String> elementTypes = gt.getAllElementTypes();
+				
 				for (String s : containerTypes) {
 					SootClass container = data.scene.getSootClass(s);
 					if (container != null) {
-						data.relationships.add(new Relationship(c, container, RelationshipType.ONE_TO_ONE));
+						boolean ignore = false;
+						for (Filter f : this.filters) {
+							if (f.ignore(container)) {
+								ignore = true;
+							}
+						}
+						if (!ignore)
+							data.relationships.add(new Relationship(c, container, RelationshipType.ASSOCIATION_ONE_TO_ONE));
 					}
 				}
 				for (String s : elementTypes) {
-					SootClass element = data.scene.getSootClass(s);
+					SootClass element = data.scene.getSootClassUnsafe(s);
 					if (element != null) {
-						RelationshipType r = RelationshipType.ONE_TO_MANY;
-						if (containerTypes.size()==0) {
-							r = RelationshipType.ONE_TO_ONE;
+						boolean ignore = false;
+						for (Filter f : this.filters) {
+							if (f.ignore(element)) {
+								ignore = true;
+							}
 						}
-						data.relationships.add(new Relationship(c, element, r));
+						if (!ignore){
+							RelationshipType r = RelationshipType.ASSOCIATION_ONE_TO_MANY;
+							if (containerTypes.size()==0) {
+								r = RelationshipType.ASSOCIATION_ONE_TO_ONE;
+							}
+							data.relationships.add(new Relationship(c, element, r));
+						}
 					}
 				}
 			}

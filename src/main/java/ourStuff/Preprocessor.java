@@ -33,9 +33,11 @@ public class Preprocessor {
 			AbstractAnalyzer impAnal = new ImplementationAnalyzer();
 			AbstractAnalyzer inhAnal = new InheritenceAnalyzer();
 			AbstractAnalyzer assAnal = new AssociationAnalyzer();
+			AbstractAnalyzer depAnal = new DependencyAnalyzer();
 			listOfAnalyzers.add(impAnal);
 			listOfAnalyzers.add(inhAnal);
 			listOfAnalyzers.add(assAnal);
+			listOfAnalyzers.add(depAnal);
 			AbstractAnalyzer cGen = new ClassCodeGenAnalyzer();
 			
 			
@@ -50,6 +52,8 @@ public class Preprocessor {
 				Filter jdk = new JDKFilter();
 				impAnal.addFilter(jdk);
 				inhAnal.addFilter(jdk);
+				assAnal.addFilter(jdk);
+				depAnal.addFilter(jdk);
 			}
 		}
 		

@@ -163,11 +163,11 @@ public class ClassCodeGenAnalyzer extends AbstractAnalyzer {
 		StringBuilder sb = new StringBuilder();
 		for (Relationship r : data.relationships) {
 			if (r.type==RelationshipType.ONE_TO_MANY) {
-				sb.append(r.from.getName() + " --> \"*\" " + r.to.getName());
+				sb.append(r.from.getShortName() + " --> \"*\" " + r.to.getShortName());
 				sb.append('\n');
 			}
 			else if (r.type == RelationshipType.ONE_TO_ONE) {
-				sb.append(r.from.getName() + " --> " + r.to.getName());
+				sb.append(r.from.getShortName() + " --> " + r.to.getShortName());
 				sb.append('\n');
 			}
 		}

@@ -1,5 +1,14 @@
 This software generates an uml depiction for the java file at the given directory.  It will save the svg file of the uml and will also bring up the svg on completion.
 
+Graphviz, PlantUML and Soot for this project. Find how to install Graphviz below. Soot and PlantUML will automatically be installed when the project is installed.
+
+**How to install Graphviz on Windows**
+Go to: https://graphviz.gitlab.io/_pages/Download/Download_windows.html
+Download the latest stable release of Graphviz.
+Extract the file.
+
+UML View of the project: 
+
 **How to use it in command line:**
 
 java -jar uml <Directory Path> <flag1> <flag2> <value1> <value2> ...

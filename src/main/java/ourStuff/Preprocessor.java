@@ -57,6 +57,16 @@ public class Preprocessor {
 			}
 		}
 		
+		if(config.containsKey("-s")){
+			AbstractAnalyzer seqAnal = new SequenceDiagramAnalyzer(config.get("-s").get(0));
+			listOfAnalyzers.add(seqAnal);
+			if (!config.containsKey("-j")) {
+				Filter jdk = new JDKFilter();
+				seqAnal.addFilter(jdk);
+			}
+			
+		}
+		
 		return listOfAnalyzers;
 	}
 	

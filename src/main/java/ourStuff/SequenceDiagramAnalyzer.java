@@ -63,7 +63,7 @@ public class SequenceDiagramAnalyzer extends AbstractAnalyzer {
 			SootMethod meth = e.getTgt().method();
 			SootClass scTo = meth.getDeclaringClass();
 			if (!this.applyFilters(scTo)) {
-				sb.append(scFrom.getName() + " -> " + scTo.getName() + ": " + meth.getName());
+				sb.append(scFrom.getName() + " -> " + scTo.getName() + ": " + meth.getSubSignature());
 				sb.append("\n");
 				sb.append(recursiveBuilder(meth, depth + 1, scene));
 				sb.append("\n");

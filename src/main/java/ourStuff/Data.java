@@ -4,6 +4,8 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 
 import soot.Scene;
@@ -19,8 +21,15 @@ public class Data {
 	
 	public Data() {
 		classes = new ArrayList<>();
-		relationships = new ArrayList<>();
+		relationships = new HashSet<>();
 		config = new HashMap<>();
 	}
+	
+	public void addRelationship(Relationship r){
+		if (!relationships.contains(r)){
+			relationships.add(r);
+		}
+	}
+
 	
 }

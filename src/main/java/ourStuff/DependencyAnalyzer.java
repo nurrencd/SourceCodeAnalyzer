@@ -1,15 +1,19 @@
 package ourStuff;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import edu.rosehulman.jvm.sigevaluator.GenericType;
 import edu.rosehulman.jvm.sigevaluator.MethodEvaluator;
 import ourStuff.Relationship.RelationshipType;
+import soot.Body;
 import soot.Local;
 import soot.SootClass;
 import soot.SootMethod;
 import soot.Type;
+import soot.jimple.toolkits.callgraph.CallGraph;
+import soot.jimple.toolkits.callgraph.Edge;
 import soot.tagkit.Tag;
 import soot.util.Chain;
 //TODO: Add filter checks
@@ -29,10 +33,34 @@ public class DependencyAnalyzer extends AbstractAnalyzer{
 					GenericType returnType = eval.getReturnType();
 					getTypeDependencies(data, c, returnType);
 				}
-				Chain<Local> locals = m.getActiveBody().getLocals();
-				for (Local l : locals) {
-					Type gt = l.getType();
-					//do funky shit with the locals ;)
+				
+				if (m.hasActiveBody()){
+					Chain<Local> locals = m.getActiveBody().getLocals();
+					for (Local l : locals) {
+						CallGraph cg = data.scene.getCallGraph();
+						Iterator<Edge> edges = cg.edgesOutOf(m);
+						while (edges.hasNext()){
+							Edge edge = edges.next();
+							if (edge.isInstance()){
+								SootClass clazz = edge.tgt().getDeclaringClass();
+								if (!this.applyFilters(clazz)){
+									Relationship r = new Relationship(c, clazz, RelationshipType.DEPENDENCY_ONE_TO_ONE);
+									data.relationships.add(r);
+								}
+							}else {
+								SootMethod method = edge.tgt();
+								Type retType = method.getReturnType();
+								if (retType != null){
+									SootClass retClass = data.scene.getSootClass(retType.toString());
+									if (!this.applyFilters(retClass)){
+										Relationship r = new Relationship(c, retClass, RelationshipType.DEPENDENCY_ONE_TO_ONE);
+										data.relationships.add(r);
+									}
+								}
+							}
+						}
+						
+					}
 				}
 			}
 			//Need to get Local variables for A

@@ -21,4 +21,10 @@ public class Relationship {
 		this.from = from;
 		this.type = r;
 	}
+	
+	@Override
+	public int hashCode(){
+		String str = this.to.getName() + this.from.getName() + this.type.toString();
+		return str.hashCode();
+	}
 }

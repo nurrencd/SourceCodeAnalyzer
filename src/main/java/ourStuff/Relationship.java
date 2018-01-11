@@ -25,6 +25,7 @@ public class Relationship {
 	@Override
 	public int hashCode(){
 		String str = this.to.getName() + this.from.getName() + this.type.toString();
+//		System.out.println(this.to.getName() + this.from.getName() + this.type.toString() + "  " + str.hashCode());
 		return str.hashCode();
 	}
 }

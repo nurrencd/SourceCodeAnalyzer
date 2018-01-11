@@ -13,7 +13,7 @@ import soot.SootClass;
 
 public class Data {
 	public Collection<SootClass> classes;
-	public Collection<Relationship> relationships;
+	public Map<Integer, Relationship> relationships;
 	public Map<String, ArrayList<String>> config;
 	public Scene scene;
 	public Path path;
@@ -21,15 +21,7 @@ public class Data {
 	
 	public Data() {
 		classes = new ArrayList<>();
-		relationships = new HashSet<>();
+		relationships = new HashMap<>();
 		config = new HashMap<>();
 	}
-	
-	public void addRelationship(Relationship r){
-		if (!relationships.contains(r)){
-			relationships.add(r);
-		}
-	}
-
-	
 }

@@ -2,7 +2,9 @@ package ourStuff;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import soot.SootClass;
 
@@ -15,13 +17,13 @@ public class ImplementationAnalyzer extends AbstractAnalyzer {
 	@Override
 	public Data analyze(Data data) {
 		data.classes.forEach((c) -> {
-			data.relationships.addAll(this.getImplementations(c));
+			data.relationships.putAll(this.getImplementations(c));
 		});
 		return data;
 	}
 
-	private Collection<Relationship> getImplementations(SootClass c) {
-		Collection<Relationship> relationships = new ArrayList<Relationship>();
+	private Map<Integer, Relationship> getImplementations(SootClass c) {
+		Map<Integer, Relationship> relationships = new HashMap<Integer, Relationship>();
 		Collection<SootClass> interfaces = c.getInterfaces();
 		//add interface relationships
 		boolean ignore = false;
@@ -32,7 +34,8 @@ public class ImplementationAnalyzer extends AbstractAnalyzer {
 				}
 			}
 			if (!ignore && !sc.getShortName().contains("$")) {
-				relationships.add(new Relationship(c, sc, Relationship.RelationshipType.IMPLEMENTATION));
+				Relationship r = new Relationship(c, sc, Relationship.RelationshipType.IMPLEMENTATION);
+				relationships.put(r.hashCode(), r);
 			}
 			ignore = false;
 		}

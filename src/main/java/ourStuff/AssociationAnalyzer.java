@@ -15,6 +15,7 @@ public class AssociationAnalyzer extends AbstractAnalyzer{
 
 	@Override
 	public Data analyze(Data data) {
+
 		Collection<SootClass> collection= data.classes;
 		Iterator<SootClass> it = collection.iterator();
 		while(it.hasNext()){
@@ -40,13 +41,20 @@ public class AssociationAnalyzer extends AbstractAnalyzer{
 								ignore = true;
 							}
 						}
-						if (!ignore)
-							data.relationships.add(new Relationship(c, container, RelationshipType.ASSOCIATION_ONE_TO_ONE));
+						if (!ignore){
+							Relationship r = new Relationship(c, container, RelationshipType.ASSOCIATION_ONE_TO_ONE);
+							data.relationships.put(r.hashCode(), r);
+						}
 					}
 				}
 				for (String s : elementTypes) {
+					System.out.println(data.scene.containsClass(s));
+					if (!data.scene.containsClass(s)){
+						continue;
+					}
 					SootClass element = data.scene.getSootClassUnsafe(s);
 					if (element != null) {
+						
 						boolean ignore = false;
 						for (Filter f : this.filters) {
 							if (f.ignore(element)) {
@@ -58,7 +66,8 @@ public class AssociationAnalyzer extends AbstractAnalyzer{
 							if (containerTypes.size()==0) {
 								r = RelationshipType.ASSOCIATION_ONE_TO_ONE;
 							}
-							data.relationships.add(new Relationship(c, element, r));
+							Relationship rel = new Relationship(c, element, r);
+							data.relationships.put(rel.hashCode(), rel);
 						}
 					}
 				}

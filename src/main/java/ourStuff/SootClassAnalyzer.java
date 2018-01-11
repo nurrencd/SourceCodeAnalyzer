@@ -32,8 +32,10 @@ public class SootClassAnalyzer extends AbstractAnalyzer {
 		}else if(data.config.containsKey("-c")){
 			List<String> arrayOfClasses = data.config.get("-c");
 			for(String s : arrayOfClasses){
-				SootClass sc = Scene.v().loadClassAndSupport(s);
+				Scene scene =  Scene.v();
+				SootClass sc = scene.loadClassAndSupport(s);
 				data.classes.add(sc);
+				data.scene = scene;
 			}
 			return data;
 					
@@ -44,18 +46,26 @@ public class SootClassAnalyzer extends AbstractAnalyzer {
 		//add extra exclusions
 		
 		if (!data.config.containsKey("-j")) {
-			sb.addExclusions(Arrays.asList("java.*", "javax.*", "sun.*"));
+			sb.addExclusions(Arrays.asList("soot.*", "java.*", "javax.*", "sun.*"));
 		}
 		if (data.config.containsKey("-e")) {
 			sb.addExclusions(data.config.get("-e"));
 		}
 		//other configs
 		//build scene
-		Scene scene = sb.build();
+		Scene scene = sb.addExclusions(Arrays.asList("soot.*", "polygot.*", "org.*", "com.*")).build();
+		ArrayList<SootClass> classesToRemove = new ArrayList<SootClass>();
+		for (SootClass c : scene.getClasses()){
+			if (c.getName().contains("soot.")){
+				classesToRemove.add(c);
+			}
+		}
+		for (SootClass c : classesToRemove){
+			scene.removeClass(c);
+		}
 		
-		data.scene = scene;	
+		data.scene = scene;
 		data.classes = scene.getApplicationClasses();
-		System.out.println(scene.getMainMethod().getSignature() + "!@#$!@#$!@#$!@#$!@#$!@#$!@#$!@#$!@#$!($*%(#$*%(#!*!(%*^!%#^!*%(^@$#*%(#%");
 		return data;
 	}
 

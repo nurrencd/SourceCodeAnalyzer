@@ -17,13 +17,13 @@ public class ImplementationAnalyzer extends AbstractAnalyzer {
 	@Override
 	public Data analyze(Data data) {
 		data.classes.forEach((c) -> {
-			data.relationships.putAll(this.getImplementations(c));
+			data.relationships.addAll(this.getImplementations(c));
 		});
 		return data;
 	}
 
-	private Map<Integer, Relationship> getImplementations(SootClass c) {
-		Map<Integer, Relationship> relationships = new HashMap<Integer, Relationship>();
+	private Collection<Relationship> getImplementations(SootClass c) {
+		Collection<Relationship> relationships = new ArrayList<Relationship>();
 		Collection<SootClass> interfaces = c.getInterfaces();
 		//add interface relationships
 		boolean ignore = false;
@@ -35,7 +35,7 @@ public class ImplementationAnalyzer extends AbstractAnalyzer {
 			}
 			if (!ignore && !sc.getShortName().contains("$")) {
 				Relationship r = new Relationship(c, sc, Relationship.RelationshipType.IMPLEMENTATION);
-				relationships.put(r.hashCode(), r);
+				relationships.add(r);
 			}
 			ignore = false;
 		}

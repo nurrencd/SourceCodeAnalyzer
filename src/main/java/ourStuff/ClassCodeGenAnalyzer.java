@@ -52,7 +52,7 @@ public class ClassCodeGenAnalyzer extends AbstractAnalyzer {
 		}
 		code.append(c.getName());
 		Collection<SootClass> interfaces = new ArrayList<>();
-		for(Relationship r : data.relationships.values()){
+		for(Relationship r : data.relationships){
 			if(r.from.equals(c)){
 				if(r.type == RelationshipType.INHERITANCE){
 					code.append(" extends " + r.to.getName());
@@ -162,7 +162,7 @@ public class ClassCodeGenAnalyzer extends AbstractAnalyzer {
 	
 	private String addDependencyArrows(Data data){
 		StringBuilder sb = new StringBuilder();
-		for (Relationship r : data.relationships.values()) {
+		for (Relationship r : data.relationships) {
 			if (r.type==RelationshipType.DEPENDENCY_ONE_TO_MANY) {
 				sb.append(r.from.getName() + " ..> \"*\" " + r.to.getName());
 				sb.append('\n');
@@ -177,7 +177,7 @@ public class ClassCodeGenAnalyzer extends AbstractAnalyzer {
 	
 	private String addAssociationArrows(Data data) {
 		StringBuilder sb = new StringBuilder();
-		for (Relationship r : data.relationships.values()) {
+		for (Relationship r : data.relationships) {
 			if (r.type==RelationshipType.ASSOCIATION_ONE_TO_MANY) {
 				sb.append(r.from.getName() + " --> \"*\" " + r.to.getName());
 				sb.append('\n');

@@ -43,7 +43,7 @@ public class AssociationAnalyzer extends AbstractAnalyzer{
 						}
 						if (!ignore){
 							Relationship r = new Relationship(c, container, RelationshipType.ASSOCIATION_ONE_TO_ONE);
-							data.relationships.put(r.hashCode(), r);
+							data.relationships.add(r);
 						}
 					}
 				}
@@ -67,7 +67,7 @@ public class AssociationAnalyzer extends AbstractAnalyzer{
 								r = RelationshipType.ASSOCIATION_ONE_TO_ONE;
 							}
 							Relationship rel = new Relationship(c, element, r);
-							data.relationships.put(rel.hashCode(), rel);
+							data.relationships.add(rel);
 						}
 					}
 				}

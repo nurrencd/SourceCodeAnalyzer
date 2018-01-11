@@ -16,14 +16,14 @@ public class InheritenceAnalyzer extends AbstractAnalyzer {
 	
 	public Data analyze(Data data) {
 		data.classes.forEach((c) -> {
-			data.relationships.putAll(this.getInheritance(c));
+			data.relationships.addAll(this.getInheritance(c));
 		});
 		return data;
 	}
 	
-	private Map<Integer, Relationship> getInheritance(SootClass c){
+	private Collection<Relationship> getInheritance(SootClass c){
 		boolean ignore;
-		Map<Integer, Relationship> rels = new HashMap<Integer, Relationship>();
+		Collection<Relationship> rels = new ArrayList<Relationship>();
 		if(c.hasSuperclass()){
 			SootClass superclass = c.getSuperclass();
 			
@@ -36,7 +36,7 @@ public class InheritenceAnalyzer extends AbstractAnalyzer {
 			}
 			if (!ignore) {
 				Relationship r = new Relationship(c, superclass, Relationship.RelationshipType.INHERITANCE);
-				rels.put(r.hashCode(), r);
+				rels.add(r);
 			}
 		}
 		return rels;

@@ -45,7 +45,7 @@ public class DependencyAnalyzer extends AbstractAnalyzer{
 								SootClass clazz = edge.tgt().getDeclaringClass();
 								if (!this.applyFilters(clazz)){
 									Relationship r = new Relationship(c, clazz, RelationshipType.DEPENDENCY_ONE_TO_ONE);
-									data.relationships.put(r.hashCode(), r);
+									data.relationships.add(r);
 								}
 							}else {
 								SootMethod method = edge.tgt();
@@ -54,7 +54,7 @@ public class DependencyAnalyzer extends AbstractAnalyzer{
 									SootClass retClass = data.scene.getSootClass(retType.toString());
 									if (!this.applyFilters(retClass)){
 										Relationship r = new Relationship(c, retClass, RelationshipType.DEPENDENCY_ONE_TO_ONE);
-										data.relationships.put(r.hashCode(), r);
+										data.relationships.add(r);
 									}
 								}
 							}
@@ -86,7 +86,7 @@ public class DependencyAnalyzer extends AbstractAnalyzer{
 				}
 				if (!ignore){
 					Relationship r = new Relationship(c, container, RelationshipType.DEPENDENCY_ONE_TO_ONE);
-					data.relationships.put(r.hashCode(), r);
+					data.relationships.add(r);
 				}
 			}
 		}
@@ -107,7 +107,7 @@ public class DependencyAnalyzer extends AbstractAnalyzer{
 					}
 					if (!ignore){
 						Relationship rel = new Relationship(c, element, r);
-						data.relationships.put(rel.hashCode(), rel);
+						data.relationships.add(rel);
 					}
 				}
 			}

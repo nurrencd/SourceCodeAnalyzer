@@ -7,7 +7,7 @@ Go to: https://graphviz.gitlab.io/_pages/Download/Download_windows.html
 Download the latest stable release of Graphviz.
 Extract the file.
 
-UML View of the project: 
+UML View of the project: https://tinyurl.com/yavnuhwo
 
 **How to use it in command line:**
 

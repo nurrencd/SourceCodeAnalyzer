@@ -8,7 +8,7 @@ public class CustomCollection<T> implements Collection<T> {
 
 	private HashMap<Integer, Relationship> hash;
 
-	public CustomCollection(){
+	public CustomCollection() {
 		this.hash = new HashMap<>();
 	}
 
@@ -16,6 +16,20 @@ public class CustomCollection<T> implements Collection<T> {
 	public boolean add(Object e) {
 		// TODO Auto-generated method stub
 		Relationship r = (Relationship) e;
+		if (r.type == Relationship.RelationshipType.DEPENDENCY_ONE_TO_MANY) {
+			Relationship arrowCheckMany = new Relationship(r.from, r.to, 
+					Relationship.RelationshipType.ASSOCIATION_ONE_TO_MANY);
+			if (hash.containsKey(arrowCheckMany.hashCode())){
+				return false;
+			}
+		}
+		else if (r.type == Relationship.RelationshipType.DEPENDENCY_ONE_TO_ONE){
+			Relationship arrowCheckOne = new Relationship(r.from, r.to, 
+					Relationship.RelationshipType.ASSOCIATION_ONE_TO_ONE);
+			if (hash.containsKey(arrowCheckOne.hashCode())){
+				return false;
+			}
+		}
 		hash.put(r.hashCode(), r);
 		return true;
 	}
@@ -24,8 +38,7 @@ public class CustomCollection<T> implements Collection<T> {
 	public boolean addAll(Collection c) {
 		// TODO Auto-generated method stub
 		for (Object o : c){
-			Relationship r = (Relationship) o;
-			hash.put(r.hashCode(), r);
+			this.add(o);
 		}
 		return true;
 	}

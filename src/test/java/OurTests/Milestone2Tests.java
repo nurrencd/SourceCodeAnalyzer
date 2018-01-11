@@ -10,10 +10,50 @@ import ourStuff.AnalyzerChain;
 import ourStuff.Data;
 import ourStuff.Preprocessor;
 
-public class SeqDiagramTest {
+public class Milestone2Tests {
 
 	@Test
+	public void testLab4(){
+		String[] args = new String[] {
+				"C:\\Users\\moormaet\\workspace\\CSSE 374\\Lab4-1\\bin",
+				"-u",
+				"-m",
+				"problem.SimpleGuiApp",
+				"-e",
+				"headfirst.*"
+			};
+			String path = args[0];
+			Preprocessor pre = new Preprocessor();
+			Data data = new Data();
+			
+			AnalyzerChain analyzerCollection = pre.makePileline(args, data);
+			
+			data.path = Paths.get(path);
+			analyzerCollection.run(data);
+	}
+	
+	@Test
 	public void testLab2_1() {
+		String[] args = new String[] {
+				"C:\\Users\\moormaet\\workspace\\CSSE 374\\Lab2-1\\bin",
+				"-u",
+				"-m",
+				"problem.AppLauncherApplication",
+				"-e",
+				"headfirst.*",
+			};
+			String path = args[0];
+			Preprocessor pre = new Preprocessor();
+			Data data = new Data();
+			
+			AnalyzerChain analyzerCollection = pre.makePileline(args, data);
+			
+			data.path = Paths.get(path);
+			analyzerCollection.run(data);
+	}
+	
+	@Test
+	public void testWeather() {
 		String[] args = new String[] {
 				"C:\\Users\\nurrencd\\Documents\\1-Rose-Hulman\\CSSE\\374\\Lab2-1\\bin",
 				"-s",

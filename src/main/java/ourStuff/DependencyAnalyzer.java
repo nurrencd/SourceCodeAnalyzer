@@ -52,7 +52,6 @@ public class DependencyAnalyzer extends AbstractAnalyzer{
 							Value leftOp = ((AssignStmt) u).getLeftOp();
 							Value rightOp = ((AssignStmt) u).getRightOp();
 							String str = leftOp.getType().toString();
-							System.out.println(((AssignStmt) u).getFieldRef().getField().getType().toString());
 							//System.out.println(leftOp.getType().toString() + " = " + rightOp.getType().toString());
 							
 							//System.out.println(str);
@@ -70,21 +69,7 @@ public class DependencyAnalyzer extends AbstractAnalyzer{
 							}
 						}
 					}
-//					Chain<Local> locals = m.getActiveBody().getLocals();
-//					for (Local l : locals) {
-//						if (data.scene.containsClass(l.getType().toString())){
-//							SootClass clazz = data.scene.getSootClass(l.getType().toString());
-//							
-////							if (clazz.getName().equals(c.getName())){
-////								continue;
-////							}
-//							
-//							if (!applyFilters(clazz)){
-//								Relationship r = new Relationship(c, clazz, RelationshipType.DEPENDENCY_ONE_TO_ONE);
-//								data.relationships.add(r);
-//							}
-//						}
-//					}
+//					
 					CallGraph cg = data.scene.getCallGraph();
 					Iterator<Edge> edges = cg.edgesOutOf(m);
 					while (edges.hasNext()){
@@ -97,15 +82,15 @@ public class DependencyAnalyzer extends AbstractAnalyzer{
 //							}
 							//edge.srcStmt().get
 						}else {
-//							SootMethod method = edge.tgt();
-//							Type retType = method.getReturnType();
-//							if (retType != null){
-//								SootClass retClass = data.scene.getSootClass(retType.toString());
-//								if (!this.applyFilters(retClass)){
-//									Relationship r = new Relationship(c, retClass, RelationshipType.DEPENDENCY_ONE_TO_ONE);
-//									data.relationships.add(r);
-//								}
-//							}
+							SootMethod method = edge.tgt();
+							Type retType = method.getReturnType();
+							if (retType != null){
+								SootClass retClass = data.scene.getSootClass(retType.toString());
+								if (!this.applyFilters(retClass)){
+									Relationship r = new Relationship(c, retClass, RelationshipType.DEPENDENCY_ONE_TO_ONE);
+									data.relationships.add(r);
+								}
+							}
 						}
 					}
 					

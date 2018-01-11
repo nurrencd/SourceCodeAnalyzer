@@ -168,7 +168,7 @@ public class ClassCodeGenAnalyzer extends AbstractAnalyzer {
 				sb.append('\n');
 			}
 			else if (r.type == RelationshipType.DEPENDENCY_ONE_TO_ONE) {
-				sb.append(r.from.getName() + " ..> " + r.to.getName());
+				sb.append(r.from.getName() + " ..> \"1\"" + r.to.getName());
 				sb.append('\n');
 			}
 		}
@@ -183,7 +183,7 @@ public class ClassCodeGenAnalyzer extends AbstractAnalyzer {
 				sb.append('\n');
 			}
 			else if (r.type == RelationshipType.ASSOCIATION_ONE_TO_ONE) {
-				sb.append(r.from.getName() + " --> " + r.to.getName());
+				sb.append(r.from.getName() + " --> \"1\"" + r.to.getName());
 				sb.append('\n');
 			}
 		}

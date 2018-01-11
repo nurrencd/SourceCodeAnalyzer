@@ -13,15 +13,17 @@ import ourStuff.Preprocessor;
 public class SeqDiagramTest {
 
 	@Test
-	public void test() {
+	public void testLab2_1() {
 		String[] args = new String[] {
-				"C:\\Users\\moormaet\\workspace\\CSSE 374\\Lab1-1\\bin",
+				"C:\\Users\\nurrencd\\Documents\\1-Rose-Hulman\\CSSE\\374\\Lab2-1\\bin",
 				"-s",
-				"problem.AppLauncher",
+				"<problem.AppLauncherApplication: void main(java.lang.String[])>",
 				"-m",
-				"problem.AppLauncher",
+				"problem.AppLauncherApplication",
 				"-e",
-				"headfirst.*"
+				"headfirst.*",
+				"-d",
+				"20"
 			};
 			String path = args[0];
 			Preprocessor pre = new Preprocessor();
@@ -32,5 +34,30 @@ public class SeqDiagramTest {
 			data.path = Paths.get(path);
 			analyzerCollection.run(data);
 	}
+	
+	@Test
+	public void testProject() {
+		String[] args = new String[] {
+				"./src/main/java",
+				"-s",
+				"<ourStuff.App: void main(java.lang.String[])>",
+				"-m",
+				"ourStuff.App",
+				"-d",
+				"20",
+				"-e",
+				"csse374.*"
+			};
+		String path = args[0];
+		Preprocessor pre = new Preprocessor();
+		Data data = new Data();
+		AnalyzerChain analyzerCollection = pre.makePileline(args, data);
+			
+//		assertEquals(5,analyzerCollection.size());
+			
+		data.path = Paths.get(path);
+		analyzerCollection.run(data);
+	}
+	
 
 }

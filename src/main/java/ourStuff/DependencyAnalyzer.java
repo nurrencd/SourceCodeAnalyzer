@@ -6,9 +6,12 @@ import java.util.List;
 import edu.rosehulman.jvm.sigevaluator.GenericType;
 import edu.rosehulman.jvm.sigevaluator.MethodEvaluator;
 import ourStuff.Relationship.RelationshipType;
+import soot.Local;
 import soot.SootClass;
 import soot.SootMethod;
+import soot.Type;
 import soot.tagkit.Tag;
+import soot.util.Chain;
 //TODO: Add filter checks
 public class DependencyAnalyzer extends AbstractAnalyzer{
 
@@ -25,6 +28,11 @@ public class DependencyAnalyzer extends AbstractAnalyzer{
 					}
 					GenericType returnType = eval.getReturnType();
 					getTypeDependencies(data, c, returnType);
+				}
+				Chain<Local> locals = m.getActiveBody().getLocals();
+				for (Local l : locals) {
+					Type gt = l.getType();
+					//do funky shit with the locals ;)
 				}
 			}
 			//Need to get Local variables for A

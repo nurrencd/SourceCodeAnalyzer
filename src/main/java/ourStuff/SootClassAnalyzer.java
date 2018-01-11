@@ -55,7 +55,7 @@ public class SootClassAnalyzer extends AbstractAnalyzer {
 		
 		data.scene = scene;	
 		data.classes = scene.getApplicationClasses();
-		
+		System.out.println(scene.getMainMethod().getSignature() + "!@#$!@#$!@#$!@#$!@#$!@#$!@#$!@#$!@#$!($*%(#$*%(#!*!(%*^!%#^!*%(^@$#*%(#%");
 		return data;
 	}
 

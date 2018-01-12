@@ -10,16 +10,29 @@ Download the latest stable release of Graphviz.msi (note download the msi and no
 
 UML View of the project: https://tinyurl.com/yavnuhwo
 
+**How to export file**
+
+Simply export the program as a Runnable Jar File
+    Set Launch Configuration to App (the main file, in \src\main\java\ourStuff)
+    Set Export Destination to your desired destination
+    
 **How to use it in command line:**
 
 java -jar uml <Directory Path> <flag1> <flag2> <value1> <value2> ...
 
 Examples:
+<h3> Creating UML </h3>
+
 java -jar uml.jar "C:\\Users\\moormaet\\workspace\\CSSE 374\\Lab1-1\\bin" -u -c javax.swing.JComponent -j -r -e headfirst.* -f public
 
 java -jar uml.jar "C:\Users\moormaet\workspace\CSSE 374\term-project\src\main\java" -u -m ourStuff.App -e csse374.* -f private
 
 NOTE:  you must either have the -m flag followed by a main method or a -c followed by a list of classes in order for your request to run
+
+<h3> Creating Sequence Diagrams </h3>
+
+java -jar uml.jar "C:\\Users\\nurrencd\\Documents\\1-Rose-Hulman\\CSSE\\374\\Lab2-1\\bin" -s "<problem.AppLauncherApplication: void main(java.lang.String[])>" -m "problem.AppLauncherApplication" -e "headfirst.*" -d "20"
+
 
 
 <h1>Flags:</h1>
@@ -30,6 +43,7 @@ NOTE:  you must either have the -m flag followed by a main method or a -c follow
 - -m mainClass            --> sets mainClass as the main class to begin searching
 - -c [classes...]         --> classes to model in the UML
 - -r                      --> recursively model all of the interfaces and superclasses of the given system
+- -s                      --> generate sequence diagram
 
 <h1>Extending the project:</h1>
 **Creating Analyzers**

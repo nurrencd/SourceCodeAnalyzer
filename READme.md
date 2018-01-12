@@ -3,9 +3,10 @@ This software generates an uml depiction for the java file at the given director
 Graphviz, PlantUML and Soot for this project. Find how to install Graphviz below. Soot and PlantUML will automatically be installed when the project is installed.
 
 **How to install Graphviz on Windows**
+
 Go to: https://graphviz.gitlab.io/_pages/Download/Download_windows.html
-Download the latest stable release of Graphviz.
-Extract the file.
+
+Download the latest stable release of Graphviz.msi (note download the msi and not the zip for easy install)
 
 UML View of the project: https://tinyurl.com/yavnuhwo
 
@@ -71,10 +72,13 @@ Chris:
  - Initial Design refactoring
 
 Abu:
- - Wrote/helped test to check if our code worked in UML
+ - Wrote/helped test to check if our code worked in UML + Sequence Generator
  - Pair programmed with teammates for the whole of milestone 1
  - Worked in CodeGen
  - Helped with file writing
  - Worked with Preprocessor and App class
+ - Sequence Generator
+ - ClassCodeGenAnalyzer
+ - Readme
  - Made the project skeleton (Which was almost completely refactored after design review)
 

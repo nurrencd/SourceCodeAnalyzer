@@ -77,6 +77,9 @@ Eric:
 - Added file writting and SVG generation
 - Added exclusion flag functionality
 - worked on SootClassAnalyzer
+- worked on SequenceDiagramAnalyzer
+- worked on Dependency and Association Analyzers
+- made CustomCollection
 
 Chris:
  - Recursive Analyzer

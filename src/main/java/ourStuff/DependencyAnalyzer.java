@@ -42,6 +42,23 @@ public class DependencyAnalyzer extends AbstractAnalyzer{
 					GenericType returnType = eval.getReturnType();
 					getTypeDependencies(data, c, returnType);
 				}
+				for (Type t : m.getParameterTypes()){
+					if (data.scene.containsClass(t.toString())){
+						SootClass container = data.scene.getSootClass(t.toString());
+						if (container != null) {
+							boolean ignore = false;
+							for (Filter f : this.filters) {
+								if (f.ignore(container)) {
+									ignore = true;
+								}
+							}
+							if (!ignore){
+								Relationship r = new Relationship(c, container, RelationshipType.DEPENDENCY_ONE_TO_ONE);
+								data.relationships.add(r);
+							}
+						}
+					}
+				}
 				
 				if (m.hasActiveBody()){
 					Body b = m.retrieveActiveBody();
@@ -105,9 +122,6 @@ public class DependencyAnalyzer extends AbstractAnalyzer{
 		//Fix Duplicate Code and Container One to One logic
 		Collection<String> containerTypes = gt.getAllContainerTypes();
 		Collection<String> elementTypes = gt.getAllElementTypes();
-		elementTypes.forEach((String s) -> {
-			System.out.println(s + "\n");
-		});
 		for (String s : containerTypes) {
 			SootClass container = data.scene.getSootClass(s);
 			if (container != null) {
@@ -124,6 +138,9 @@ public class DependencyAnalyzer extends AbstractAnalyzer{
 			}
 		}
 		for (String s : elementTypes) {
+			if (c.getName().equals("problem.IDirectoryListener")){
+				System.out.println("Wombo: " + s + ".............");
+			}
 			SootClass element = data.scene.getSootClassUnsafe(s);
 			if (element != null) {
 				//TODO: Abstract to AbstractAnalyzerClass

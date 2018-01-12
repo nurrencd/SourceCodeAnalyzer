@@ -16,20 +16,17 @@ public class CustomCollection<T> implements Collection<T> {
 	public boolean add(Object e) {
 		// TODO Auto-generated method stub
 		Relationship r = (Relationship) e;
-		if (r.type == Relationship.RelationshipType.DEPENDENCY_ONE_TO_MANY) {
+		if (r.type == Relationship.RelationshipType.DEPENDENCY_ONE_TO_MANY 
+				|| r.type == Relationship.RelationshipType.DEPENDENCY_ONE_TO_ONE) {
 			Relationship arrowCheckMany = new Relationship(r.from, r.to, 
 					Relationship.RelationshipType.ASSOCIATION_ONE_TO_MANY);
-			if (hash.containsKey(arrowCheckMany.hashCode())){
-				return false;
-			}
-		}
-		else if (r.type == Relationship.RelationshipType.DEPENDENCY_ONE_TO_ONE){
 			Relationship arrowCheckOne = new Relationship(r.from, r.to, 
 					Relationship.RelationshipType.ASSOCIATION_ONE_TO_ONE);
-			if (hash.containsKey(arrowCheckOne.hashCode())){
+			if (hash.containsKey(arrowCheckMany.hashCode()) || hash.containsKey(arrowCheckOne.hashCode())){
 				return false;
 			}
 		}
+		
 		hash.put(r.hashCode(), r);
 		return true;
 	}

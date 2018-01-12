@@ -13,14 +13,19 @@ import ourStuff.Preprocessor;
 public class Milestone2Tests {
 
 	@Test
-	public void testLab4(){
+	public void testLab4_1(){
 		String[] args = new String[] {
-				"C:\\Users\\moormaet\\workspace\\CSSE 374\\Lab4-1\\bin",
-				"-u",
+				"C:\\Users\\nurrencd\\Documents\\1-Rose-Hulman\\CSSE\\374\\374 Workspace\\Lab4-1.zip_expanded\\bin",
+//				"C:\\Users\\moormaet\\workspace\\CSSE 374\\Lab4-1\\bin",
+				"-s",
+				"<headfirst.factory.pizzaaf.PizzaStore: headfirst.factory.pizzaaf.Pizza orderPizza(java.lang.String)>",
 				"-m",
-				"problem.SimpleGuiApp",
+				"headfirst.factory.pizzaaf.PizzaTestDrive",
 				"-e",
-				"headfirst.*"
+				"problem.*",
+				"windows.*",
+				"linux.*",
+				"mac.*",
 			};
 			String path = args[0];
 			Preprocessor pre = new Preprocessor();
@@ -35,7 +40,8 @@ public class Milestone2Tests {
 	@Test
 	public void testLab2_1() {
 		String[] args = new String[] {
-				"C:\\Users\\moormaet\\workspace\\CSSE 374\\Lab2-1\\bin",
+				"C:\\Users\\nurrencd\\Documents\\1-Rose-Hulman\\CSSE\\374\\Lab2-1\\bin",
+//				"C:\\Users\\moormaet\\workspace\\CSSE 374\\Lab2-1\\bin",
 				"-u",
 				"-m",
 				"problem.AppLauncherApplication",
@@ -57,11 +63,11 @@ public class Milestone2Tests {
 		String[] args = new String[] {
 				"C:\\Users\\nurrencd\\Documents\\1-Rose-Hulman\\CSSE\\374\\Lab2-1\\bin",
 				"-s",
-				"<problem.AppLauncherApplication: void main(java.lang.String[])>",
+				"<headfirst.designpatterns.observer.weather.WeatherStation: void main(java.lang.String[])>",
 				"-m",
-				"problem.AppLauncherApplication",
+				"headfirst.designpatterns.observer.weather.WeatherStation",
 				"-e",
-				"headfirst.*",
+				"problem.*",
 				"-d",
 				"20"
 			};
@@ -79,12 +85,10 @@ public class Milestone2Tests {
 	public void testProject() {
 		String[] args = new String[] {
 				"./src/main/java",
-				"-s",
+				"-u",
 				"<ourStuff.App: void main(java.lang.String[])>",
 				"-m",
 				"ourStuff.App",
-				"-d",
-				"20",
 				"-e",
 				"csse374.*"
 			};

@@ -1,6 +1,6 @@
-This software generates an uml depiction for the java file at the given directory.  It will save the svg file of the uml and will also bring up the svg on completion.
+This software generates a UML or Sequence Diagram depiction for the java file at the given directory.  It will save the svg file of the UML and will also bring up the svg on completion.
 
-Graphviz, PlantUML and Soot for this project. Find how to install Graphviz below. Soot and PlantUML will automatically be installed when the project is installed.
+Graphviz, PlantUML and Soot are required for this project. Find how to install Graphviz below. Soot and PlantUML will automatically be installed when the project is installed.
 
 **How to install Graphviz on Windows**
 
@@ -18,7 +18,8 @@ Simply export the program as a Runnable Jar File
     
 **How to use it in command line:**
 
-java -jar uml <Directory Path> <flag1> <flag2> <value1> <value2> ...
+java -jar uml <Directory Path> <flag1> <value1> <flag2>  <value2> ...
+Not all filters have values;
 
 Examples:
 <h3> Creating UML </h3>
@@ -36,14 +37,15 @@ java -jar uml.jar "C:\\Users\\nurrencd\\Documents\\1-Rose-Hulman\\CSSE\\374\\Lab
 
 
 <h1>Flags:</h1>
-- -f  [filters...]        --> apply filters (rework ideology)
 - -u                      --> generate UML
+- -s                      --> generate sequence diagram
+- -f  [filters...]        --> apply filters
 - -j                      --> include java files
 - -e [exclusions]         --> exclude file types
 - -m mainClass            --> sets mainClass as the main class to begin searching
 - -c [classes...]         --> classes to model in the UML
 - -r                      --> recursively model all of the interfaces and superclasses of the given system
-- -s                      --> generate sequence diagram
+- -d                      --> set maximum call depth for sequence diagram
 
 <h1>Extending the project:</h1>
 **Creating Analyzers**
@@ -75,7 +77,6 @@ Eric:
 - Added file writting and SVG generation
 - Added exclusion flag functionality
 - worked on SootClassAnalyzer
-- pair programmed for entire implementation of the milestone
 
 Chris:
  - Recursive Analyzer
@@ -84,10 +85,12 @@ Chris:
  - designed most of flag system
  - Relationship Analyzer
  - Initial Design refactoring
+ - One design / implementation of SequenceDiagramAnalyzer
+ - Association analyzer
+ - Data relationship maintenance
 
 Abu:
  - Wrote/helped test to check if our code worked in UML + Sequence Generator
- - Pair programmed with teammates for the whole of milestone 1
  - Worked in CodeGen
  - Helped with file writing
  - Worked with Preprocessor and App class

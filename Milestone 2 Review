@@ -1,0 +1,5 @@
+* Very few Association Arrows being drawn.  Need to go back and figure out why
+* Field, return, and Parameter types not showing the elements contained in a Collection
+* Sequence Diagrams look good
+* need to refactor code.  Classes are of a good length, but some methods very large
+* UML arrows correct in where they are pointing

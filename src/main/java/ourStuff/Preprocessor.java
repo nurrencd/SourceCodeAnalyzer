@@ -32,12 +32,15 @@ public class Preprocessor {
 		if(config.containsKey("-u")){
 			AbstractAnalyzer impAnal = new ImplementationAnalyzer();
 			AbstractAnalyzer inhAnal = new InheritenceAnalyzer();
-			AbstractAnalyzer assAnal = new AssociationAnalyzer();
 			AbstractAnalyzer depAnal = new DependencyAnalyzer();
+			AbstractAnalyzer assAnal = new AssociationAnalyzer();
+			
 			listOfAnalyzers.add(impAnal);
 			listOfAnalyzers.add(inhAnal);
 			listOfAnalyzers.add(assAnal);
-			listOfAnalyzers.add(depAnal);
+			//listOfAnalyzers.add(depAnal);
+			
+			
 			AbstractAnalyzer cGen = new ClassCodeGenAnalyzer();
 			
 			

@@ -137,8 +137,7 @@ public class SequenceDiagramAnalyzer extends AbstractAnalyzer {
 					}
 
 				}
-				else 
-				if (u instanceof InvokeStmt) {
+				else if (u instanceof InvokeStmt) {
 					SootMethod rightMethod = ((InvokeStmt) u).getInvokeExpr().getMethod();
 					SootClass rightClass = rightMethod.getDeclaringClass();
 					if (this.applyFilters(rightClass)) {

@@ -15,8 +15,8 @@ public class Milestone2Tests {
 	@Test
 	public void testLab4_1(){
 		String[] args = new String[] {
-				"C:\\Users\\nurrencd\\Documents\\1-Rose-Hulman\\CSSE\\374\\374 Workspace\\Lab4-1.zip_expanded\\bin",
-//				"C:\\Users\\moormaet\\workspace\\CSSE 374\\Lab4-1\\bin",
+				//"C:\\Users\\nurrencd\\Documents\\1-Rose-Hulman\\CSSE\\374\\374 Workspace\\Lab4-1.zip_expanded\\bin",
+				"C:\\Users\\moormaet\\workspace\\CSSE 374\\Lab4-1\\bin",
 				"-s",
 				"<headfirst.factory.pizzaaf.PizzaStore: headfirst.factory.pizzaaf.Pizza orderPizza(java.lang.String)>",
 				"-m",
@@ -40,8 +40,8 @@ public class Milestone2Tests {
 	@Test
 	public void testLab2_1() {
 		String[] args = new String[] {
-				"C:\\Users\\nurrencd\\Documents\\1-Rose-Hulman\\CSSE\\374\\Lab2-1\\bin",
-//				"C:\\Users\\moormaet\\workspace\\CSSE 374\\Lab2-1\\bin",
+//				"C:\\Users\\nurrencd\\Documents\\1-Rose-Hulman\\CSSE\\374\\Lab2-1\\bin",
+				"C:\\Users\\moormaet\\workspace\\CSSE 374\\Lab2-1\\bin",
 				"-u",
 				"-m",
 				"problem.AppLauncherApplication",

@@ -26,18 +26,11 @@ public class ImplementationAnalyzer extends AbstractAnalyzer {
 		Collection<Relationship> relationships = new ArrayList<Relationship>();
 		Collection<SootClass> interfaces = c.getInterfaces();
 		//add interface relationships
-		boolean ignore = false;
 		for (SootClass sc : interfaces) {
-			for (Filter f : this.filters) {
-				if (f.ignore(sc)) {
-					ignore = true;
-				}
-			}
-			if (!ignore && !sc.getShortName().contains("$")) {
+			if (!this.applyFilters(sc) && !sc.getShortName().contains("$")) {
 				Relationship r = new Relationship(c, sc, Relationship.RelationshipType.IMPLEMENTATION);
 				relationships.add(r);
 			}
-			ignore = false;
 		}
 		return relationships;
 	}

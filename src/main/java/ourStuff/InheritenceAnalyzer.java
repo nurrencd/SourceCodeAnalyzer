@@ -22,19 +22,10 @@ public class InheritenceAnalyzer extends AbstractAnalyzer {
 	}
 	
 	private Collection<Relationship> getInheritance(SootClass c){
-		boolean ignore;
 		Collection<Relationship> rels = new ArrayList<Relationship>();
 		if(c.hasSuperclass()){
 			SootClass superclass = c.getSuperclass();
-			
-			ignore = false;
-			for (Filter f : this.filters) {
-				
-				if (f.ignore(superclass)) {
-					ignore = true;
-				}
-			}
-			if (!ignore) {
+			if (!this.applyFilters(superclass)) {
 				Relationship r = new Relationship(c, superclass, Relationship.RelationshipType.INHERITANCE);
 				rels.add(r);
 			}

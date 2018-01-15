@@ -30,34 +30,7 @@ public class Preprocessor {
 		
 		//Create a Uml
 		if(config.containsKey("-u")){
-			AbstractAnalyzer impAnal = new ImplementationAnalyzer();
-			AbstractAnalyzer inhAnal = new InheritenceAnalyzer();
-			AbstractAnalyzer depAnal = new DependencyAnalyzer();
-			AbstractAnalyzer assAnal = new AssociationAnalyzer();
-			
-			listOfAnalyzers.add(impAnal);
-			listOfAnalyzers.add(inhAnal);
-			listOfAnalyzers.add(assAnal);
-			//listOfAnalyzers.add(depAnal);
-			
-			
-			AbstractAnalyzer cGen = new ClassCodeGenAnalyzer();
-			
-			
-			listOfAnalyzers.add(cGen);
-			if(config.containsKey("-f")){
-				
-				List<String> instructions = config.get("-f");
-				for (String s : instructions)
-					cGen.addFilter(this.filterMap.get(s));
-			}
-			if (!config.containsKey("-j")) {
-				Filter jdk = new JDKFilter();
-				impAnal.addFilter(jdk);
-				inhAnal.addFilter(jdk);
-				assAnal.addFilter(jdk);
-				depAnal.addFilter(jdk);
-			}
+			createUMLAnalyzers(config, listOfAnalyzers);
 		}
 		
 		if(config.containsKey("-s")){
@@ -71,6 +44,42 @@ public class Preprocessor {
 		}
 		
 		return listOfAnalyzers;
+	}
+
+
+	/**
+	 * @param config
+	 * @param listOfAnalyzers
+	 */
+	private void createUMLAnalyzers(Map<String, ArrayList<String>> config, AnalyzerChain listOfAnalyzers) {
+		AbstractAnalyzer impAnal = new ImplementationAnalyzer();
+		AbstractAnalyzer inhAnal = new InheritenceAnalyzer();
+		AbstractAnalyzer depAnal = new DependencyAnalyzer();
+		AbstractAnalyzer assAnal = new AssociationAnalyzer();
+		
+		listOfAnalyzers.add(impAnal);
+		listOfAnalyzers.add(inhAnal);
+		listOfAnalyzers.add(assAnal);
+		listOfAnalyzers.add(depAnal);
+		
+		
+		AbstractAnalyzer cGen = new ClassCodeGenAnalyzer();
+		
+		
+		listOfAnalyzers.add(cGen);
+		if(config.containsKey("-f")){
+			
+			List<String> instructions = config.get("-f");
+			for (String s : instructions)
+				cGen.addFilter(this.filterMap.get(s));
+		}
+		if (!config.containsKey("-j")) {
+			Filter jdk = new JDKFilter();
+			impAnal.addFilter(jdk);
+			inhAnal.addFilter(jdk);
+			assAnal.addFilter(jdk);
+			depAnal.addFilter(jdk);
+		}
 	}
 	
 	Map<String, ArrayList<String>> configGen(String[] args){

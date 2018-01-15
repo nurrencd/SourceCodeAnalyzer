@@ -19,6 +19,7 @@ public class ClassCodeGenAnalyzer extends AbstractAnalyzer {
 	public Data analyze(Data data) {
 		StringBuilder code = new StringBuilder();
 		code.append("@startuml\n");
+		code.append("skinparam linetype ortho \n");
 		for(SootClass c : data.classes){
 			if(filterClass(c)){
 				code.append(genString(c, data) + "\n");
@@ -41,6 +42,73 @@ public class ClassCodeGenAnalyzer extends AbstractAnalyzer {
 	private String genString(SootClass c, Data data){
 		
 		StringBuilder code = new StringBuilder();
+	
+		
+		//Classes/Relations have been added
+		genClasses(c, data, code);
+		
+		
+		//Fields added
+		genField(c, code);
+		
+		//Methods added
+		genMethod(c, code);
+		
+		code.append("}");
+		return code.toString();
+	}
+
+	/**
+	 * @param c
+	 * @param code
+	 */
+	private void genMethod(SootClass c, StringBuilder code) {
+		for(SootMethod m : c.getMethods()){
+			if(m.isPublic()){
+				code.append("  + ");
+			}else if(m.isProtected()){
+				code.append("  # ");
+			}else{ 
+				code.append("  - ");
+			}
+			if(m.isStatic()){
+				code.append("{static} ");
+			}
+			if(m.isAbstract()){
+				code.append("{abstract} ");
+			}
+			code.append(this.genMethodDeclaration(m));
+		}
+	}
+
+	/**
+	 * @param c
+	 * @param code
+	 */
+	private void genField(SootClass c, StringBuilder code) {
+		code.append(" { \n");
+		for(SootField f : c.getFields()){
+			if(f.isPublic()){
+				code.append("  + ");
+			}else if(f.isProtected()){
+				code.append("  # ");
+			}else{
+				code.append("  - ");
+			}
+			if(f.isStatic()){
+				code.append("{static} ");
+			}
+			code.append(f.getType().toQuotedString() + " ");
+			code.append(f.getName()+ " \n");
+		}
+	}
+
+	/**
+	 * @param c
+	 * @param data
+	 * @param code
+	 */
+	private void genClasses(SootClass c, Data data, StringBuilder code) {
 		if (c.isInterface()) {
 			code.append("interface ");
 		}
@@ -69,48 +137,6 @@ public class ClassCodeGenAnalyzer extends AbstractAnalyzer {
 			code.deleteCharAt(code.length() - 1);
 			code.deleteCharAt(code.length() - 1);
 		}
-	
-		
-		//Classes/Relations have been added
-		
-		code.append(" { \n");
-		for(SootField f : c.getFields()){
-			if(f.isPublic()){
-				code.append("  + ");
-			}else if(f.isProtected()){
-				code.append("  # ");
-			}else{
-				code.append("  - ");
-			}
-			if(f.isStatic()){
-				code.append("{static} ");
-			}
-			code.append(f.getType().toQuotedString() + " ");
-			code.append(f.getName()+ " \n");
-		}
-		
-		//Fields added
-		
-		for(SootMethod m : c.getMethods()){
-			if(m.isPublic()){
-				code.append("  + ");
-			}else if(m.isProtected()){
-				code.append("  # ");
-			}else{ 
-				code.append("  - ");
-			}
-			if(m.isStatic()){
-				code.append("{static} ");
-			}
-			if(m.isAbstract()){
-				code.append("{abstract} ");
-			}
-			code.append(this.genMethodDeclaration(m));
-		}
-		//Methods added
-		
-		code.append("}");
-		return code.toString();
 	}
 	
 	private String genMethodDeclaration(SootMethod m) {
@@ -168,7 +194,7 @@ public class ClassCodeGenAnalyzer extends AbstractAnalyzer {
 				sb.append('\n');
 			}
 			else if (r.type == RelationshipType.DEPENDENCY_ONE_TO_ONE) {
-				sb.append(r.from.getName() + " ..> \"1\"" + r.to.getName());
+				sb.append(r.from.getName() + " ..> \"1\" " + r.to.getName());
 				sb.append('\n');
 			}
 		}
@@ -183,7 +209,7 @@ public class ClassCodeGenAnalyzer extends AbstractAnalyzer {
 				sb.append('\n');
 			}
 			else if (r.type == RelationshipType.ASSOCIATION_ONE_TO_ONE) {
-				sb.append(r.from.getName() + " --> \"1\"" + r.to.getName());
+				sb.append(r.from.getName() + " --> \"1\" " + r.to.getName());
 				sb.append('\n');
 			}
 		}

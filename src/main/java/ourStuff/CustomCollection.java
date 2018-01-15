@@ -26,7 +26,6 @@ public class CustomCollection<T> implements Collection<T> {
 				return false;
 			}
 		}
-		
 		hash.put(r.hashCode(), r);
 		return true;
 	}

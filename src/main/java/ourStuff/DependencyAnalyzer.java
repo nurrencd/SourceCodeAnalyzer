@@ -25,30 +25,31 @@ import soot.tagkit.Tag;
 import soot.toolkits.graph.ExceptionalUnitGraph;
 import soot.toolkits.graph.UnitGraph;
 import soot.util.Chain;
+
 //TODO: Add filter checks
-public class DependencyAnalyzer extends AbstractAnalyzer{
+public class DependencyAnalyzer extends AbstractAnalyzer {
 
 	@Override
 	public Data analyze(Data data) {
 		for (SootClass c : data.classes) {
-			for (SootMethod m : c.getMethods()){
+			for (SootMethod m : c.getMethods()) {
 				Tag tag = m.getTag("SignatureTag");
-				if (tag != null){
+				if (tag != null) {
 					getReturnType(data, c, tag);
 				}
 				getParameterTypes(data, c, m);
-				
-				if (m.hasActiveBody()){
+
+				if (m.hasActiveBody()) {
 					Body b = m.retrieveActiveBody();
 					UnitGraph ug = new ExceptionalUnitGraph(b);
-					
+
 					checkExpressionInterior(data, c, ug);
-//					
+					//
 					checkExpressionEdges(data, c, m);
-					
+
 				}
 			}
-			//Need to get Local variables for A
+			// Need to get Local variables for A
 		}
 		return data;
 	}
@@ -61,14 +62,14 @@ public class DependencyAnalyzer extends AbstractAnalyzer{
 	private void checkExpressionEdges(Data data, SootClass c, SootMethod m) {
 		CallGraph cg = data.scene.getCallGraph();
 		Iterator<Edge> edges = cg.edgesOutOf(m);
-		while (edges.hasNext()){
+		while (edges.hasNext()) {
 			Edge edge = edges.next();
-			if (!edge.isInstance()){
+			if (!edge.isInstance()) {
 				SootMethod method = edge.tgt();
 				Type retType = method.getReturnType();
-				if (retType != null){
+				if (retType != null) {
 					SootClass retClass = data.scene.getSootClass(retType.toString());
-					if (!this.applyFilters(retClass)){
+					if (!this.applyFilters(retClass)) {
 						Relationship r = new Relationship(c, retClass, RelationshipType.DEPENDENCY_ONE_TO_ONE);
 						data.relationships.add(r);
 					}
@@ -83,16 +84,15 @@ public class DependencyAnalyzer extends AbstractAnalyzer{
 	 * @param ug
 	 */
 	private void checkExpressionInterior(Data data, SootClass c, UnitGraph ug) {
-		for (Unit u : ug){
+		for (Unit u : ug) {
 			if (u instanceof AssignStmt) {
 				Value leftOp = ((AssignStmt) u).getLeftOp();
 				Value rightOp = ((AssignStmt) u).getRightOp();
 				String str = leftOp.getType().toString();
-				if (data.scene.containsClass(str)){
+				if (data.scene.containsClass(str)) {
 					SootClass clazz = data.scene.getSootClass(str);
 
-					
-					if (!applyFilters(clazz)){
+					if (!applyFilters(clazz)) {
 						Relationship r = new Relationship(c, clazz, RelationshipType.DEPENDENCY_ONE_TO_ONE);
 						data.relationships.add(r);
 					}
@@ -107,8 +107,11 @@ public class DependencyAnalyzer extends AbstractAnalyzer{
 	 * @param m
 	 */
 	private void getParameterTypes(Data data, SootClass c, SootMethod m) {
-		for (Type t : m.getParameterTypes()){
-			if (data.scene.containsClass(t.toString())){
+		for (Type t : m.getParameterTypes()) {
+			if (t.toString().contains("TT;")||t.toString().contains("<*")) {
+				continue;
+			}
+			if (data.scene.containsClass(t.toString())) {
 				SootClass container = data.scene.getSootClass(t.toString());
 				if (container != null) {
 					boolean ignore = false;
@@ -117,7 +120,7 @@ public class DependencyAnalyzer extends AbstractAnalyzer{
 							ignore = true;
 						}
 					}
-					if (!ignore){
+					if (!ignore) {
 						Relationship r = new Relationship(c, container, RelationshipType.DEPENDENCY_ONE_TO_ONE);
 						data.relationships.add(r);
 					}
@@ -132,9 +135,13 @@ public class DependencyAnalyzer extends AbstractAnalyzer{
 	 * @param tag
 	 */
 	private void getReturnType(Data data, SootClass c, Tag tag) {
+		if (tag.toString().contains("TT;")||tag.toString().contains("<*")) {
+			return;
+		}
 		MethodEvaluator eval = new MethodEvaluator(tag.toString());
+		System.out.println(c.getName() + " " + tag.toString());
 		List<GenericType> generic = eval.getParameterTypes();
-		for (GenericType gt : generic){
+		for (GenericType gt : generic) {
 			getTypeDependencies(data, c, gt);
 		}
 		GenericType returnType = eval.getReturnType();
@@ -142,13 +149,13 @@ public class DependencyAnalyzer extends AbstractAnalyzer{
 	}
 
 	private void getTypeDependencies(Data data, SootClass c, GenericType gt) {
-		//Fix Duplicate Code and Container One to One logic
+		// Fix Duplicate Code and Container One to One logic
 		Collection<String> containerTypes = gt.getAllContainerTypes();
 		Collection<String> elementTypes = gt.getAllElementTypes();
 		for (String s : containerTypes) {
 			SootClass container = data.scene.getSootClass(s);
 			if (container != null) {
-				if (!this.applyFilters(container)){
+				if (!this.applyFilters(container)) {
 					Relationship r = new Relationship(c, container, RelationshipType.DEPENDENCY_ONE_TO_ONE);
 					data.relationships.add(r);
 				}
@@ -157,9 +164,9 @@ public class DependencyAnalyzer extends AbstractAnalyzer{
 		for (String s : elementTypes) {
 			SootClass element = data.scene.getSootClassUnsafe(s);
 			if (element != null) {
-				if (!this.applyFilters(element)){
+				if (!this.applyFilters(element)) {
 					RelationshipType r = RelationshipType.DEPENDENCY_ONE_TO_MANY;
-					if (containerTypes.size()==0) {
+					if (containerTypes.size() == 0) {
 						r = RelationshipType.DEPENDENCY_ONE_TO_ONE;
 					}
 					Relationship rel = new Relationship(c, element, r);
@@ -169,6 +176,4 @@ public class DependencyAnalyzer extends AbstractAnalyzer{
 		}
 	}
 
-	
-	
 }

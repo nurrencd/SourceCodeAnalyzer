@@ -1,0 +1,5 @@
+path=./src/main/java
+uml=true
+recursive=true
+classlist=java.lang.String
+exclude=csse374.*

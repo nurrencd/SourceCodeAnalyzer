@@ -152,7 +152,7 @@ public class ClassCodeGenAnalyzer extends AbstractAnalyzer {
 			String[] ar = m.getSignature().split(" ");
 			sb.append(ar[ar.length - 1]);
 			sb.deleteCharAt(sb.length() - 1);
-			t.toString().lastIndex
+			
 		}
 		else {
 			MethodEvaluator me = new MethodEvaluator(t.toString());

@@ -1,11 +1,21 @@
 package ourStuff;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 public class Preprocessor {
+	public static final List<String> PROPERTIES = Collections.unmodifiableList(Arrays.asList("path", "uml", "recursive", "classlist",
+			"exclude", "sequence", "mainmethod", "filters", "java"));
+	
 	private Map<String, Filter> filterMap;
 	
 	public Preprocessor() {
@@ -84,20 +94,31 @@ public class Preprocessor {
 	
 	Map<String, ArrayList<String>> configGen(String[] args){
 		Map<String, ArrayList<String>> config =  new HashMap<String, ArrayList<String>>();
-		String flag = "";
-		ArrayList<String> configStringArray;
-		for(int i = 1; i < args.length; i++){
-			String e = args[i];
-			if(e.startsWith("-")){
-				configStringArray = new ArrayList<String>();
-				flag = e;
-				config.put(flag,configStringArray); //For flags that don't have a filter/value associated with it
-										// E.g. -u For generating UML
-			}else{
-				config.get(flag).add(e);
-				System.out.println(flag + " " + config.get(flag).toString());
-			}
+		
+		Path path = Paths.get(args[1]);
+		Properties prop = new Properties();
+		try {
+			FileInputStream in = new FileInputStream(path.toFile());
+			prop.load(in);
+			//TODO:  Add the property file recursion
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+		
+//		String flag = "";
+//		ArrayList<String> configStringArray;
+//		for(int i = 1; i < args.length; i++){
+//			String e = args[i];
+//			if(e.startsWith("-")){
+//				configStringArray = new ArrayList<String>();
+//				flag = e;
+//				config.put(flag,configStringArray); //For flags that don't have a filter/value associated with it
+//										// E.g. -u For generatingUML
+//			}else{
+//				config.get(flag).add(e);
+//				System.out.println(flag + " " + config.get(flag).toString());
+//			}
+//		}
 		return config;
 	}
 	

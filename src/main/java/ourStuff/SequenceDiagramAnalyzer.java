@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Properties;
 
 import net.bytebuddy.jar.asm.Type;
 import soot.Body;
@@ -30,7 +31,7 @@ import soot.toolkits.graph.UnitGraph;
 
 public class SequenceDiagramAnalyzer extends AbstractAnalyzer {
 	private final int DEFAULT_DEPTH = 5;
-	private final String DEPTH_KEY = "-d";
+	private final String DEPTH_KEY = "depth";
 
 	private String mSig;
 	private int maxDepth;
@@ -43,7 +44,7 @@ public class SequenceDiagramAnalyzer extends AbstractAnalyzer {
 	@Override
 	public Data analyze(Data data) {
 		if (data.config.containsKey(DEPTH_KEY)) {
-			this.maxDepth = Integer.parseInt(data.config.get(DEPTH_KEY).get(0));
+			this.maxDepth = Integer.parseInt(data.get("properties", Properties.class).getProperty(DEPTH_KEY));
 		}
 		SootMethod entry = data.scene.getMethod(this.mSig);
 		StringBuilder codeBuilder = new StringBuilder();

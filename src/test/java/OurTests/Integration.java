@@ -20,7 +20,7 @@ import ourStuff.ImplementationAnalyzer;
 public class Integration {
 
 	@Test
-	public void systemTest() {
+	public void oldSystemTest() {
 		String[] args = new String[] {
 			"./src/main/java",
 			"-u",
@@ -39,6 +39,16 @@ public class Integration {
 //		assertEquals(5,analyzerCollection.size());
 		
 		data.path = Paths.get(path);
+		analyzerCollection.run(data);
+	}
+	@Test
+	public void systemTest() {
+		String[] args = new String[] {
+			"PropertiesFiles/IntegrationProperties"
+		};
+		Preprocessor pre = new Preprocessor();
+		Data data = new Data();
+		AnalyzerChain analyzerCollection = pre.makePileline(args, data);
 		analyzerCollection.run(data);
 	}
 

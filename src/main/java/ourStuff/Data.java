@@ -3,10 +3,10 @@ package ourStuff;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.Properties;
+
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ListMultimap;
 
 import soot.Scene;
 import soot.SootClass;
@@ -14,15 +14,31 @@ import soot.SootClass;
 public class Data {
 	public Collection<SootClass> classes;
 	public Collection<Relationship> relationships;
-	public Map<String, ArrayList<String>> config;
+	public ListMultimap<String, Object> config;
+	public Properties prop;
 	public Scene scene;
 	public Path path;
-	// ADD PRIVATE FILTER METHOD TO ANALYZERS TO CLEAN UP DA CODE
 	
 	public Data() {
 		classes = new ArrayList<>();
 		relationships = new CustomCollection<>();
-		config = new HashMap<>();
+		config = ArrayListMultimap.create();
+	}
+	
+	public void put(String key, Object value) {
+		if (key.equals("properties")) {
+			this.prop = (Properties) value;
+			return;
+		}
+		config.put(key, value);
+	}
+	
+	public <T> T get(String key, Class<T> clazz) {
+		if (key.equals("properties")) {
+			return clazz.cast(this.prop);
+		}
+		Object o = config.get(key);
+		return clazz.cast(o);
 	}
 	
 	

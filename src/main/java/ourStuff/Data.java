@@ -4,6 +4,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -25,5 +26,15 @@ public class Data {
 		return clazz.cast(o);
 	}
 	
+	public List<Pattern> getPatterns(){
+		List<Pattern> patterns = new ArrayList<Pattern>();
+		for(Object o: this.map.values()){
+			if(o instanceof Pattern){
+				Pattern p = (Pattern) o;
+				patterns.add(p);
+			}
+		}
+		return patterns;
+	}
 	
 }

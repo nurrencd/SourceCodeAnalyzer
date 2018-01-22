@@ -18,7 +18,7 @@ public class Preprocessor {
 	public static final List<String> PROPERTIES = Collections.unmodifiableList(Arrays.asList(
 			"path", "uml", "recursive", "depth",
 			"classlist", "exclude", "sequence",
-			"mainmethod", "filters", "java"));
+			"mainmethod", "filters", "java", "pattern"));
 
 	private Map<String, Filter> filterMap;
 
@@ -76,6 +76,8 @@ public class Preprocessor {
 		listOfAnalyzers.add(assAnal);
 		listOfAnalyzers.add(depAnal);
 
+		addPatternAnalyzers(config, listOfAnalyzers);
+		
 		AbstractAnalyzer cGen = new ClassCodeGenAnalyzer();
 
 		listOfAnalyzers.add(cGen);
@@ -91,6 +93,26 @@ public class Preprocessor {
 			inhAnal.addFilter(jdk);
 			assAnal.addFilter(jdk);
 			depAnal.addFilter(jdk);
+		}
+	}
+
+	/**
+	 * @param config
+	 * @param listOfAnalyzers
+	 */
+	private void addPatternAnalyzers(Properties config, AnalyzerChain listOfAnalyzers) {
+		if(config.containsKey("pattern")){
+			String pattern  = config.getProperty("pattern");
+			String[] patternArray = pattern.split(" ");
+			for(String p : patternArray){
+				try {
+					AbstractAnalyzer analyzer = (AbstractAnalyzer) Class.forName(p).newInstance();
+					listOfAnalyzers.add(analyzer);
+				} catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 

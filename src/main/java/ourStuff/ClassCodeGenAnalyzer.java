@@ -31,8 +31,7 @@ public class ClassCodeGenAnalyzer extends AbstractAnalyzer {
 			}
 		}
 		// draw arrows
-		code.append(this.addAssociationArrows(data));
-		code.append(this.addDependencyArrows(data));
+		code.append(this.addRelationshipArrows(data));
 		code.append("@enduml");
 		// System.out.println(code.toString());
 		try {
@@ -127,23 +126,24 @@ public class ClassCodeGenAnalyzer extends AbstractAnalyzer {
 		code.append(c.getName());
 		Collection<SootClass> interfaces = new ArrayList<>();
 		Collection<Relationship> rels = data.get("relationships", Collection.class);
-		for (Relationship r : rels) {
-			if (r.from.equals(c)) {
-				if (r.type == RelationshipType.INHERITANCE) {
-					code.append(" extends " + r.to.getName());
-				} else if (r.type == RelationshipType.IMPLEMENTATION) {
-					interfaces.add(r.to);
+
+		for(Pattern p: data.getPatterns()){
+			Collection<String> classKeys = p.getClassKeys();
+			for(String key: classKeys){
+				if(p.getAppliedRelationships(key).contains(c)){
+					code.append(" " + p.getDeclarationModification());
 				}
 			}
 		}
-		if (interfaces.size() > 0) {
-			code.append(" implements ");
-			interfaces.forEach((i) -> {
-				code.append(i.getName() + ", ");
-			});
-			code.deleteCharAt(code.length() - 1);
-			code.deleteCharAt(code.length() - 1);
-		}
+		
+//		if (interfaces.size() > 0) {
+//			code.append(" implements ");
+//			interfaces.forEach((i) -> {
+//				code.append(i.getName() + ", ");
+//			});
+//			code.deleteCharAt(code.length() - 1);
+//			code.deleteCharAt(code.length() - 1);
+//		}
 	}
 
 	private String genMethodDeclaration(SootMethod m) {
@@ -207,7 +207,7 @@ public class ClassCodeGenAnalyzer extends AbstractAnalyzer {
 		return true;
 	}
 
-	private String addDependencyArrows(Data data) {
+	private String addRelationshipArrows(Data data) {
 		StringBuilder sb = new StringBuilder();
 		Collection<Relationship> rels = data.get("relationships", Collection.class);
 		for (Relationship r : rels) {
@@ -218,20 +218,24 @@ public class ClassCodeGenAnalyzer extends AbstractAnalyzer {
 				sb.append(r.from.getName() + " ..> \"1\" " + r.to.getName());
 				sb.append('\n');
 			}
-		}
-		return sb.toString();
-	}
-
-	private String addAssociationArrows(Data data) {
-		StringBuilder sb = new StringBuilder();
-		Collection<Relationship> rels = data.get("relationships", Collection.class);
-		for (Relationship r : rels) {
-			if (r.type == RelationshipType.ASSOCIATION_ONE_TO_MANY) {
+			else if (r.type == RelationshipType.ASSOCIATION_ONE_TO_MANY) {
 				sb.append(r.from.getName() + " --> \"*\" " + r.to.getName());
 				sb.append('\n');
 			} else if (r.type == RelationshipType.ASSOCIATION_ONE_TO_ONE) {
 				sb.append(r.from.getName() + " --> \"1\" " + r.to.getName());
 				sb.append('\n');
+			}else if (r.type == RelationshipType.INHERITANCE) {
+				sb.append(r.from.getName() + " --|> " + r.to.getName());
+			} else if (r.type == RelationshipType.IMPLEMENTATION) {
+				sb.append(r.from.getName() + " ..|> " + r.to.getName());
+			}
+			for(Pattern p: data.getPatterns()){
+				Collection<String> relationshipKeys = p.getRelationshipKeys();
+				for(String key: relationshipKeys){
+					if(p.getAppliedRelationships(key).contains(r)){
+						sb.append(" " + p.getRelationshipModification());
+					}
+				}
 			}
 		}
 		return sb.toString();

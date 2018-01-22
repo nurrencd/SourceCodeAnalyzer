@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import soot.SootClass;
+
 public class Preprocessor {
 	public static final List<String> PROPERTIES = Collections.unmodifiableList(Arrays.asList(
 			"path", "uml", "recursive", "depth",
@@ -55,7 +57,7 @@ public class Preprocessor {
 
 		}
 
-		data.path = Paths.get(config.getProperty("path"));
+		data.put("path", Paths.get(config.getProperty("path")));
 		return listOfAnalyzers;
 	}
 

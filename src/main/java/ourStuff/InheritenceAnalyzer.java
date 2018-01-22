@@ -15,8 +15,10 @@ public class InheritenceAnalyzer extends AbstractAnalyzer {
 	}
 	
 	public Data analyze(Data data) {
-		data.classes.forEach((c) -> {
-			data.relationships.addAll(this.getInheritance(c));
+		Collection<Relationship> rels = data.get("relationships", Collection.class);
+		Collection<SootClass> classes = data.get("classes", Collection.class);
+		classes.forEach((c) -> {
+			rels.addAll(this.getInheritance(c));
 		});
 		return data;
 	}

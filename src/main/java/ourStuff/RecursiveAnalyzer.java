@@ -10,28 +10,30 @@ import soot.SootClass;
 public class RecursiveAnalyzer extends AbstractAnalyzer {
 
 	public Data analyze(Data data) {
+		Collection<Relationship> rels = data.get("relationships", Collection.class);
+		Collection<SootClass> classes = data.get("classes", Collection.class);
 		
 		Collection<SootClass> classesToAdd = new ArrayList<>();
 		//get superClasses
-		for (SootClass c1 : data.classes) {
-			if (c1.hasSuperclass() && !data.classes.contains(c1.getSuperclass())){
+		for (SootClass c1 : classes) {
+			if (c1.hasSuperclass() && !classes.contains(c1.getSuperclass())){
 //				System.out.println(c1.getShortName() + "   " + c1.getSuperclass().getShortName());
 				classesToAdd.add(c1.getSuperclass());
 			}
 		}
 		//getSuperInterfaces
-		for (SootClass c1 : data.classes) {
+		for (SootClass c1 : classes) {
 			for (SootClass c2 : c1.getInterfaces()) {
 				if (c2.getShortName().contains("$")){
 					continue;
 				}
-				if (!data.classes.contains(c2)){
+				if (!classes.contains(c2)){
 //					System.out.println("Interface: " + c1.getShortName() + "   " + c2.getShortName());
 					classesToAdd.add(c2);
 				}
 			}
 		}
-		data.classes.addAll(classesToAdd);
+		classes.addAll(classesToAdd);
 		if (classesToAdd.size() > 0){
 			data = analyze(data);
 		}

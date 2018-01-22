@@ -6,6 +6,7 @@ import java.util.Iterator;
 import edu.rosehulman.jvm.sigevaluator.FieldEvaluator;
 import edu.rosehulman.jvm.sigevaluator.GenericType;
 import ourStuff.Relationship.RelationshipType;
+import soot.Scene;
 import soot.SootClass;
 import soot.SootField;
 import soot.tagkit.Tag;
@@ -19,7 +20,8 @@ public class AssociationAnalyzer extends AbstractAnalyzer{
 	 */
 	@Override
 	public Data analyze(Data data) {
-		Collection<SootClass> collection= data.classes;
+		Collection<SootClass> collection= (Collection<SootClass>)
+				data.get("classes", Collection.class);
 		Iterator<SootClass> it = collection.iterator();
 		while(it.hasNext()){
 			SootClass c = it.next();
@@ -27,8 +29,9 @@ public class AssociationAnalyzer extends AbstractAnalyzer{
 			
 			for(SootField sf :  chField){
 				String sfType = sf.getType().toString();
-				if(data.scene.containsClass(sfType)){
-					SootClass to = data.scene.getSootClass(sfType);
+				Scene scene = data.get("scene", Scene.class);
+				if(scene.containsClass(sfType)){
+					SootClass to = scene.getSootClass(sfType);
 					addRelationship(data, c, to, RelationshipType.ASSOCIATION_ONE_TO_ONE);
 				}
 				Tag sig = sf.getTag("SignatureTag");
@@ -36,8 +39,8 @@ public class AssociationAnalyzer extends AbstractAnalyzer{
 					if(sf.getType().toString().endsWith("[]")){
 						String sifType = sf.getType().toString();
 						String modType = sifType.substring(0, sifType.length()-2);
-						if(data.scene.containsClass(modType)){
-							SootClass to = data.scene.getSootClass(modType);
+						if(scene.containsClass(modType)){
+							SootClass to = scene.getSootClass(modType);
 							addRelationship(data, c, to, RelationshipType.ASSOCIATION_ONE_TO_MANY);
 							
 						}
@@ -62,19 +65,19 @@ public class AssociationAnalyzer extends AbstractAnalyzer{
 		GenericType gt = fe.getType();
 		Collection<String> containerTypes = gt.getAllContainerTypes();
 		Collection<String> elementTypes = gt.getAllElementTypes();
-		
+		Scene scene = data.get("scene", Scene.class);
 		for (String s : containerTypes) {
-			SootClass container = data.scene.getSootClass(s);
+			SootClass container = scene.getSootClass(s);
 			if (container != null) {
 				addRelationship(data, c, container, RelationshipType.ASSOCIATION_ONE_TO_ONE);
 			}
 		}
 		for (String s : elementTypes) {
-			System.out.println(data.scene.containsClass(s));
-			if (!data.scene.containsClass(s)){
+			System.out.println(scene.containsClass(s));
+			if (!scene.containsClass(s)){
 				continue;
 			}
-			SootClass element = data.scene.getSootClassUnsafe(s);
+			SootClass element = scene.getSootClassUnsafe(s);
 			if (element != null) {
 				RelationshipType r = RelationshipType.ASSOCIATION_ONE_TO_MANY;
 				if (containerTypes.size()==0) {
@@ -96,7 +99,8 @@ public class AssociationAnalyzer extends AbstractAnalyzer{
 		if (!this.applyFilters(container)){
 			//Need to check the 0th index of containerTypes to confirm a one to one relation
 			Relationship r = new Relationship(c, container, rType);
-			data.relationships.add(r);
+			Collection<Relationship> rels = data.get("relationships", Collection.class);
+			rels.add(r);
 			System.out.println(container.getName() + "!!!!!!!!!!!!!!!" + c.getName());
 		}
 	}

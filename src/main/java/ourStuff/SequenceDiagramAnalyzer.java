@@ -43,13 +43,15 @@ public class SequenceDiagramAnalyzer extends AbstractAnalyzer {
 
 	@Override
 	public Data analyze(Data data) {
-		if (data.config.containsKey(DEPTH_KEY)) {
-			this.maxDepth = Integer.parseInt(data.get("properties", Properties.class).getProperty(DEPTH_KEY));
+		Properties prop = data.get("properties", Properties.class);
+		Scene scene = data.get("scene", Scene.class);
+		if (prop.containsKey(DEPTH_KEY)) {
+			this.maxDepth = Integer.parseInt(prop.getProperty(DEPTH_KEY));
 		}
-		SootMethod entry = data.scene.getMethod(this.mSig);
+		SootMethod entry = scene.getMethod(this.mSig);
 		StringBuilder codeBuilder = new StringBuilder();
 		codeBuilder.append("@startuml\n");
-		codeBuilder.append(recursiveBuilder(entry, 0, data.scene));
+		codeBuilder.append(recursiveBuilder(entry, 0, scene));
 		codeBuilder.append("@enduml");
 		System.out.println(codeBuilder.toString());
 		try {

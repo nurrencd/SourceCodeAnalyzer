@@ -19,28 +19,7 @@ import ourStuff.ImplementationAnalyzer;
 
 public class Integration {
 
-	@Test
-	public void oldSystemTest() {
-		String[] args = new String[] {
-			"./src/main/java",
-			"-u",
-			"-m",
-			"ourStuff.App",
-			"-f",
-			"private",
-			"-e",
-			"csse374.*"
-		};
-		String path = args[0];
-		Preprocessor pre = new Preprocessor();
-		Data data = new Data();
-		AnalyzerChain analyzerCollection = pre.makePileline(args, data);
-		
-//		assertEquals(5,analyzerCollection.size());
-		
-		data.path = Paths.get(path);
-		analyzerCollection.run(data);
-	}
+	
 	@Test
 	public void systemTest() {
 		String[] args = new String[] {

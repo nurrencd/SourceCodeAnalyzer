@@ -1,18 +1,14 @@
 package ourStuff;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import com.beust.jcommander.internal.Lists;
-
 import edu.rosehulman.jvm.sigevaluator.GenericType;
 import edu.rosehulman.jvm.sigevaluator.MethodEvaluator;
-import jas.Method;
 import ourStuff.Relationship.RelationshipType;
 import soot.Body;
-import soot.Local;
+import soot.Scene;
 import soot.SootClass;
 import soot.SootMethod;
 import soot.Type;
@@ -24,14 +20,14 @@ import soot.jimple.toolkits.callgraph.Edge;
 import soot.tagkit.Tag;
 import soot.toolkits.graph.ExceptionalUnitGraph;
 import soot.toolkits.graph.UnitGraph;
-import soot.util.Chain;
 
 //TODO: Add filter checks
 public class DependencyAnalyzer extends AbstractAnalyzer {
 
 	@Override
 	public Data analyze(Data data) {
-		for (SootClass c : data.classes) {
+		Collection<SootClass> classes = data.get("classes", Collection.class);
+		for (SootClass c : classes) {
 			for (SootMethod m : c.getMethods()) {
 				Tag tag = m.getTag("SignatureTag");
 				if (tag != null) {
@@ -60,18 +56,20 @@ public class DependencyAnalyzer extends AbstractAnalyzer {
 	 * @param m
 	 */
 	private void checkExpressionEdges(Data data, SootClass c, SootMethod m) {
-		CallGraph cg = data.scene.getCallGraph();
+		Scene scene = data.get("scene", Scene.class);
+		CallGraph cg = scene.getCallGraph();
 		Iterator<Edge> edges = cg.edgesOutOf(m);
+		Collection<Relationship> rels = data.get("relationships", Collection.class);
 		while (edges.hasNext()) {
 			Edge edge = edges.next();
 			if (!edge.isInstance()) {
 				SootMethod method = edge.tgt();
 				Type retType = method.getReturnType();
 				if (retType != null) {
-					SootClass retClass = data.scene.getSootClass(retType.toString());
+					SootClass retClass = scene.getSootClass(retType.toString());
 					if (!this.applyFilters(retClass)) {
 						Relationship r = new Relationship(c, retClass, RelationshipType.DEPENDENCY_ONE_TO_ONE);
-						data.relationships.add(r);
+						rels.add(r);
 					}
 				}
 			}
@@ -84,17 +82,20 @@ public class DependencyAnalyzer extends AbstractAnalyzer {
 	 * @param ug
 	 */
 	private void checkExpressionInterior(Data data, SootClass c, UnitGraph ug) {
+		Scene scene = data.get("scene", Scene.class);
+		Collection<Relationship> rels = data.get("relationships", Collection.class);
+		
 		for (Unit u : ug) {
 			if (u instanceof AssignStmt) {
 				Value leftOp = ((AssignStmt) u).getLeftOp();
 				Value rightOp = ((AssignStmt) u).getRightOp();
 				String str = leftOp.getType().toString();
-				if (data.scene.containsClass(str)) {
-					SootClass clazz = data.scene.getSootClass(str);
+				if (scene.containsClass(str)) {
+					SootClass clazz = scene.getSootClass(str);
 
 					if (!applyFilters(clazz)) {
 						Relationship r = new Relationship(c, clazz, RelationshipType.DEPENDENCY_ONE_TO_ONE);
-						data.relationships.add(r);
+						rels.add(r);
 					}
 				}
 			}
@@ -107,12 +108,15 @@ public class DependencyAnalyzer extends AbstractAnalyzer {
 	 * @param m
 	 */
 	private void getParameterTypes(Data data, SootClass c, SootMethod m) {
+		Collection<Relationship> rels = data.get("relationships", Collection.class);
+		Scene scene = data.get("scene", Scene.class);
+		
 		for (Type t : m.getParameterTypes()) {
 			if (t.toString().contains("TT;")||t.toString().contains("<*")) {
 				continue;
 			}
-			if (data.scene.containsClass(t.toString())) {
-				SootClass container = data.scene.getSootClass(t.toString());
+			if (scene.containsClass(t.toString())) {
+				SootClass container = scene.getSootClass(t.toString());
 				if (container != null) {
 					boolean ignore = false;
 					for (Filter f : this.filters) {
@@ -122,7 +126,7 @@ public class DependencyAnalyzer extends AbstractAnalyzer {
 					}
 					if (!ignore) {
 						Relationship r = new Relationship(c, container, RelationshipType.DEPENDENCY_ONE_TO_ONE);
-						data.relationships.add(r);
+						rels.add(r);
 					}
 				}
 			}
@@ -152,17 +156,19 @@ public class DependencyAnalyzer extends AbstractAnalyzer {
 		// Fix Duplicate Code and Container One to One logic
 		Collection<String> containerTypes = gt.getAllContainerTypes();
 		Collection<String> elementTypes = gt.getAllElementTypes();
+		Scene scene = data.get("scene", Scene.class);
+		Collection<Relationship> rels = data.get("relationships", Collection.class);
 		for (String s : containerTypes) {
-			SootClass container = data.scene.getSootClass(s);
+			SootClass container = scene.getSootClass(s);
 			if (container != null) {
 				if (!this.applyFilters(container)) {
 					Relationship r = new Relationship(c, container, RelationshipType.DEPENDENCY_ONE_TO_ONE);
-					data.relationships.add(r);
+					rels.add(r);
 				}
 			}
 		}
 		for (String s : elementTypes) {
-			SootClass element = data.scene.getSootClassUnsafe(s);
+			SootClass element = scene.getSootClassUnsafe(s);
 			if (element != null) {
 				if (!this.applyFilters(element)) {
 					RelationshipType r = RelationshipType.DEPENDENCY_ONE_TO_MANY;
@@ -170,7 +176,7 @@ public class DependencyAnalyzer extends AbstractAnalyzer {
 						r = RelationshipType.DEPENDENCY_ONE_TO_ONE;
 					}
 					Relationship rel = new Relationship(c, element, r);
-					data.relationships.add(rel);
+					rels.add(rel);
 				}
 			}
 		}

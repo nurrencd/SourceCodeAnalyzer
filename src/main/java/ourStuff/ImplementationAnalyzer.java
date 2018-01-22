@@ -16,8 +16,10 @@ public class ImplementationAnalyzer extends AbstractAnalyzer {
 
 	@Override
 	public Data analyze(Data data) {
-		data.classes.forEach((c) -> {
-			data.relationships.addAll(this.getImplementations(c));
+		Collection<Relationship> rels = data.get("relationships", Collection.class);
+		Collection<SootClass> classes = data.get("classes", Collection.class);
+		classes.forEach((c) -> {
+			rels.addAll(this.getImplementations(c));
 		});
 		return data;
 	}

@@ -1,6 +1,6 @@
 package ourStuff;
 
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -20,8 +20,11 @@ public class SootClassAnalyzer extends AbstractAnalyzer {
 	}
 
 	public Data analyze(Data data) {
-		String path = data.path.toFile().getAbsolutePath();
+		data.put("classes", new ArrayList<SootClass>());
+		data.put("relationships", new CustomCollection<Relationship>());
+		String path = data.get("path", Path.class).toFile().getAbsolutePath();
 		Properties prop = data.get("properties", Properties.class);
+		Collection<SootClass> classes = data.get("classes", Collection.class);
 
 		System.out.println(path.toString());
 		SceneBuilder sb = SceneBuilder.create();
@@ -38,8 +41,8 @@ public class SootClassAnalyzer extends AbstractAnalyzer {
 			for(String s : arrayOfClasses){
 				Scene scene =  Scene.v();
 				SootClass sc = scene.loadClassAndSupport(s);
-				data.classes.add(sc);
-				data.scene = scene;
+				classes.add(sc);
+				data.put("scene", scene);
 			}
 			return data;
 					
@@ -67,9 +70,9 @@ public class SootClassAnalyzer extends AbstractAnalyzer {
 		for (SootClass c : classesToRemove){
 			scene.removeClass(c);
 		}
-		
-		data.scene = scene;
-		data.classes = scene.getApplicationClasses();
+
+		data.put("scene", scene);
+		data.put("classes", scene.getApplicationClasses());
 		return data;
 	}
 

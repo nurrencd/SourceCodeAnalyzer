@@ -14,7 +14,7 @@ public class App {
 		Data data = new Data();
 		AnalyzerChain analyzerCollection = pre.makePileline(args, data);
 		
-		data.path = Paths.get(path);
+		data.put("path", Paths.get(path));
 		analyzerCollection.run(data);
 		
 	}

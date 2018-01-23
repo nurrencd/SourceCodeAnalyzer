@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.Properties;
 
 import soot.SootClass;
-import soot.SootField;
 import soot.SootMethod;
 
 public class SingletonAnalyzer extends AbstractAnalyzer {

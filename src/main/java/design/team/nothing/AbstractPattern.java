@@ -1,8 +1,6 @@
 package design.team.nothing;
 
 import java.util.Collection;
-import java.util.List;
-
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 
@@ -16,25 +14,31 @@ public abstract class AbstractPattern implements Pattern {
 		this.classes = ArrayListMultimap.create();
 		this.relationships = ArrayListMultimap.create();
 	}
+	@Override
 	public Collection<SootClass> getAppliedClasses(String s) {
 		return classes.get(s);
 	}
 
+	@Override
 	public Collection<Relationship> getAppliedRelationships(String s) {
 		return relationships.get(s);
 	}
 	
+	@Override
 	public void addClass(String s, SootClass sootClass){
 		classes.put(s, sootClass);
 	}
+	@Override
 	public void addRelationship(String s, Relationship r){
 		relationships.put(s, r);
 	}
 	
+	@Override
 	public Collection<String> getClassKeys(){
 		return classes.keySet();
 	}
 	
+	@Override
 	public Collection<String> getRelationshipKeys(){
 		return relationships.keySet();
 	}

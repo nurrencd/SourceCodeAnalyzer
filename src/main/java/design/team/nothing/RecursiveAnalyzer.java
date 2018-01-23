@@ -2,13 +2,11 @@ package design.team.nothing;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
-
-import soot.Hierarchy;
 import soot.SootClass;
 
 public class RecursiveAnalyzer extends AbstractAnalyzer {
 
+	@Override
 	public Data analyze(Data data) {
 		Collection<Relationship> rels = data.get("relationships", Collection.class);
 		Collection<SootClass> classes = data.get("classes", Collection.class);

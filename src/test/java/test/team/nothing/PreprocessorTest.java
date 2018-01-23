@@ -8,23 +8,23 @@ import java.util.Iterator;
 
 import org.junit.Test;
 
-import ourStuff.AbstractAnalyzer;
-import ourStuff.AnalyzerChain;
-import ourStuff.ClassCodeGenAnalyzer;
-import ourStuff.Data;
-import ourStuff.Preprocessor;
-import ourStuff.SootClassAnalyzer;
-import ourStuff.ImplementationAnalyzer;
+import design.team.nothing.AbstractAnalyzer;
+import design.team.nothing.AnalyzerChain;
+import design.team.nothing.ClassCodeGenAnalyzer;
+import design.team.nothing.Data;
+import design.team.nothing.Preprocessor;
+import design.team.nothing.SootClassAnalyzer;
+import design.team.nothing.ImplementationAnalyzer;
 
 public class PreprocessorTest {
 
 	@Test
 	public void testWithU() {
 		String[] args = new String[] {
-			"C:/Users/moormaet/Documents/GitHub/term-project/src/main/java/ourStuff",
+			"C:/Users/moormaet/Documents/GitHub/term-project/src/main/java/design.team.nothing",
 			"-u",
 			"-m",
-			"OurStuff.App",
+			"design.team.nothing.App",
 			"-f",
 			"private"
 		};
@@ -41,9 +41,9 @@ public class PreprocessorTest {
 	@Test
 	public void testWithoutU() {
 		String[] args = new String[] {
-			"C:/Users/moormaet/Documents/GitHub/term-project/src/main/java/ourStuff",
+			"C:/Users/moormaet/Documents/GitHub/term-project/src/main/java/design.team.nothing",
 			"-m",
-			"OurStuff.App",
+			"design.team.nothing.App",
 			"-f",
 			"private"
 		};
@@ -59,7 +59,7 @@ public class PreprocessorTest {
 	@Test
 	public void testNoMain() {
 		String[] args = new String[] {
-			"C:/Users/moormaet/Documents/GitHub/term-project/src/main/java/ourStuff",
+			"C:/Users/moormaet/Documents/GitHub/term-project/src/main/java/design.team.nothing",
 			"-u",
 			"-f",
 			"private"
@@ -79,7 +79,7 @@ public class PreprocessorTest {
 	@Test
 	public void testNoMainPath() {
 		String[] args = new String[] {
-			"C:/Users/moormaet/Documents/GitHub/term-project/src/main/java/ourStuff",
+			"C:/Users/moormaet/Documents/GitHub/term-project/src/main/java/design.team.nothing",
 			"-u",
 			"-m",
 			"-f",

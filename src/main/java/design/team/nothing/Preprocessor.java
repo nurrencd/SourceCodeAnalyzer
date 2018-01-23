@@ -4,15 +4,12 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-
-import soot.SootClass;
 
 public class Preprocessor {
 	public static final List<String> PROPERTIES = Collections.unmodifiableList(Arrays.asList(

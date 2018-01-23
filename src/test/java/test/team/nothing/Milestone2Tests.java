@@ -33,7 +33,7 @@ public class Milestone2Tests {
 			
 			AnalyzerChain analyzerCollection = pre.makePileline(args, data);
 			
-			data.path = Paths.get(path);
+			//data.path = Paths.get(path);
 			analyzerCollection.run(data);
 	}
 	
@@ -54,7 +54,7 @@ public class Milestone2Tests {
 			
 			AnalyzerChain analyzerCollection = pre.makePileline(args, data);
 			
-			data.path = Paths.get(path);
+			//data.path = Paths.get(path);
 			analyzerCollection.run(data);
 	}
 	
@@ -77,7 +77,7 @@ public class Milestone2Tests {
 			
 			AnalyzerChain analyzerCollection = pre.makePileline(args, data);
 			
-			data.path = Paths.get(path);
+			//data.path = Paths.get(path);
 			analyzerCollection.run(data);
 	}
 	
@@ -98,7 +98,7 @@ public class Milestone2Tests {
 			
 //		assertEquals(5,analyzerCollection.size());
 			
-		data.path = Paths.get(path);
+		//data.path = Paths.get(path);
 		analyzerCollection.run(data);
 	}
 	

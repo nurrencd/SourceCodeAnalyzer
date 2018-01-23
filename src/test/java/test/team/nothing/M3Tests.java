@@ -1,7 +1,5 @@
 package test.team.nothing;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
 
 import design.team.nothing.AnalyzerChain;

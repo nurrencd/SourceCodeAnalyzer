@@ -1,15 +1,9 @@
 package design.team.nothing;
 
-import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
-
-import soot.Scene;
-import soot.SootClass;
 
 public class Data {
 	private Map<String, Object> map;

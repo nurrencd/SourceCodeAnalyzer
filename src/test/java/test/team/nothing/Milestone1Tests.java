@@ -35,7 +35,7 @@ public class Milestone1Tests {
 		Data data = new Data();
 		AnalyzerChain analyzerCollection = pre.makePileline(args, data);
 		
-		data.path = Paths.get(path);
+		//data.path = Paths.get(path);
 		analyzerCollection.run(data);
 		
 	}
@@ -56,7 +56,7 @@ public class Milestone1Tests {
 		
 		AnalyzerChain analyzerCollection = pre.makePileline(args, data);
 		
-		data.path = Paths.get(path);
+		//data.path = Paths.get(path);
 		analyzerCollection.run(data);
 		
 	}
@@ -79,11 +79,11 @@ public class Milestone1Tests {
 		Preprocessor pre = new Preprocessor();
 		Data data = new Data();
 
-		data.path = Paths.get(path);
+		//data.path = Paths.get(path);
 		
 		AnalyzerChain analyzerCollection = pre.makePileline(args, data);
 		
-		data.path = Paths.get(path);
+		//data.path = Paths.get(path);
 		analyzerCollection.run(data);
 	}
 }

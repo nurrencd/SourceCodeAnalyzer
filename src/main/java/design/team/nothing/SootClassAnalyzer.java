@@ -19,6 +19,7 @@ public class SootClassAnalyzer extends AbstractAnalyzer {
 		this.filters = new ArrayList<Filter>();
 	}
 
+	@Override
 	public Data analyze(Data data) {
 		data.put("classes", new ArrayList<SootClass>());
 		data.put("relationships", new CustomCollection<Relationship>());

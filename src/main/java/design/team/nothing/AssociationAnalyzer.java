@@ -20,8 +20,7 @@ public class AssociationAnalyzer extends AbstractAnalyzer{
 	 */
 	@Override
 	public Data analyze(Data data) {
-		Collection<SootClass> collection= (Collection<SootClass>)
-				data.get("classes", Collection.class);
+		Collection<SootClass> collection= data.get("classes", Collection.class);
 		Iterator<SootClass> it = collection.iterator();
 		while(it.hasNext()){
 			SootClass c = it.next();

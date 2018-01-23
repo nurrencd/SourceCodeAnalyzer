@@ -1,8 +1,6 @@
 package design.team.nothing;
 
 import java.util.Collection;
-import java.util.List;
-
 import soot.SootClass;
 
 public interface Pattern {

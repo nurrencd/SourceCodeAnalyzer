@@ -1,7 +1,6 @@
 package design.team.nothing;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Properties;
 
 import soot.SootClass;

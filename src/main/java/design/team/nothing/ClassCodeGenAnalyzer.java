@@ -3,7 +3,6 @@ package design.team.nothing;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Properties;
 
 import design.team.nothing.Relationship.RelationshipType;

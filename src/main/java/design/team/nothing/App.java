@@ -1,10 +1,6 @@
 package design.team.nothing;
 
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collection;
-import java.util.Iterator;
 
 public class App {
 

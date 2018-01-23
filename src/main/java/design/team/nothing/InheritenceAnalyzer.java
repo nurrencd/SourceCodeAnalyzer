@@ -2,10 +2,6 @@ package design.team.nothing;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import soot.SootClass;
 
 public class InheritenceAnalyzer extends AbstractAnalyzer {
@@ -14,6 +10,7 @@ public class InheritenceAnalyzer extends AbstractAnalyzer {
 		filters = new ArrayList<Filter>();
 	}
 	
+	@Override
 	public Data analyze(Data data) {
 		Collection<Relationship> rels = data.get("relationships", Collection.class);
 		Collection<SootClass> classes = data.get("classes", Collection.class);

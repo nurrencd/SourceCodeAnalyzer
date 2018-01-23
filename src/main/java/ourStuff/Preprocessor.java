@@ -93,13 +93,11 @@ public class Preprocessor {
 			inhAnal.addFilter(jdk);
 			assAnal.addFilter(jdk);
 			depAnal.addFilter(jdk);
+			cGen.addFilter(jdk);
 		}
 	}
 
-	/**
-	 * @param config
-	 * @param listOfAnalyzers
-	 */
+	
 	private void addPatternAnalyzers(Properties config, AnalyzerChain listOfAnalyzers) {
 		if(config.containsKey("pattern")){
 			String pattern  = config.getProperty("pattern");

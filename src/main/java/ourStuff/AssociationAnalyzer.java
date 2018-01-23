@@ -96,12 +96,12 @@ public class AssociationAnalyzer extends AbstractAnalyzer{
 	 * @param rType
 	 */
 	private void addRelationship(Data data, SootClass c, SootClass container, RelationshipType rType) {
-		if (!this.applyFilters(container)){
+		//if (!this.applyFilters(container)){
 			//Need to check the 0th index of containerTypes to confirm a one to one relation
 			Relationship r = new Relationship(c, container, rType);
 			Collection<Relationship> rels = data.get("relationships", Collection.class);
 			rels.add(r);
 			System.out.println(container.getName() + "!!!!!!!!!!!!!!!" + c.getName());
-		}
+		//}
 	}
 }

@@ -27,10 +27,10 @@ public class InheritenceAnalyzer extends AbstractAnalyzer {
 		Collection<Relationship> rels = new ArrayList<Relationship>();
 		if(c.hasSuperclass()){
 			SootClass superclass = c.getSuperclass();
-			if (!this.applyFilters(superclass)) {
+			//if (!this.applyFilters(superclass)) {
 				Relationship r = new Relationship(c, superclass, Relationship.RelationshipType.INHERITANCE);
 				rels.add(r);
-			}
+			//}
 		}
 		return rels;
 	}

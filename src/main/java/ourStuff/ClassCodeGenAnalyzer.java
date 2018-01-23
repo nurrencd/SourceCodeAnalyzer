@@ -3,6 +3,7 @@ package ourStuff;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Properties;
 
 import edu.rosehulman.jvm.sigevaluator.FieldEvaluator;
 import edu.rosehulman.jvm.sigevaluator.GenericType;
@@ -26,14 +27,14 @@ public class ClassCodeGenAnalyzer extends AbstractAnalyzer {
 		code.append("skinparam linetype ortho \n");
 		Collection<SootClass> classes = data.get("classes", Collection.class);
 		for (SootClass c : classes) {
-			if (filterClass(c)) {
+			if (!this.applyFilters(c) || data.get("properties", Properties.class).getProperty("classlist").contains(c.getName())) {
 				code.append(genString(c, data) + "\n");
 			}
 		}
 		// draw arrows
 		code.append(this.addRelationshipArrows(data));
 		code.append("@enduml");
-		// System.out.println(code.toString());
+		System.out.println(code.toString());
 		try {
 			FileCreator fc = new FileCreator();
 			fc.getSVG(code.toString());
@@ -171,7 +172,7 @@ public class ClassCodeGenAnalyzer extends AbstractAnalyzer {
 		return sb.toString();
 	}
 
-	private boolean filterClass(SootClass c) {
+	private boolean filterClass(SootClass c, Data data) {
 		// if class gets filtered
 		for (Filter filter : this.filters) {
 			if (filter.ignore(c)) {
@@ -211,21 +212,21 @@ public class ClassCodeGenAnalyzer extends AbstractAnalyzer {
 		StringBuilder sb = new StringBuilder();
 		Collection<Relationship> rels = data.get("relationships", Collection.class);
 		for (Relationship r : rels) {
+			if (this.applyFilters(r.from) && this.applyFilters(r.to)){
+				continue;
+			}
 			if (r.type == RelationshipType.DEPENDENCY_ONE_TO_MANY) {
 				sb.append(r.from.getName() + " ..> \"*\" " + r.to.getName());
-				sb.append('\n');
 			} else if (r.type == RelationshipType.DEPENDENCY_ONE_TO_ONE) {
 				sb.append(r.from.getName() + " ..> \"1\" " + r.to.getName());
-				sb.append('\n');
 			}
 			else if (r.type == RelationshipType.ASSOCIATION_ONE_TO_MANY) {
 				sb.append(r.from.getName() + " --> \"*\" " + r.to.getName());
-				sb.append('\n');
 			} else if (r.type == RelationshipType.ASSOCIATION_ONE_TO_ONE) {
 				sb.append(r.from.getName() + " --> \"1\" " + r.to.getName());
-				sb.append('\n');
 			}else if (r.type == RelationshipType.INHERITANCE) {
 				sb.append(r.from.getName() + " --|> " + r.to.getName());
+			
 			} else if (r.type == RelationshipType.IMPLEMENTATION) {
 				sb.append(r.from.getName() + " ..|> " + r.to.getName());
 			}
@@ -237,6 +238,7 @@ public class ClassCodeGenAnalyzer extends AbstractAnalyzer {
 					}
 				}
 			}
+			sb.append('\n');
 		}
 		return sb.toString();
 	}

@@ -22,6 +22,7 @@ public class SootClassAnalyzer extends AbstractAnalyzer {
 	public Data analyze(Data data) {
 		data.put("classes", new ArrayList<SootClass>());
 		data.put("relationships", new CustomCollection<Relationship>());
+		
 		String path = data.get("path", Path.class).toFile().getAbsolutePath();
 		Properties prop = data.get("properties", Properties.class);
 		Collection<SootClass> classes = data.get("classes", Collection.class);

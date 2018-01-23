@@ -17,13 +17,19 @@ public class RecursiveAnalyzer extends AbstractAnalyzer {
 		//get superClasses
 		for (SootClass c1 : classes) {
 			if (c1.hasSuperclass() && !classes.contains(c1.getSuperclass())){
-//				System.out.println(c1.getShortName() + "   " + c1.getSuperclass().getShortName());
+
+//				if (!this.applyFilters(c1.getSuperclass())){
+//					continue;
+//				}
 				classesToAdd.add(c1.getSuperclass());
 			}
 		}
 		//getSuperInterfaces
 		for (SootClass c1 : classes) {
 			for (SootClass c2 : c1.getInterfaces()) {
+//				if (!this.applyFilters(c2)){
+//					continue;
+//				}
 				if (c2.getShortName().contains("$")){
 					continue;
 				}

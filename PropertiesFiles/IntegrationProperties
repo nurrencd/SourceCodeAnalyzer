@@ -2,3 +2,4 @@ path=./src/main/java
 uml=true
 main=ourStuff.App
 exclude=csse374.*
+pattern=ourStuff.InheritanceOverCompositionAnalyzer

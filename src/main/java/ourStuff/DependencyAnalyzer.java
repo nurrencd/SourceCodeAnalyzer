@@ -67,10 +67,10 @@ public class DependencyAnalyzer extends AbstractAnalyzer {
 				Type retType = method.getReturnType();
 				if (retType != null) {
 					SootClass retClass = scene.getSootClass(retType.toString());
-					if (!this.applyFilters(retClass)) {
+					//if (!this.applyFilters(retClass)) {
 						Relationship r = new Relationship(c, retClass, RelationshipType.DEPENDENCY_ONE_TO_ONE);
 						rels.add(r);
-					}
+					//}
 				}
 			}
 		}
@@ -93,10 +93,10 @@ public class DependencyAnalyzer extends AbstractAnalyzer {
 				if (scene.containsClass(str)) {
 					SootClass clazz = scene.getSootClass(str);
 
-					if (!applyFilters(clazz)) {
+					//if (!applyFilters(clazz)) {
 						Relationship r = new Relationship(c, clazz, RelationshipType.DEPENDENCY_ONE_TO_ONE);
 						rels.add(r);
-					}
+					//}
 				}
 			}
 		}
@@ -124,10 +124,10 @@ public class DependencyAnalyzer extends AbstractAnalyzer {
 							ignore = true;
 						}
 					}
-					if (!ignore) {
+					//if (!ignore) {
 						Relationship r = new Relationship(c, container, RelationshipType.DEPENDENCY_ONE_TO_ONE);
 						rels.add(r);
-					}
+					//}
 				}
 			}
 		}
@@ -161,23 +161,23 @@ public class DependencyAnalyzer extends AbstractAnalyzer {
 		for (String s : containerTypes) {
 			SootClass container = scene.getSootClass(s);
 			if (container != null) {
-				if (!this.applyFilters(container)) {
+				//if (!this.applyFilters(container)) {
 					Relationship r = new Relationship(c, container, RelationshipType.DEPENDENCY_ONE_TO_ONE);
 					rels.add(r);
-				}
+				//}
 			}
 		}
 		for (String s : elementTypes) {
 			SootClass element = scene.getSootClassUnsafe(s);
 			if (element != null) {
-				if (!this.applyFilters(element)) {
+				//if (!this.applyFilters(element)) {
 					RelationshipType r = RelationshipType.DEPENDENCY_ONE_TO_MANY;
 					if (containerTypes.size() == 0) {
 						r = RelationshipType.DEPENDENCY_ONE_TO_ONE;
 					}
 					Relationship rel = new Relationship(c, element, r);
 					rels.add(rel);
-				}
+				//}
 			}
 		}
 	}

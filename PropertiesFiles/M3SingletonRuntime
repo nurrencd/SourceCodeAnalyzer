@@ -1,0 +1,5 @@
+path=./src/main/java
+uml=true
+classlist=java.lang.Runtime java.awt.Desktop java.util.Calendar
+exclude=csse374.*
+pattern=design.team.nothing.SingletonAnalyzer

@@ -28,10 +28,12 @@ public class ClassCodeGenAnalyzer extends AbstractAnalyzer {
 		code.append("skinparam linetype ortho \n");
 		Collection<SootClass> classes = data.get("classes", Collection.class);
 		for (SootClass c : classes) {
-			if (!this.applyFilters(c) || data.get("properties", Properties.class).getProperty("classlist").contains(c.getName())) {
+			if (!this.applyFilters(c) || !this.checkClasses(data, c)) {
 				code.append(genString(c, data) + "\n");
 			}
 		}
+		
+		
 		// draw arrows
 		code.append(this.addRelationshipArrows(data));
 		code.append("@enduml");

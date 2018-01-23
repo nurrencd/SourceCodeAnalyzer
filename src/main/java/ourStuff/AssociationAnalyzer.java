@@ -73,7 +73,6 @@ public class AssociationAnalyzer extends AbstractAnalyzer{
 			}
 		}
 		for (String s : elementTypes) {
-			System.out.println(scene.containsClass(s));
 			if (!scene.containsClass(s)){
 				continue;
 			}
@@ -101,7 +100,7 @@ public class AssociationAnalyzer extends AbstractAnalyzer{
 			Relationship r = new Relationship(c, container, rType);
 			Collection<Relationship> rels = data.get("relationships", Collection.class);
 			rels.add(r);
-			System.out.println(container.getName() + "!!!!!!!!!!!!!!!" + c.getName());
+			
 		//}
 	}
 }

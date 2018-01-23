@@ -3,6 +3,7 @@ package ourStuff;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Properties;
 
 import edu.rosehulman.jvm.sigevaluator.FieldEvaluator;
@@ -131,7 +132,8 @@ public class ClassCodeGenAnalyzer extends AbstractAnalyzer {
 		for(Pattern p: data.getPatterns()){
 			Collection<String> classKeys = p.getClassKeys();
 			for(String key: classKeys){
-				if(p.getAppliedRelationships(key).contains(c)){
+				//System.out.println(p.getAppliedRelationships(s));
+				if(p.getAppliedClasses(key).contains(c)){
 					code.append(" " + p.getDeclarationModification());
 				}
 			}
@@ -212,7 +214,8 @@ public class ClassCodeGenAnalyzer extends AbstractAnalyzer {
 		StringBuilder sb = new StringBuilder();
 		Collection<Relationship> rels = data.get("relationships", Collection.class);
 		for (Relationship r : rels) {
-			if (this.applyFilters(r.from) && this.applyFilters(r.to)){
+			if (this.applyFilters(r.from) && this.applyFilters(r.to) 
+					&& (this.checkClasses(data, r.to) || this.checkClasses(data, r.from))){
 				continue;
 			}
 			if (r.type == RelationshipType.DEPENDENCY_ONE_TO_MANY) {
@@ -241,6 +244,11 @@ public class ClassCodeGenAnalyzer extends AbstractAnalyzer {
 			sb.append('\n');
 		}
 		return sb.toString();
+	}
+	
+	private boolean checkClasses(Data data, SootClass sc){
+		return !data.get("properties", Properties.class).getProperty("classlist").contains(sc.getName());
+		
 	}
 
 }

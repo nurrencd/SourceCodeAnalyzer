@@ -15,7 +15,8 @@ public class Preprocessor {
 	public static final List<String> PROPERTIES = Collections.unmodifiableList(Arrays.asList(
 			"path", "uml", "recursive", "depth",
 			"classlist", "exclude", "sequence",
-			"mainmethod", "filters", "java", "pattern"));
+			"mainmethod", "filters", "java", "pattern", "resolutionstrategy",
+			"algorithms"));
 
 	private Map<String, Filter> filterMap;
 

@@ -16,7 +16,7 @@ public class Preprocessor {
 			"path", "uml", "recursive", "depth",
 			"classlist", "exclude", "sequence",
 			"mainmethod", "filters", "java", "pattern", "resolutionstrategy",
-			"algorithms"));
+			"algorithms", "synthetic"));
 
 	private Map<String, Filter> filterMap;
 
@@ -114,6 +114,7 @@ public class Preprocessor {
 	}
 
 	private Properties configGen(String[] args) {
+		
 		Path path = Paths.get(args[0]);
 		Properties prop = new Properties();
 		

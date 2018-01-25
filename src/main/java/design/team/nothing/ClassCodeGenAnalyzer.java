@@ -57,7 +57,7 @@ public class ClassCodeGenAnalyzer extends AbstractAnalyzer {
 		genField(c, code);
 
 		// Methods added
-		genMethod(c, code);
+		genMethod(c, code, data);
 
 		code.append("}");
 		return code.toString();
@@ -67,8 +67,15 @@ public class ClassCodeGenAnalyzer extends AbstractAnalyzer {
 	 * @param c
 	 * @param code
 	 */
-	private void genMethod(SootClass c, StringBuilder code) {
+	private void genMethod(SootClass c, StringBuilder code, Data data) {
+		Properties prop = data.get("properties", Properties.class);
+		
 		for (SootMethod m : c.getMethods()) {
+			if (prop.containsKey("synthetic")){
+				if (prop.getProperty("synthetic").equals("false") && m.getName().contains("$")){
+					continue;
+				}
+			}
 			if (m.isPublic()) {
 				code.append("  + ");
 			} else if (m.isProtected()) {

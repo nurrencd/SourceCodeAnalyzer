@@ -222,10 +222,17 @@ public class ClassCodeGenAnalyzer extends AbstractAnalyzer {
 		StringBuilder sb = new StringBuilder();
 		Collection<Relationship> rels = data.get("relationships", Collection.class);
 		for (Relationship r : rels) {
-			if (this.applyFilters(r.from) && this.applyFilters(r.to) 
-					&& (this.checkClasses(data, r.to) || this.checkClasses(data, r.from))){
-				continue;
+			if (data.get("properties", Properties.class).getProperty("classlist") != null){
+				if (this.applyFilters(r.from) && this.applyFilters(r.to) 
+						&& (this.checkClasses(data, r.to) || this.checkClasses(data, r.from))){
+					continue;
+				}
+			}else {
+				if (this.applyFilters(r.from) || this.applyFilters(r.to)) {
+					continue;
+				}
 			}
+			
 			if (r.type == RelationshipType.DEPENDENCY_ONE_TO_MANY) {
 				sb.append(r.from.getName() + " ..> \"*\" " + r.to.getName());
 			} else if (r.type == RelationshipType.DEPENDENCY_ONE_TO_ONE) {
@@ -255,6 +262,9 @@ public class ClassCodeGenAnalyzer extends AbstractAnalyzer {
 	}
 	
 	private boolean checkClasses(Data data, SootClass sc){
+		if (data.get("properties", Properties.class).getProperty("classlist") == null) {
+			return true;
+		}
 		return !data.get("properties", Properties.class).getProperty("classlist").contains(sc.getName());
 		
 	}

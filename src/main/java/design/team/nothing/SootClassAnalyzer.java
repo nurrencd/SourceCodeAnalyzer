@@ -37,11 +37,15 @@ public class SootClassAnalyzer extends AbstractAnalyzer {
 			sb.addDirectory(path)
 				.setEntryClass(mainClass)
 				.addEntryPointMatcher(new MainMethodMatcher(mainClass))
-				.addExclusions(Arrays.asList("soot.*", "polygot.*", "org.*", "com.*"));
+				.addExclusions(Arrays.asList("soot.*", "polygot.*", "org.*", "com.*", "design.team.nothing.Preprocessor"));
 		}else if(prop.containsKey("classlist")){
 			String[] arrayOfClasses = prop.getProperty("classlist").split(" ");
 			for(String s : arrayOfClasses){
-				Scene scene =  Scene.v();
+				sb.addDirectory(path)
+					.setEntryClass("design.team.nothing.App")
+					.addEntryPointMatcher(new MainMethodMatcher("design.team.nothing.App"))
+					.addExclusions(Arrays.asList("soot.*", "polygot.*", "org.*", "com.*", "design.team.nothing.Preprocessor"));
+				Scene scene =  sb.build();
 				System.out.println(s);
 				SootClass sc = scene.loadClassAndSupport(s);
 				classes.add(sc);

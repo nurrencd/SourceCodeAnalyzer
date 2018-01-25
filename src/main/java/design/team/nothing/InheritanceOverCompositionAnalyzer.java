@@ -20,32 +20,12 @@ public class InheritanceOverCompositionAnalyzer extends AbstractAnalyzer{
 		Collection<SootClass> sootClasses = data.get("classes", Collection.class);
 		Collection<Relationship> relationships = data.get("relationships", Collection.class);
 		for(SootClass sc : sootClasses){
-			if (!this.applyFilters(sc) && !data.get("properties", Properties.class).getProperty("classlist").contains(sc.getName())){
+			String str = data.get("properties", Properties.class).getProperty("classlist");
+			if (!this.applyFilters(sc) && (str == null || !str.contains(sc.getName()))){
 				continue;
-			}
-			if (!sc.hasSuperclass()){
-				continue;
-			}
-			boolean valid = false;
-			for (Relationship r : relationships){
-				if (r.from.equals(sc) && r.type == RelationshipType.ASSOCIATION_ONE_TO_ONE && r.to.getPackageName().equals(sc.getPackageName())){
-					System.out.println(r.to.getPackageName() + "-------------------------" + sc.getPackageName());
-					valid = true;
-					break;
-				}
 			}
 			
 			SootClass superSC = sc.getSuperclass();
-			if (!valid){
-				
-				pattern.addClass("compositionOverInheritance", sc);
-				for(Relationship r : (Collection<Relationship>) data.get("relationships", CustomCollection.class)){
-					if(r.from.getShortName().equals(sc.getShortName()) && r.to.getShortName().equals(superSC.getShortName())){
-						pattern.addRelationship("compositionOverInheritance", r);
-					}
-				}
-			}
-			
 			
 			//SootClass superSC = sc.getSuperclass();
 			if(superSC.hasSuperclass() && !superSC.isAbstract()){
@@ -59,35 +39,10 @@ public class InheritanceOverCompositionAnalyzer extends AbstractAnalyzer{
 						pattern.addClass("compositionOverInheritance", sc);
 					}
 				}
-//				if (!sc.getPackageName().equals(superSC.getPackageName())){
-//					pattern.addClass("compositionOverInheritance", sc);
-//					for(Relationship r : (Collection<Relationship>) data.get("relationships", CustomCollection.class)){
-//						if(r.from.getShortName().equals(sc.getShortName()) && r.to.getShortName().equals(superSC.getShortName())){
-//							pattern.addRelationship("compositionOverInheritance", r);
-//						}
-//					}
-//				}
 				
 				Scene scene = data.get("scene", Scene.class);
 				
-				for (SootField f : sc.getFields()){
-						
-					
-				}
-				
-				for (SootMethod m : sc.getMethods()){
-					
-//					for (SootMethod m2 : superSC.getMethods()){
-//						if (m.getName().equals(m2.getName()) && !m2.isAbstract()){
-//							pattern.addClass("compositionOverInheritance", sc);
-//							for(Relationship r : (Collection<Relationship>) data.get("relationships", CustomCollection.class)){
-//								if(r.from.getShortName().equals(sc.getShortName()) && r.to.getShortName().equals(superSC.getShortName())){
-//									pattern.addRelationship("compositionOverInheritance", r);
-//								}
-//							}
-//						}
-//					}
-				}
+	
 			}
 			
 		}

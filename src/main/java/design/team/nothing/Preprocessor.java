@@ -4,12 +4,17 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+
+import ChocolateFactory.EagerlyInstantiatedChocolateFactory;
+import ChocolateFactory.LazilyInstantiatedChocolateFactory;
+
 
 public class Preprocessor {
 	public static final List<String> PROPERTIES = Collections.unmodifiableList(Arrays.asList(
@@ -115,19 +120,48 @@ public class Preprocessor {
 
 	private Properties configGen(String[] args) {
 		
-		Path path = Paths.get(args[0]);
-		Properties prop = new Properties();
-		
-		FileInputStream in;
-		try {
-			in = new FileInputStream(path.toFile());
-			prop.load(in);
-		} catch (IOException e) {
-			e.printStackTrace();
+		HashMap<String, List<String>> flags = new HashMap<>();
+		String currentFlag = "";
+		for (String str : args){
+			if (str.startsWith("-")){
+				currentFlag = str;
+				flags.put(str, new ArrayList<String>());
+			}else {
+				flags.get(currentFlag).add(str);
+			}
 		}
+		Properties prop = new Properties();
+		if (flags.containsKey("-config")){
+			Path path = Paths.get(flags.get("-config").get(0));
+			FileInputStream in;
+			try {
+				in = new FileInputStream(path.toFile());
+				prop.load(in);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		for (String key : PROPERTIES){
+			if (flags.containsKey("-" + key)){
+				if (prop.containsKey(key)){
+					prop.setProperty(key, genString(flags.get("-" + key)));
+				}
+			}
+		}
+		
 		return prop;
 	}
 
+	
+	private String genString(List<String> str){
+		StringBuilder sb = new StringBuilder();
+		for (String s : str){
+			sb.append(s + " ");
+		}
+		return sb.toString();
+	}
+	
 	public void addFilter(String key, Filter filter) {
 		this.filterMap.put(key, filter);
 	}

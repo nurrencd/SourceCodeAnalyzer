@@ -12,6 +12,7 @@ public class Integration {
 	@Test
 	public void systemTest() {
 		String[] args = new String[] {
+			"-config",
 			"PropertiesFiles/IntegrationProperties"
 		};
 		Preprocessor pre = new Preprocessor();

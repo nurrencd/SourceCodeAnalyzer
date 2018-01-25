@@ -1,5 +1,5 @@
-path=./src/main/java
+path=build/classes/main
 uml=true
 main=design.team.nothing.App
 exclude=csse374.*
-pattern=ourStuff.InheritanceOverCompositionAnalyzer
+pattern=design.team.nothing.InheritanceOverCompositionAnalyzer

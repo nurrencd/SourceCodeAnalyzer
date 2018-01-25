@@ -1,5 +1,5 @@
-path=./src/main/java
+path=build/classes/main
 uml=true
-classlist=java.lang.Runtime java.awt.Desktop java.util.Calendar
+classlist=java.lang.Runtime java.awt.Desktop java.util.Calendar ChocolateFactory.LazilyInstantiatedChocolateFactory  ChocolateFactory.EagerlyInstantiatedChocolateFactory
 exclude=csse374.*
 pattern=design.team.nothing.SingletonAnalyzer

@@ -42,6 +42,7 @@ public class SootClassAnalyzer extends AbstractAnalyzer {
 			String[] arrayOfClasses = prop.getProperty("classlist").split(" ");
 			for(String s : arrayOfClasses){
 				Scene scene =  Scene.v();
+				System.out.println(s);
 				SootClass sc = scene.loadClassAndSupport(s);
 				classes.add(sc);
 				data.put("scene", scene);

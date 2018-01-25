@@ -1,5 +1,6 @@
 path=./src/main/java
 uml=true
+main=design.team.nothing.App
 recursive=true
 classlist=java.lang.String
 exclude=csse374.*

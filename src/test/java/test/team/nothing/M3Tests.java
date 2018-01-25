@@ -11,6 +11,7 @@ public class M3Tests {
 	@Test
 	public void testFrame() {
 		String[] args = new String[] {
+				"-config",
 				"PropertiesFiles/M3Swing.prop"
 			};
 			Preprocessor pre = new Preprocessor();

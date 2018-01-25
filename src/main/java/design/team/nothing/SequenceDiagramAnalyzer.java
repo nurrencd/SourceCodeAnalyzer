@@ -157,7 +157,6 @@ public class SequenceDiagramAnalyzer extends AbstractAnalyzer {
 				rightMethod = chosenOne;
 				rightClass = chosenOne.getDeclaringClass();
 			}
-			
 		}
 		sb.append(m.getDeclaringClass().getName() + " --> " + rightClass.getName() + " : " + rightMethod.getSubSignature());
 		sb.append('\n');

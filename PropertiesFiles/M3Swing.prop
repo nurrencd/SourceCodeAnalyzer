@@ -1,5 +1,6 @@
 path=./src/main/java
 uml=true
+main=design.team.nothing.App
 classlist=javax.swing.JFrame java.awt.Frame
 exclude=csse374.*
 pattern=design.team.nothing.InheritanceOverCompositionAnalyzer

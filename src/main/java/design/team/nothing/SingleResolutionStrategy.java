@@ -12,7 +12,7 @@ public class SingleResolutionStrategy implements ResolutionStrategy {
 
 	@Override
 	public Collection<SootMethod> resolve(List<Algorithm> list, SootMethod sm, Unit u, Scene sc) {
-		List<SootMethod> returnList = new ArrayList<>();
+		Collection<SootMethod> returnList = new ArrayList<>();
 		if (list.size() > 0) {
 			returnList = list.get(0).resolve(sm, u, sc);
 		}

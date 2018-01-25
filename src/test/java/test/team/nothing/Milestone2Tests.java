@@ -61,6 +61,7 @@ public class Milestone2Tests {
 	@Test
 	public void testWeather() {
 		String[] args = new String[] {
+				//"C:\\Users\\agarwaa\\Desktop\\Everything\\Rose-Hulman\\CSSE\\374\\Lab2-1"
 				"C:\\Users\\nurrencd\\Documents\\1-Rose-Hulman\\CSSE\\374\\Lab2-1\\bin",
 				"-s",
 				"<headfirst.designpatterns.observer.weather.WeatherStation: void main(java.lang.String[])>",

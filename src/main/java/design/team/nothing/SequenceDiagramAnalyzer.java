@@ -1,8 +1,10 @@
 package design.team.nothing;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Properties;
 
 import soot.Body;
@@ -22,6 +24,8 @@ public class SequenceDiagramAnalyzer extends AbstractAnalyzer {
 	private final int DEFAULT_DEPTH = 5;
 	private final String DEPTH_KEY = "depth";
 
+	private Data data;
+	private Unit unit;
 	private String mSig;
 	private int maxDepth;
 
@@ -32,6 +36,7 @@ public class SequenceDiagramAnalyzer extends AbstractAnalyzer {
 
 	@Override
 	public Data analyze(Data data) {
+		this.data = data;
 		Properties prop = data.get("properties", Properties.class);
 		Scene scene = data.get("scene", Scene.class);
 		if (prop.containsKey(DEPTH_KEY)) {
@@ -66,7 +71,27 @@ public class SequenceDiagramAnalyzer extends AbstractAnalyzer {
 			genConcreteMethod(m, depth, scene, sb);
 			
 		}else {
-			genAbstractMethod(m, depth, scene, sb);
+			AggregateAlgorithm aa = new AggregateAlgorithm();
+			Properties prop = this.data.get("properties", Properties.class);
+			String resolutionString = prop.getProperty("resolutionstrategy");
+			String[] algorithmString = prop.getProperty("algorithms").split(" ");
+			List<Algorithm> algorithms = new ArrayList<>();
+			try {
+				System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!1" + resolutionString);
+				ResolutionStrategy resolutionStrat = (ResolutionStrategy) Class.forName(resolutionString).newInstance();
+				aa.setResolutionStrategy(resolutionStrat);
+				for(String str : algorithmString){
+					aa.addAlgorithm((Algorithm) Class.forName(str).newInstance());
+				}
+			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			SootMethod chosenOne = aa.resolve(m, this.unit, scene);
+//			genAbstractMethod(m, depth, scene, sb);
+			if(chosenOne!=null){
+				genConcreteMethod(chosenOne, depth, scene, sb);
+			}
 		}
 		
 		sb.append("deactivate " + m.getDeclaringClass().getName());
@@ -144,6 +169,7 @@ public class SequenceDiagramAnalyzer extends AbstractAnalyzer {
 		
 		UnitGraph ug = new ExceptionalUnitGraph(b);
 		for (Unit u : ug) {
+				this.unit = u;
 //				System.out.println(u.getClass());
 			if (u instanceof JAssignStmt) {
 				Value leftOp = ((JAssignStmt) u).getLeftOp();

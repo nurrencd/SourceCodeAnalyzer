@@ -26,7 +26,7 @@ public class AggregateAlgorithm {
 	public SootMethod resolve(SootMethod sm, Unit u, Scene scene) {
 		Collection<SootMethod> potentialCandidates = this.strategy.resolve(this.algs, sm, u, scene);
 		if (potentialCandidates.isEmpty()) {
-			return sm;
+			return null;
 		}
 		return potentialCandidates.iterator().next();
 	}

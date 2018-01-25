@@ -5,10 +5,12 @@ import java.util.Iterator;
 import java.util.List;
 
 import soot.Scene;
+import soot.SootClass;
 import soot.SootMethod;
 import soot.Unit;
 import soot.jimple.toolkits.callgraph.CallGraph;
 import soot.jimple.toolkits.callgraph.Edge;
+import soot.util.Chain;
 
 public class CallGraphAlgorithm implements Algorithm {
 
@@ -18,8 +20,10 @@ public class CallGraphAlgorithm implements Algorithm {
 		CallGraph cg = s.getCallGraph();
 		Iterator<Edge> iter = cg.edgesOutOf(u);
 		while (iter.hasNext()) {
-			returnList.add(iter.next().getTgt().method());
+			SootMethod temp = iter.next().getTgt().method();
+			returnList.add(temp);
 		}
+
 		return returnList;
 	}
 

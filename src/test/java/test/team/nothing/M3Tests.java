@@ -30,4 +30,14 @@ public class M3Tests {
 			analyzerCollection.run(data);
 	}
 
+	@Test
+	public void testWeather(){
+		String[] args = new String[] {
+				"PropertiesFiles/WeatherProp"
+			};
+			Preprocessor pre = new Preprocessor();
+			Data data = new Data();
+			AnalyzerChain analyzerCollection = pre.makePileline(args, data);
+			analyzerCollection.run(data);
+	}
 }

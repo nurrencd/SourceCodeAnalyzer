@@ -12,7 +12,7 @@ public class ChainResolutionStrategy implements ResolutionStrategy {
 
 	@Override
 	public Collection<SootMethod> resolve(List<Algorithm> list, SootMethod sm, Unit u, Scene sc) {
-		List<SootMethod> returnList = new ArrayList<SootMethod>();
+		Collection<SootMethod> returnList = new ArrayList<SootMethod>();
 		int i = 0;
 		while (returnList.size() == 0 && i < list.size()) {
 			returnList =  list.get(i).resolve(sm, u, sc);

@@ -13,7 +13,7 @@ public class IntersectionResolutionStrategy implements ResolutionStrategy {
 	@Override
 	public Collection<SootMethod> resolve(List<Algorithm> list, SootMethod sm, Unit u, Scene sc) {
 
-		List<SootMethod> toReturn = new ArrayList<>();
+		Collection<SootMethod> toReturn = new ArrayList<>();
 		if (list.size() > 0) {
 			toReturn = list.get(0).resolve(sm, u, sc);
 		}
@@ -23,7 +23,7 @@ public class IntersectionResolutionStrategy implements ResolutionStrategy {
 		return toReturn;
 	}
 	
-	private List<SootMethod> intersection(List<SootMethod> l1, List<SootMethod> l2){
+	private Collection<SootMethod> intersection(Collection<SootMethod> l1, Collection<SootMethod> l2){
 		List<SootMethod> lists = new ArrayList<SootMethod>();
 		for (SootMethod m : l2) {
 			if (l1.contains(m)) {

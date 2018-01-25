@@ -1,0 +1,6 @@
+path=C:\\Users\\agarwaa\\Desktop\\Everything\\Rose-Hulman\\CSSE\\374\\Lab2-1\\bin
+sequence=<headfirst.designpatterns.observer.weather.WeatherStation: void main(java.lang.String[])>
+main=headfirst.designpatterns.observer.weather.WeatherStation
+depth=20
+resolutionstrategy=design.team.nothing.SingleResolutionStrategy
+algorithms=design.team.nothing.CallGraphAlgorithm

@@ -41,7 +41,6 @@ public class AssociationAnalyzer extends AbstractAnalyzer{
 						if(scene.containsClass(modType)){
 							SootClass to = scene.getSootClass(modType);
 							addRelationship(data, c, to, RelationshipType.ASSOCIATION_ONE_TO_MANY);
-							
 						}
 					}
 					continue;
@@ -66,7 +65,7 @@ public class AssociationAnalyzer extends AbstractAnalyzer{
 		Collection<String> elementTypes = gt.getAllElementTypes();
 		Scene scene = data.get("scene", Scene.class);
 		for (String s : containerTypes) {
-			SootClass container = scene.getSootClass(s);
+			SootClass container = scene.getSootClassUnsafe(s);
 			if (container != null) {
 				addRelationship(data, c, container, RelationshipType.ASSOCIATION_ONE_TO_ONE);
 			}

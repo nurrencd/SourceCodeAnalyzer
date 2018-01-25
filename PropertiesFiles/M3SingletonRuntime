@@ -1,5 +1,5 @@
 path=build/classes/main
 uml=true
-classlist=java.lang.Runtime java.awt.Desktop java.util.Calendar ChocolateFactory.LazilyInstantiatedChocolateFactory  ChocolateFactory.EagerlyInstantiatedChocolateFactory
-exclude=csse374.*
+main=design.team.nothing.App
+classlist=Chocolate java.lang.Runtime java.awt.Desktop java.util.Calendar ChocolateFactory.EagerlyInstantiatedChocolateFactory ChocolateFactory.LazilyInstantiatedChocolateFactory
 pattern=design.team.nothing.SingletonAnalyzer

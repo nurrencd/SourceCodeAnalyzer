@@ -54,6 +54,31 @@ public class M3Tests {
 			AnalyzerChain analyzerCollection = pre.makePileline(args, data);
 			analyzerCollection.run(data);
 	}
+	
+	@Test
+	public void testIntersection(){
+		String[] args = new String[] {
+				"-config",
+				"C:\\Users\\moormaet\\workspace\\CSSE 374\\PatternDetectorExample2\\PropertyFolders\\Intersection"
+			};
+			Preprocessor pre = new Preprocessor();
+			Data data = new Data();
+			AnalyzerChain analyzerCollection = pre.makePileline(args, data);
+			analyzerCollection.run(data);
+	}
+	
+	@Test
+	public void testUnion(){
+		String[] args = new String[] {
+				"-config",
+				"C:\\Users\\moormaet\\workspace\\CSSE 374\\PatternDetectorExample2\\PropertyFolders\\Union"
+			};
+			Preprocessor pre = new Preprocessor();
+			Data data = new Data();
+			AnalyzerChain analyzerCollection = pre.makePileline(args, data);
+			analyzerCollection.run(data);
+	}
+	
 
 	@Test
 	public void testWeather(){

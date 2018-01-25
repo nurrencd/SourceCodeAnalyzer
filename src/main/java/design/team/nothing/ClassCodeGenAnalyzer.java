@@ -27,6 +27,7 @@ public class ClassCodeGenAnalyzer extends AbstractAnalyzer {
 		code.append("skinparam linetype ortho \n");
 		Collection<SootClass> classes = data.get("classes", Collection.class);
 		for (SootClass c : classes) {
+			System.out.println(!this.applyFilters(c) + "   " + c.getName());
 			if (!this.applyFilters(c) || !this.checkClasses(data, c)) {
 				code.append(genString(c, data) + "\n");
 			}

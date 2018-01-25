@@ -77,7 +77,7 @@ public class SequenceDiagramAnalyzer extends AbstractAnalyzer {
 			String[] algorithmString = prop.getProperty("algorithms").split(" ");
 			List<Algorithm> algorithms = new ArrayList<>();
 			try {
-				System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!1" + resolutionString);
+				System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!! " + resolutionString);
 				ResolutionStrategy resolutionStrat = (ResolutionStrategy) Class.forName(resolutionString).newInstance();
 				aa.setResolutionStrategy(resolutionStrat);
 				for(String str : algorithmString){
@@ -113,7 +113,7 @@ public class SequenceDiagramAnalyzer extends AbstractAnalyzer {
 		Body b = iter.next().getActiveBody();
 		UnitGraph ug = new ExceptionalUnitGraph(b);
 		for (Unit u : ug) {
-			System.out.println(u.getClass());
+
 			if (u instanceof JAssignStmt) {
 				Value leftOp = ((JAssignStmt) u).getLeftOp();
 				Value rightOp = ((JAssignStmt) u).getRightOp();
@@ -150,12 +150,42 @@ public class SequenceDiagramAnalyzer extends AbstractAnalyzer {
 	 */
 	private void drawArrows(SootMethod m, int depth, Scene scene, StringBuilder sb, SootMethod rightMethod,
 			SootClass rightClass) {
+		if (!rightMethod.hasActiveBody()){
+			SootMethod chosenOne = resolveAbstractMethod(scene, rightMethod);
+//			genAbstractMethod(m, depth, scene, sb);
+			if(chosenOne!=null){
+				rightMethod = chosenOne;
+				rightClass = chosenOne.getDeclaringClass();
+			}
+			
+		}
 		sb.append(m.getDeclaringClass().getName() + " --> " + rightClass.getName() + " : " + rightMethod.getSubSignature());
 		sb.append('\n');
 		sb.append(recursiveBuilder(rightMethod, depth+1,scene));
 		sb.append('\n');
 		sb.append(m.getDeclaringClass().getName() + " <- " + rightClass.getName());
 		sb.append('\n');
+	}
+
+	private SootMethod resolveAbstractMethod(Scene scene, SootMethod rightMethod) {
+		AggregateAlgorithm aa = new AggregateAlgorithm();
+		Properties prop = this.data.get("properties", Properties.class);
+		String resolutionString = prop.getProperty("resolutionstrategy");
+		String[] algorithmString = prop.getProperty("algorithms").split(" ");
+		List<Algorithm> algorithms = new ArrayList<>();
+		try {
+			System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!! " + resolutionString);
+			ResolutionStrategy resolutionStrat = (ResolutionStrategy) Class.forName(resolutionString).newInstance();
+			aa.setResolutionStrategy(resolutionStrat);
+			for(String str : algorithmString){
+				aa.addAlgorithm((Algorithm) Class.forName(str).newInstance());
+			}
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		SootMethod chosenOne = aa.resolve(rightMethod, this.unit, scene);
+		return chosenOne;
 	}
 
 	/**

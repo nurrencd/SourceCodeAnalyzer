@@ -21,7 +21,7 @@ public class InheritanceOverCompositionAnalyzer extends AbstractAnalyzer{
 		Collection<Relationship> relationships = data.get("relationships", Collection.class);
 		for(SootClass sc : sootClasses){
 			String str = data.get("properties", Properties.class).getProperty("classlist");
-			if (this.applyFilters(sc) && (str == null || !str.contains(sc.getName()))){
+			if (!this.applyFilters(sc) && (str == null || !str.contains(sc.getName()))){
 				continue;
 			}
 			

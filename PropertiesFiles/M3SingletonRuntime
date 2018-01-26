@@ -1,4 +1,4 @@
-path=build/classes/main
+path=C:/Users/moormaet/Documents/GitHub/term-project/build/classes/main
 uml=true
 main=design.team.nothing.App
 classlist=Chocolate java.lang.Runtime java.awt.Desktop java.util.Calendar ChocolateFactory.EagerlyInstantiatedChocolateFactory ChocolateFactory.LazilyInstantiatedChocolateFactory

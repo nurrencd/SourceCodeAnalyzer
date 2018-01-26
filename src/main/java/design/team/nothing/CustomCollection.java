@@ -33,7 +33,7 @@ public class CustomCollection<T> implements Collection<T> {
 			return true;
 //			break;
 		case ASSOCIATION_ONE_TO_ONE:
-			if (!hash.containsKey(arrowCheckAssMany.hashCode())){
+			if (hash.containsKey(arrowCheckAssMany.hashCode())){
 				return false;
 			}
 			hash.put(r.hashCode(), r);
@@ -43,11 +43,14 @@ public class CustomCollection<T> implements Collection<T> {
 			if (hash.containsKey(arrowCheckDepOne.hashCode())){
 				hash.remove(arrowCheckDepOne.hashCode());
 			}
+			if (hash.containsKey(arrowCheckAssMany.hashCode()) || hash.containsKey(arrowCheckAssOne.hashCode())){
+				return false;
+			}
 			hash.put(r.hashCode(), r);
 			return true;
 //			break;
 		case DEPENDENCY_ONE_TO_ONE:
-			if (hash.containsKey(arrowCheckDepMany.hashCode()) || hash.containsKey(arrowCheckDepOne.hashCode())){
+			if (hash.containsKey(arrowCheckDepMany.hashCode()) || hash.containsKey(arrowCheckAssMany.hashCode()) || hash.containsKey(arrowCheckAssOne.hashCode())){
 				return false;
 			}
 			hash.put(r.hashCode(), r);

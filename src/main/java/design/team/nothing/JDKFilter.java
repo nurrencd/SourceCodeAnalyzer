@@ -8,7 +8,6 @@ public class JDKFilter implements Filter {
 
 	@Override
 	public boolean ignore(SootClass c) {
-		System.out.println(c.isJavaLibraryClass() || c.getName().contains("java.") || c.getName().equals("void"));
 		
 		return c.isJavaLibraryClass() || c.getName().contains("java") || c.getName().equals("void") 
 				|| c.getName().contains("google") || c.getName().contains("soot") || c.getName().contains("org")

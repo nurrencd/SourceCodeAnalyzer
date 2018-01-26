@@ -24,28 +24,33 @@ Not all filters have values;
 Examples:
 <h3> Creating UML </h3>
 
-java -jar uml.jar "C:\\Users\\moormaet\\workspace\\CSSE 374\\Lab1-1\\bin" -u -c javax.swing.JComponent -j -r -e headfirst.* -f public
+java -jar uml.jar "C:\\Users\\moormaet\\workspace\\CSSE 374\\Lab1-1\\bin" -uml -classlist javax.swing.JComponent -java -recursive -exclude headfirst.* -filter public
 
-java -jar uml.jar "C:\Users\moormaet\workspace\CSSE 374\term-project\src\main\java" -u -m ourStuff.App -e csse374.* -f private
+java -jar uml.jar "C:\Users\moormaet\workspace\CSSE 374\term-project\src\main\java" -uml -main ourStuff.App -exclude csse374.* -filter private
 
-NOTE:  you must either have the -m flag followed by a main method or a -c followed by a list of classes in order for your request to run
+NOTE:  you must either have the -main flag followed by a main method or a -classlist followed by a list of classes in order for your request to run
 
 <h3> Creating Sequence Diagrams </h3>
 
-java -jar uml.jar "C:\\Users\\nurrencd\\Documents\\1-Rose-Hulman\\CSSE\\374\\Lab2-1\\bin" -s "<problem.AppLauncherApplication: void main(java.lang.String[])>" -m "problem.AppLauncherApplication" -e "headfirst.*" -d "20"
+java -jar uml.jar "C:\\Users\\nurrencd\\Documents\\1-Rose-Hulman\\CSSE\\374\\Lab2-1\\bin" -sequence "<problem.AppLauncherApplication: void main(java.lang.String[])>" -mainmethod "problem.AppLauncherApplication" -exclude"headfirst.*" -depth "20"
 
 
 
 <h1>Flags:</h1>
-- -u                      --> generate UML
-- -s                      --> generate sequence diagram
-- -f  [filters...]        --> apply filters
-- -j                      --> include java files
-- -e [exclusions]         --> exclude file types
-- -m mainClass            --> sets mainClass as the main class to begin searching
-- -c [classes...]         --> classes to model in the UML
-- -r                      --> recursively model all of the interfaces and superclasses of the given system
-- -d                      --> set maximum call depth for sequence diagram
+- -uml                      --> generate UML
+- -sequence                 --> generate sequence diagram
+- -filters                  --> apply filters
+- -java                     --> include java files
+- -exclude                  --> exclude file types
+- -main                     --> sets mainClass as the main class to begin searching
+- -classlist                --> classes to model in the UML
+- -recursive                --> recursively model all of the interfaces and superclasses of the given system
+- -depth                    --> set maximum call depth for sequence diagram
+- -pattern                  --> set which pattern to detect
+- -resolutionstrategy       --> set which resolution strategy to use for the given <code>Algorithms</code>
+- -path                     --> set the path of the file
+- -algorithms               --> Abstract Method Resolvers for sequence diagram. Include whole package name to load.
+- -synthetic                --> Adds the Synthetic function filter
 
 <h1>Extending the project:</h1>
 **Creating Analyzers**
@@ -91,13 +96,22 @@ Chris:
  - One design / implementation of SequenceDiagramAnalyzer
  - Association analyzer
  - Data relationship maintenance
+ - Data class, providing extensibility
+ - Created Pattern and Algorithm infrastructure
+ - Pattern logic and SingletonPatternAnalyzer
+ - Applying pattern logic to UML Generator
+ - Restructuring part of the SequenceDiagramAnalyzer to properly handle Algorithm's resolutions
 
 Abu:
  - Wrote/helped test to check if our code worked in UML + Sequence Generator
+ - Algorithm/CallGraphAlgorithm/HierarchyAlgorithm/AggregateAlgorithm
+ - ChainResolutionStrategy/IntersectionResolutionStrategy/SingleResolutionStrategy
+ - InheritanceOverCompositionAnalyzer/Pattern
+ - Pattern/AbstractPattern
  - Worked in CodeGen
  - Helped with file writing
  - Worked with Preprocessor and App class
- - Sequence Generator
+ - Sequence Generator/SequenceDiagramAnalyzer
  - ClassCodeGenAnalyzer
  - Readme
  - Made the project skeleton (Which was almost completely refactored after design review)

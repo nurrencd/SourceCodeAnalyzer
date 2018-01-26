@@ -3,6 +3,7 @@ package design.team.nothing;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Properties;
 
 import design.team.nothing.Relationship.RelationshipType;
 import edu.rosehulman.jvm.sigevaluator.GenericType;
@@ -27,7 +28,13 @@ public class DependencyAnalyzer extends AbstractAnalyzer {
 	@Override
 	public Data analyze(Data data) {
 		Collection<SootClass> classes = data.get("classes", Collection.class);
+		Properties p = data.get("properties", Properties.class);
 		for (SootClass c : classes) {
+			if (!p.containsKey("classlist")) {
+				if (this.applyFilters(c)){
+					continue;
+				}
+			}
 			for (SootMethod m : c.getMethods()) {
 				Tag tag = m.getTag("SignatureTag");
 				if (tag != null) {
@@ -144,7 +151,12 @@ public class DependencyAnalyzer extends AbstractAnalyzer {
 		}
 		MethodEvaluator eval = new MethodEvaluator(tag.toString());
 		System.out.println(c.getName() + " " + tag.toString());
-		List<GenericType> generic = eval.getParameterTypes();
+		List<GenericType> generic;
+		try {
+			generic = eval.getParameterTypes();
+		}catch (Exception e){
+			return;
+		}
 		for (GenericType gt : generic) {
 			getTypeDependencies(data, c, gt);
 		}

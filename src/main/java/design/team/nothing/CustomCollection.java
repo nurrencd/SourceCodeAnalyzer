@@ -16,17 +16,64 @@ public class CustomCollection<T> implements Collection<T> {
 	public boolean add(Object e) {
 		// TODO Auto-generated method stub
 		Relationship r = (Relationship) e;
-		if (r.type == Relationship.RelationshipType.DEPENDENCY_ONE_TO_MANY 
-				|| r.type == Relationship.RelationshipType.DEPENDENCY_ONE_TO_ONE) {
-			Relationship arrowCheckMany = new Relationship(r.from, r.to, 
-					Relationship.RelationshipType.ASSOCIATION_ONE_TO_MANY);
-			Relationship arrowCheckOne = new Relationship(r.from, r.to, 
-					Relationship.RelationshipType.ASSOCIATION_ONE_TO_ONE);
-			if (hash.containsKey(arrowCheckMany.hashCode()) || hash.containsKey(arrowCheckOne.hashCode())){
+		Relationship arrowCheckAssMany = new Relationship(r.from, r.to, 
+				Relationship.RelationshipType.ASSOCIATION_ONE_TO_MANY);
+		Relationship arrowCheckAssOne = new Relationship(r.from, r.to, 
+				Relationship.RelationshipType.ASSOCIATION_ONE_TO_ONE);
+		Relationship arrowCheckDepMany = new Relationship(r.from, r.to, 
+				Relationship.RelationshipType.DEPENDENCY_ONE_TO_MANY);
+		Relationship arrowCheckDepOne = new Relationship(r.from, r.to, 
+				Relationship.RelationshipType.DEPENDENCY_ONE_TO_ONE);
+		switch(r.type){
+		case ASSOCIATION_ONE_TO_MANY:
+			if (hash.containsKey(arrowCheckAssOne.hashCode())){
+				hash.remove(arrowCheckAssOne.hashCode());
+			}
+			hash.put(r.hashCode(), r);
+			return true;
+//			break;
+		case ASSOCIATION_ONE_TO_ONE:
+			if (!hash.containsKey(arrowCheckAssMany.hashCode())){
 				return false;
 			}
+			hash.put(r.hashCode(), r);
+			return true;
+//			break;
+		case DEPENDENCY_ONE_TO_MANY:
+			if (hash.containsKey(arrowCheckDepOne.hashCode())){
+				hash.remove(arrowCheckDepOne.hashCode());
+			}
+			hash.put(r.hashCode(), r);
+			return true;
+//			break;
+		case DEPENDENCY_ONE_TO_ONE:
+			if (hash.containsKey(arrowCheckDepMany.hashCode()) || hash.containsKey(arrowCheckDepOne.hashCode())){
+				return false;
+			}
+			hash.put(r.hashCode(), r);
+			break;
+		case IMPLEMENTATION:
+			hash.put(r.hashCode(), r);
+			break;
+		case INHERITANCE:
+			hash.put(r.hashCode(), r);
+			break;
+		default:
+			break;
+			
 		}
-		hash.put(r.hashCode(), r);
+//		if (r.type == Relationship.RelationshipType.ASSOCIATION_ONE_TO_ONE){
+//		
+//		}
+//		if (r.type == Relationship.RelationshipType.DEPENDENCY_ONE_TO_MANY 
+//				|| r.type == Relationship.RelationshipType.DEPENDENCY_ONE_TO_ONE) {
+//			
+//			if (hash.containsKey(arrowCheckAssMany.hashCode()) || hash.containsKey(arrowCheckAssOne.hashCode())){
+//				return false;
+//			}
+//		}
+//		
+//		hash.put(r.hashCode(), r);
 		return true;
 	}
 

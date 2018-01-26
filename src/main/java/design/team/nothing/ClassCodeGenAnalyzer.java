@@ -27,8 +27,8 @@ public class ClassCodeGenAnalyzer extends AbstractAnalyzer {
 		code.append("skinparam linetype ortho \n");
 		Collection<SootClass> classes = data.get("classes", Collection.class);
 		for (SootClass c : classes) {
-			System.out.println(!this.applyFilters(c) + "   " + c.getName());
 			if (!this.applyFilters(c) || !this.checkClasses(data, c)) {
+				
 				code.append(genString(c, data) + "\n");
 			}
 		}
@@ -112,7 +112,7 @@ public class ClassCodeGenAnalyzer extends AbstractAnalyzer {
 				code.append("{static} ");
 			}
 			Tag t = f.getTag("SignatureTag");
-			if (t == null) {
+			if (t == null || t.toString().contains("TV") || t.toString().contains("TT;")) {
 				code.append(f.getType().toQuotedString() + " ");
 			} else {
 				code.append(new FieldEvaluator(t.toString()).getType().toString() + " ");
@@ -161,17 +161,20 @@ public class ClassCodeGenAnalyzer extends AbstractAnalyzer {
 	private String genMethodDeclaration(SootMethod m) {
 		StringBuilder sb = new StringBuilder();
 		Tag t = m.getTag("SignatureTag");
-		if (t==null||t.toString().contains("TT;")||t.toString().contains("<*")) {
+		if (t==null||t.toString().contains("TK;")||t.toString().contains("<T") || t.toString().contains("TT;")
+				|| t.toString().contains("(T")) {
 			sb.append(m.getReturnType().toString() + " ");
 			String[] ar = m.getSignature().split(" ");
 			sb.append(ar[ar.length - 1]);
 			sb.deleteCharAt(sb.length() - 1);
-			
 		}
 		else {
 			MethodEvaluator me = new MethodEvaluator(t.toString());
-			System.out.println(me.getReturnType());
-			sb.append(me.getReturnType().toString() + " ");
+			try {
+				sb.append(me.getReturnType().toString() + " ");
+			}catch (Exception e) {
+				sb.append("T ");
+			}
 			sb.append(m.getName() + "(");
 			for (GenericType gt : me.getParameterTypes()) {
 				sb.append(gt.toString() + ", ");
@@ -224,11 +227,13 @@ public class ClassCodeGenAnalyzer extends AbstractAnalyzer {
 		Collection<Relationship> rels = data.get("relationships", Collection.class);
 		for (Relationship r : rels) {
 			if (data.get("properties", Properties.class).getProperty("classlist") != null){
-				if (this.applyFilters(r.from) && this.applyFilters(r.to) 
+				
+				if ((this.applyFilters(r.from) || this.applyFilters(r.to) )
 						&& (this.checkClasses(data, r.to) || this.checkClasses(data, r.from))){
 					continue;
 				}
 			}else {
+				
 				if (this.applyFilters(r.from) || this.applyFilters(r.to)) {
 					continue;
 				}

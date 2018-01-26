@@ -21,20 +21,17 @@ public class InheritanceOverCompositionAnalyzer extends AbstractAnalyzer{
 		Collection<Relationship> relationships = data.get("relationships", Collection.class);
 		for(SootClass sc : sootClasses){
 			String str = data.get("properties", Properties.class).getProperty("classlist");
-			if (!this.applyFilters(sc) && (str == null || !str.contains(sc.getName()))){
+			if (this.applyFilters(sc) && (str == null || !str.contains(sc.getName()))){
 				continue;
 			}
 			
 			SootClass superSC = sc.getSuperclass();
-			
-			//SootClass superSC = sc.getSuperclass();
-			if(superSC.hasSuperclass() && !superSC.isAbstract()){
+
+			if(superSC.hasSuperclass() /*&& !superSC.isAbstract()*/){
 				System.out.println("found Class: " + sc.getName());
 				
 				for(Relationship r : (Collection<Relationship>) data.get("relationships", CustomCollection.class)){
-					if(r.from.getShortName().equals(sc.getShortName()) 
-							&& r.to.getShortName().equals(superSC.getShortName())
-							&& (r.type == RelationshipType.DEPENDENCY_ONE_TO_MANY || r.type == RelationshipType.DEPENDENCY_ONE_TO_ONE)){
+					if(r.from.getShortName().equals(sc.getShortName()) && r.to.getShortName().equals(superSC.getShortName())){
 						pattern.addRelationship("compositionOverInheritance", r);
 						pattern.addClass("compositionOverInheritance", sc);
 					}

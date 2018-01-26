@@ -1,5 +1,6 @@
 path=build/classes/main
-uml=true
+uml=truth
 main=design.team.nothing.App
 exclude=csse374.*
 pattern=design.team.nothing.InheritanceOverCompositionAnalyzer
+synthetic=true

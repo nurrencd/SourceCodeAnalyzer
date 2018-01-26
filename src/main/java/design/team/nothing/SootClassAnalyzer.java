@@ -63,9 +63,10 @@ public class SootClassAnalyzer extends AbstractAnalyzer {
 		if (!prop.containsKey("java")) {
 			sb.addExclusions(Arrays.asList("soot.*", "java.*", "javax.*", "sun.*"));
 		}
-//		if (prop.containsKey("exclude")) {
-//			sb.addExclusions(Arrays.asList(prop.getProperty("exclude").split(" ")));
-//		}
+		if (prop.containsKey("exclude")) {
+			sb.addExclusions(Arrays.asList(prop.getProperty("exclude").split(" ")));
+		}
+		sb.addExclusion("csse374.*");
 		//other configs
 		//build scene
 		Scene scene = sb.build();
@@ -78,6 +79,31 @@ public class SootClassAnalyzer extends AbstractAnalyzer {
 		}
 		for (SootClass c : classesToRemove){
 			scene.removeClass(c);
+		}
+		
+		if (prop.containsKey("exclude")){
+			Collection<SootClass> classesRem = new HashSet<SootClass>();
+			String[] clazzes = prop.getProperty("exclude").split(" ");
+			for (SootClass c : scene.getClasses()){
+				boolean rm = false;
+				for (String s : clazzes){
+					if (s.contains("*")) {
+						if (c.getName().contains(s.substring(0, s.length()-1))){
+							rm = true;
+						}
+					}else {
+						if (c.getName().equals(s)){
+							rm = true;
+						}
+					}
+				}
+				if (rm){
+					classesRem.add(c);
+				}
+			}
+			for (SootClass c : classesRem){
+				scene.removeClass(c);
+			}
 		}
 
 		if (prop.containsKey("classlist")){
@@ -110,8 +136,14 @@ public class SootClassAnalyzer extends AbstractAnalyzer {
 		
 		data.put("scene", scene);
 		Collection<SootClass> classesToStore = new ArrayList<>();
-		for (SootClass c : scene.getClasses()){
-			classesToStore.add(c);
+		if (prop.containsKey("classlist")){
+			for (SootClass c : scene.getClasses()){
+				classesToStore.add(c);
+			}
+		}else {
+			for (SootClass c : scene.getApplicationClasses()){
+				classesToStore.add(c);
+			}
 		}
 		data.put("classes", classesToStore);
 		

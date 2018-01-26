@@ -80,7 +80,6 @@ public class M3Tests {
 			analyzerCollection.run(data);
 	}
 	
-
 	@Test
 	public void testWeather(){
 		String[] args = new String[] {

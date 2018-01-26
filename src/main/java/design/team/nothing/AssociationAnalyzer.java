@@ -2,6 +2,7 @@ package design.team.nothing;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Properties;
 
 import design.team.nothing.Relationship.RelationshipType;
 import edu.rosehulman.jvm.sigevaluator.FieldEvaluator;
@@ -22,10 +23,15 @@ public class AssociationAnalyzer extends AbstractAnalyzer{
 	public Data analyze(Data data) {
 		Collection<SootClass> collection= data.get("classes", Collection.class);
 		Iterator<SootClass> it = collection.iterator();
+		Properties p = data.get("properties", Properties.class);
 		while(it.hasNext()){
 			SootClass c = it.next();
 			Chain<SootField> chField = c.getFields();
-			
+			if (!p.containsKey("classlist")) {
+				if (this.applyFilters(c)){
+					continue;
+				}
+			}
 			for(SootField sf :  chField){
 				String sfType = sf.getType().toString();
 				Scene scene = data.get("scene", Scene.class);
@@ -45,7 +51,6 @@ public class AssociationAnalyzer extends AbstractAnalyzer{
 					}
 					continue;
 				}
-				
 				fieldEval(data, sig, c);
 			}
 		}
@@ -60,7 +65,12 @@ public class AssociationAnalyzer extends AbstractAnalyzer{
 	 */
 	private void fieldEval(Data data, Tag sig, SootClass c){
 		FieldEvaluator fe = new FieldEvaluator(sig.toString());
-		GenericType gt = fe.getType();
+		GenericType gt;
+		try {
+			gt = fe.getType();
+		}catch (Exception e){
+			return;
+		}
 		Collection<String> containerTypes = gt.getAllContainerTypes();
 		Collection<String> elementTypes = gt.getAllElementTypes();
 		Scene scene = data.get("scene", Scene.class);

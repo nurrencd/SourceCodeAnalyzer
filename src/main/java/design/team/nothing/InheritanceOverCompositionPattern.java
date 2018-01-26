@@ -4,7 +4,7 @@ public class InheritanceOverCompositionPattern extends AbstractPattern{
 
 	@Override
 	public String getDeclarationModification() {
-		return "##orange";
+		return "#orange";
 	}
 
 	@Override

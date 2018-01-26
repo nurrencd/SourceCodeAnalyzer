@@ -85,7 +85,6 @@ public class Preprocessor {
 
 		listOfAnalyzers.add(cGen);
 		if (config.containsKey("filters")) {
-
 			String instructions = config.getProperty("filters");
 			for (String s : instructions.split(" "))
 				cGen.addFilter(this.filterMap.get(s));
@@ -97,6 +96,10 @@ public class Preprocessor {
 			assAnal.addFilter(jdk);
 			depAnal.addFilter(jdk);
 			cGen.addFilter(jdk);
+		}
+		
+		if (config.containsKey("synthetic")){
+			cGen.addFilter(new SyntheticFilter());
 		}
 	}
 

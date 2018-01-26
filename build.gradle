@@ -26,7 +26,7 @@ eclipse {
 }
 
 dependencies {
-    runtime fileTree(".\\bidirectional-detector\\build\\libs")
+    runtime fileTree("C:/Users/moormaet/Documents/GitHub/bidirectional-detector/build/libs")
     runtime fileTree("C:/Users/moormaet/workspace/CSSE 374/PatternDetectorExample2/build/libs")
 	compile 'ca.mcgill.sable:soot:3.+'
 	compile 'org.apache.logging.log4j:log4j-api:2.+'

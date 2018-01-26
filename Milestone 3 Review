@@ -1,0 +1,13 @@
+UML Diagram is missing dependencies.
+Seperate patterns for singleton and inheritance / composition are unnecessary--combine them into single concrete pattern type;
+Pattern class should not have rendering logic--simply represent the pattern model--violates single responsibility principle.
+Composite pattern --> AggregateAlgorithm can turn into single algorithms and use all algorithms collectively.
+
+DEMOS
+Composition over inheritance violation is too general. Look for delegation of responsibility within methods instead of class types.
+Singleton --> include static field of itself. Private constructor and Static Method that returns self is too general.
+    ArrayListMultimap would be a singleton with our model, but it is not.
+    Don't detect Desktop because it's not traditional Singleton. This is beyond scope of project.
+Resolution Strategy should print all resolutions into PlantUML code, but not-chosen ones as commented code.
+
+

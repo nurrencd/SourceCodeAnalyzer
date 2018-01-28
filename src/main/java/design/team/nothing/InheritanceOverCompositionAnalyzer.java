@@ -20,12 +20,28 @@ public class InheritanceOverCompositionAnalyzer extends AbstractAnalyzer{
 		Collection<SootClass> sootClasses = data.get("classes", Collection.class);
 		Collection<Relationship> relationships = data.get("relationships", Collection.class);
 		for(SootClass sc : sootClasses){
-			String str = data.get("properties", Properties.class).getProperty("classlist");
-			if (!this.applyFilters(sc) && (str == null || !str.contains(sc.getName()))){
-				continue;
+			//String str = data.get("properties", Properties.class).getProperty("classlist");
+//			if (this.applyFilters(sc) && (str == null || !str.contains(sc.getName()))){
+//				continue;
+//			}
+			if (!data.get("properties", Properties.class).containsKey("classlist")){
+				
+				if (this.applyFilters(sc)){
+					continue;
+				}
+			}else {
+				String str = data.get("properties", Properties.class).getProperty("classlist");
+				if (this.applyFilters(sc) &&  !str.contains(sc.getName())){
+					continue;
+				}
 			}
 			
-			SootClass superSC = sc.getSuperclass();
+			SootClass superSC;
+			if (sc.hasSuperclass()){
+				superSC = sc.getSuperclass();
+			}else {
+				continue;
+			}
 
 			if(superSC.hasSuperclass() /*&& !superSC.isAbstract()*/){
 				System.out.println("found Class: " + sc.getName());

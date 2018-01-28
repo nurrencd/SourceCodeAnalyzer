@@ -1,6 +1,7 @@
 package design.team.nothing;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import soot.SootClass;
 import soot.SootField;
@@ -36,6 +37,17 @@ public abstract class AbstractAnalyzer implements Analyzer{
 			}
 		}
 		return false;
+	}
+	
+	public List<Pattern> getPatterns(Data data){
+		List<Pattern> patterns = new ArrayList<Pattern>();
+		for(Object o: data.getValues()){
+			if(o instanceof Pattern){
+				Pattern p = (Pattern) o;
+				patterns.add(p);
+			}
+		}
+		return patterns;
 	}
 	
 }

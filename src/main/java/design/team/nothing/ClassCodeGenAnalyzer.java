@@ -138,7 +138,7 @@ public class ClassCodeGenAnalyzer extends AbstractAnalyzer {
 		Collection<SootClass> interfaces = new ArrayList<>();
 		Collection<Relationship> rels = data.get("relationships", Collection.class);
 
-		for(Pattern p: data.getPatterns()){
+		for(Pattern p: this.getPatterns(data)){
 			Collection<String> classKeys = p.getClassKeys();
 			for(String key: classKeys){
 				//System.out.println(p.getAppliedRelationships(s));
@@ -254,7 +254,7 @@ public class ClassCodeGenAnalyzer extends AbstractAnalyzer {
 			} else if (r.type == RelationshipType.IMPLEMENTATION) {
 				sb.append(r.from.getName() + " ..|> " + r.to.getName());
 			}
-			for(Pattern p: data.getPatterns()){
+			for(Pattern p: this.getPatterns(data)){
 				Collection<String> relationshipKeys = p.getRelationshipKeys();
 				for(String key: relationshipKeys){
 					if(p.getAppliedRelationships(key).contains(r)){

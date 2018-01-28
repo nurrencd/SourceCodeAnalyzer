@@ -20,7 +20,7 @@ public class Preprocessor {
 	public static final List<String> PROPERTIES = Collections.unmodifiableList(Arrays.asList(
 			"path", "uml", "recursive", "depth",
 			"classlist", "exclude", "sequence",
-			"mainmethod", "filters", "java", "pattern", "resolutionstrategy",
+			"main", "filters", "java", "pattern", "resolutionstrategy",
 			"algorithms", "synthetic"));
 
 	private Map<String, Filter> filterMap;
@@ -133,6 +133,7 @@ public class Preprocessor {
 				flags.get(currentFlag).add(str);
 			}
 		}
+		System.out.println(flags.containsKey("-path"));
 		Properties prop = new Properties();
 		if (flags.containsKey("-config")){
 			Path path = Paths.get(flags.get("-config").get(0));
@@ -147,7 +148,11 @@ public class Preprocessor {
 		
 		for (String key : PROPERTIES){
 			if (flags.containsKey("-" + key)){
+
 				if (prop.containsKey(key)){
+					prop.setProperty(key, genString(flags.get("-" + key)));
+				}else {
+					System.out.println("Has Key -" + key );
 					prop.setProperty(key, genString(flags.get("-" + key)));
 				}
 			}
@@ -162,7 +167,10 @@ public class Preprocessor {
 		for (String s : str){
 			sb.append(s + " ");
 		}
-		return sb.toString();
+		String end = sb.toString();
+		end = end.trim();
+		System.out.println(end + "!!");
+		return end;
 	}
 	
 	public void addFilter(String key, Filter filter) {

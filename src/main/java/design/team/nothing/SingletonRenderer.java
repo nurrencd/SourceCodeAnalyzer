@@ -1,9 +1,9 @@
 package design.team.nothing;
 
-public class SingletonPattern extends AbstractPattern {
+public class SingletonRenderer implements PatternRenderer{
 
 	@Override
-	public String getDeclarationModification() {
+	public String getClassModification() {
 		return "<<Singleton>> ##blue";
 	}
 

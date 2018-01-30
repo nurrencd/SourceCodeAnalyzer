@@ -1,4 +1,4 @@
-path=C:/Users/moormaet/Documents/GitHub/term-project/src/main/java
+path=src/main/java
 uml=true
 main=design.team.nothing.App
 classlist=javax.swing.JFrame java.awt.Frame

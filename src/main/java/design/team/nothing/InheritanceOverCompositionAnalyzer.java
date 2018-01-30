@@ -1,29 +1,27 @@
 package design.team.nothing;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.Properties;
 
-import design.team.nothing.Relationship.RelationshipType;
 import soot.Scene;
 import soot.SootClass;
-import soot.SootField;
 import soot.SootMethod;
-import soot.Type;
+import soot.jimple.toolkits.callgraph.CallGraph;
+import soot.jimple.toolkits.callgraph.Edge;
 
 public class InheritanceOverCompositionAnalyzer extends AbstractAnalyzer{
 
-	Pattern pattern = new InheritanceOverCompositionPattern();
+	PatternRenderer patternRenderer = new InheritanceOverCompositionRenderer();
 	
 	
 	@Override
 	public Data analyze(Data data) {
+		Pattern pattern = new Pattern(patternRenderer);
 		Collection<SootClass> sootClasses = data.get("classes", Collection.class);
 		Collection<Relationship> relationships = data.get("relationships", Collection.class);
+		Scene scene = data.get("scene", Scene.class);
 		for(SootClass sc : sootClasses){
-			//String str = data.get("properties", Properties.class).getProperty("classlist");
-//			if (this.applyFilters(sc) && (str == null || !str.contains(sc.getName()))){
-//				continue;
-//			}
 			if (!data.get("properties", Properties.class).containsKey("classlist")){
 				
 				if (this.applyFilters(sc)){
@@ -35,27 +33,33 @@ public class InheritanceOverCompositionAnalyzer extends AbstractAnalyzer{
 					continue;
 				}
 			}
-			
-			SootClass superSC;
-			if (sc.hasSuperclass()){
-				superSC = sc.getSuperclass();
-			}else {
-				continue;
-			}
-
-			if(superSC.hasSuperclass() /*&& !superSC.isAbstract()*/){
-				System.out.println("found Class: " + sc.getName());
-				
-				for(Relationship r : (Collection<Relationship>) data.get("relationships", CustomCollection.class)){
-					if(r.from.getShortName().equals(sc.getShortName()) && r.to.getShortName().equals(superSC.getShortName())){
-						pattern.addRelationship("compositionOverInheritance", r);
-						pattern.addClass("compositionOverInheritance", sc);
+			CallGraph cg = scene.getCallGraph();
+			Collection<SootMethod> methods = sc.getMethods();
+			for (SootMethod m : methods) {
+				if (m.hasActiveBody()) {
+					Iterator<Edge> edges = cg.edgesOutOf(m);
+					Edge e;
+					while (edges.hasNext()) {
+						e = edges.next();
+						SootClass target = e.getTgt().method().getDeclaringClass();
+						if (target.getName().equals("java.lang.Object")) {
+							System.out.println("Eric, you were wrong!");
+							continue;
+						}
+						if (target.getName().equals(sc.getSuperclass().getName())) {
+							pattern.addClass("compositionOverInheritance", sc);
+							System.out.println("Adding COI class");
+							for (Relationship r : relationships) {
+								if (r.to.getName().equals(sc.getSuperclass().getName())
+										&&r.from.getName().equals(sc.getName())){
+									pattern.addRelationship("compositionOverInheritance", r);
+									System.out.println("Adding COI relationship");
+								}
+								
+							}
+						}
 					}
 				}
-				
-				Scene scene = data.get("scene", Scene.class);
-				
-	
 			}
 			
 		}

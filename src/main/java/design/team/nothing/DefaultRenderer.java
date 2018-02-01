@@ -1,16 +1,17 @@
 package design.team.nothing;
 
-public class SingletonRenderer extends PatternRenderer{
+public class DefaultRenderer extends PatternRenderer {
 
 	@Override
 	public String getClassModification(String patternType) {
-		return "<<Singleton>> ##blue";
+		// TODO Auto-generated method stub
+		return "";
 	}
 
 	@Override
 	public String getRelationshipModification() {
+		// TODO Auto-generated method stub
 		return "";
 	}
-
 
 }

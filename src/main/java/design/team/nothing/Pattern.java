@@ -40,12 +40,8 @@ public class Pattern {
 		return relationships.keySet();
 	}
 	
-	public String getDeclarationModification() {
-		return this.renderer.getClassModification();
-	}
-	
-	public String getRelationshipModification() {
-		return this.renderer.getRelationshipModification();
+	public PatternRenderer getRenderer() {
+		return this.renderer;
 	}
 	
 

@@ -22,22 +22,69 @@ public class ClassCodeGenAnalyzer extends AbstractAnalyzer {
 
 	@Override
 	public Data analyze(Data data) {
+		PatternRenderer defaul = new DefaultRenderer();
 		StringBuilder code = new StringBuilder();
 		code.append("@startuml\n");
 		code.append("skinparam linetype ortho \n");
 		Collection<SootClass> classes = data.get("classes", Collection.class);
+		Collection<Relationship> relationships = data.get("relationships", Collection.class);
+		Properties prop = data.get("properties", Properties.class);
 		for (SootClass c : classes) {
+
+			String patternType = "";
+			PatternRenderer current = defaul;
+
 			if (!this.applyFilters(c) || !this.checkClasses(data, c)) {
-				
-				code.append(genString(c, data) + "\n");
+
+				for (Pattern p : this.getPatterns(data)) {
+
+					Collection<String> patternKeys = p.getClassKeys();
+					for (String key : patternKeys) {
+
+						// System.out.println(p.getAppliedRelationships(s));
+						if (p.getAppliedClasses(key).contains(c)) {
+							patternType = key;
+							current = p.getRenderer();
+						}
+					}
+				}
+
+				code.append(current.generateClassCode(c, patternType, prop) + "\n");
 			}
 		}
-		
-		
+
 		// draw arrows
-		code.append(this.addRelationshipArrows(data));
+		for (Relationship r : relationships) {
+			if (data.get("properties", Properties.class).getProperty("classlist") != null) {
+
+				if ((this.applyFilters(r.from) || this.applyFilters(r.to))
+						&& (this.checkClasses(data, r.to) || this.checkClasses(data, r.from))) {
+					continue;
+				}
+			} else {
+
+				if (this.applyFilters(r.from) || this.applyFilters(r.to)) {
+					continue;
+				}
+			}
+			
+			String patternType = "";
+			PatternRenderer current = defaul;
+			for (Pattern p : this.getPatterns(data)) {
+				Collection<String> patternKeys = p.getRelationshipKeys();
+				for (String key : patternKeys) {
+
+					// System.out.println(p.getAppliedRelationships(s));
+					if (p.getAppliedRelationships(key).contains(r)) {
+						patternType = key;
+						current = p.getRenderer();
+					}
+				}
+			}
+			code.append(current.generateRelationshipCode(r));
+		}
 		code.append("@enduml");
-//		System.out.println(code.toString());
+		// System.out.println(code.toString());
 		try {
 			FileCreator fc = new FileCreator();
 			fc.getSVG(code.toString());
@@ -70,10 +117,10 @@ public class ClassCodeGenAnalyzer extends AbstractAnalyzer {
 	 */
 	private void genMethod(SootClass c, StringBuilder code, Data data) {
 		Properties prop = data.get("properties", Properties.class);
-		
+
 		for (SootMethod m : c.getMethods()) {
-			if (prop.containsKey("synthetic")){
-				if (prop.getProperty("synthetic").equals("false") && m.getName().contains("$")){
+			if (prop.containsKey("synthetic")) {
+				if (prop.getProperty("synthetic").equals("false") && m.getName().contains("$")) {
 					continue;
 				}
 			}
@@ -138,48 +185,47 @@ public class ClassCodeGenAnalyzer extends AbstractAnalyzer {
 		Collection<SootClass> interfaces = new ArrayList<>();
 		Collection<Relationship> rels = data.get("relationships", Collection.class);
 
-		for(Pattern p: this.getPatterns(data)){
+		for (Pattern p : this.getPatterns(data)) {
 			Collection<String> classKeys = p.getClassKeys();
-			for(String key: classKeys){
-				//System.out.println(p.getAppliedRelationships(s));
-				if(p.getAppliedClasses(key).contains(c)){
-					code.append(" " + p.getDeclarationModification());
+			for (String key : classKeys) {
+				// System.out.println(p.getAppliedRelationships(s));
+				if (p.getAppliedClasses(key).contains(c)) {
+					// code.append(" " + p.getDeclarationModification());
 				}
 			}
 		}
-		
-//		if (interfaces.size() > 0) {
-//			code.append(" implements ");
-//			interfaces.forEach((i) -> {
-//				code.append(i.getName() + ", ");
-//			});
-//			code.deleteCharAt(code.length() - 1);
-//			code.deleteCharAt(code.length() - 1);
-//		}
+
+		// if (interfaces.size() > 0) {
+		// code.append(" implements ");
+		// interfaces.forEach((i) -> {
+		// code.append(i.getName() + ", ");
+		// });
+		// code.deleteCharAt(code.length() - 1);
+		// code.deleteCharAt(code.length() - 1);
+		// }
 	}
 
 	private String genMethodDeclaration(SootMethod m) {
 		StringBuilder sb = new StringBuilder();
 		Tag t = m.getTag("SignatureTag");
-		if (t==null||t.toString().contains("TK;")||t.toString().contains("<T") || t.toString().contains("TT;")
+		if (t == null || t.toString().contains("TK;") || t.toString().contains("<T") || t.toString().contains("TT;")
 				|| t.toString().contains("(T")) {
 			sb.append(m.getReturnType().toString() + " ");
 			String[] ar = m.getSignature().split(" ");
 			sb.append(ar[ar.length - 1]);
 			sb.deleteCharAt(sb.length() - 1);
-		}
-		else {
+		} else {
 			MethodEvaluator me = new MethodEvaluator(t.toString());
 			try {
 				sb.append(me.getReturnType().toString() + " ");
-			}catch (Exception e) {
+			} catch (Exception e) {
 				sb.append("T ");
 			}
 			sb.append(m.getName() + "(");
 			for (GenericType gt : me.getParameterTypes()) {
 				sb.append(gt.toString() + ", ");
 			}
-			sb.delete(sb.length()-2, sb.length());
+			sb.delete(sb.length() - 2, sb.length());
 			sb.append(")");
 		}
 		sb.append("\n");
@@ -226,39 +272,38 @@ public class ClassCodeGenAnalyzer extends AbstractAnalyzer {
 		StringBuilder sb = new StringBuilder();
 		Collection<Relationship> rels = data.get("relationships", Collection.class);
 		for (Relationship r : rels) {
-			if (data.get("properties", Properties.class).getProperty("classlist") != null){
-				
-				if ((this.applyFilters(r.from) || this.applyFilters(r.to) )
-						&& (this.checkClasses(data, r.to) || this.checkClasses(data, r.from))){
+			if (data.get("properties", Properties.class).getProperty("classlist") != null) {
+
+				if ((this.applyFilters(r.from) || this.applyFilters(r.to))
+						&& (this.checkClasses(data, r.to) || this.checkClasses(data, r.from))) {
 					continue;
 				}
-			}else {
-				
+			} else {
+
 				if (this.applyFilters(r.from) || this.applyFilters(r.to)) {
 					continue;
 				}
 			}
-			
+
 			if (r.type == RelationshipType.DEPENDENCY_ONE_TO_MANY) {
 				sb.append(r.from.getName() + " ..> \"*\" " + r.to.getName());
 			} else if (r.type == RelationshipType.DEPENDENCY_ONE_TO_ONE) {
 				sb.append(r.from.getName() + " ..> \"1\" " + r.to.getName());
-			}
-			else if (r.type == RelationshipType.ASSOCIATION_ONE_TO_MANY) {
+			} else if (r.type == RelationshipType.ASSOCIATION_ONE_TO_MANY) {
 				sb.append(r.from.getName() + " --> \"*\" " + r.to.getName());
 			} else if (r.type == RelationshipType.ASSOCIATION_ONE_TO_ONE) {
 				sb.append(r.from.getName() + " --> \"1\" " + r.to.getName());
-			}else if (r.type == RelationshipType.INHERITANCE) {
+			} else if (r.type == RelationshipType.INHERITANCE) {
 				sb.append(r.from.getName() + " --|> " + r.to.getName());
-			
+
 			} else if (r.type == RelationshipType.IMPLEMENTATION) {
 				sb.append(r.from.getName() + " ..|> " + r.to.getName());
 			}
-			for(Pattern p: this.getPatterns(data)){
+			for (Pattern p : this.getPatterns(data)) {
 				Collection<String> relationshipKeys = p.getRelationshipKeys();
-				for(String key: relationshipKeys){
-					if(p.getAppliedRelationships(key).contains(r)){
-						sb.append(" " + p.getRelationshipModification());
+				for (String key : relationshipKeys) {
+					if (p.getAppliedRelationships(key).contains(r)) {
+						// sb.append(" " + p.getRelationshipModification());
 					}
 				}
 			}
@@ -266,13 +311,13 @@ public class ClassCodeGenAnalyzer extends AbstractAnalyzer {
 		}
 		return sb.toString();
 	}
-	
-	private boolean checkClasses(Data data, SootClass sc){
+
+	private boolean checkClasses(Data data, SootClass sc) {
 		if (data.get("properties", Properties.class).getProperty("classlist") == null) {
 			return true;
 		}
 		return !data.get("properties", Properties.class).getProperty("classlist").contains(sc.getName());
-		
+
 	}
 
 }

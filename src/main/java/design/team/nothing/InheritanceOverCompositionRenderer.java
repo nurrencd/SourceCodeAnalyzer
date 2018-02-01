@@ -1,6 +1,6 @@
 package design.team.nothing;
 
-public class InheritanceOverCompositionRenderer implements PatternRenderer {
+public class InheritanceOverCompositionRenderer extends PatternRenderer {
 
 	@Override
 	public String getRelationshipModification() {
@@ -8,7 +8,7 @@ public class InheritanceOverCompositionRenderer implements PatternRenderer {
 	}
 
 	@Override
-	public String getClassModification() {
+	public String getClassModification(String patternType) {
 		return "#orange";
 	}
 

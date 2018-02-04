@@ -15,7 +15,10 @@ import soot.tagkit.Tag;
 
 public abstract class PatternRenderer {
 	
+	protected String patternType;
+	
 	public String generateClassCode(SootClass c, String patternType, Properties prop) {
+		this.patternType = patternType;
 		StringBuilder code = new StringBuilder();
 		code.append(generateClassSignature(c) + " ");
 		code.append(getClassModification(patternType));

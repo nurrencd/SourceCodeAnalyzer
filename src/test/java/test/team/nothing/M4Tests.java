@@ -12,14 +12,20 @@ public class M4Tests {
 
 	@Test
 	public void DITest() {
-		String[] args = new String[] {
-				"-config",
-				"PropertiesFiles/DipendencyProp"
-			};
-			Preprocessor pre = new Preprocessor();
-			Data data = new Data();
-			AnalyzerChain analyzerCollection = pre.makePileline(args, data);
-			analyzerCollection.run(data);
+		String[] args = new String[] { "-config", "PropertiesFiles/DipendencyProp" };
+		Preprocessor pre = new Preprocessor();
+		Data data = new Data();
+		AnalyzerChain analyzerCollection = pre.makePileline(args, data);
+		analyzerCollection.run(data);
+	}
+
+	@Test
+	public void DecoratorTest() {
+		String[] args = new String[] { "-config", "PropertiesFiles/M4DecoratorLab" };
+		Preprocessor pre = new Preprocessor();
+		Data data = new Data();
+		AnalyzerChain analyzerCollection = pre.makePileline(args, data);
+		analyzerCollection.run(data);
 	}
 
 }

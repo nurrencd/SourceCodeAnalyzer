@@ -38,7 +38,7 @@ public class SootClassAnalyzer extends AbstractAnalyzer {
 			sb.addDirectory(path)
 				.setEntryClass(mainClass)
 				.addEntryPointMatcher(new MainMethodMatcher(mainClass))
-				.addExclusions(Arrays.asList("soot.*", "polygot.*", "org.*", "com.*", "design.team.nothing.Preprocessor"));
+				.addExclusions(Arrays.asList(/*"soot.*", "polygot.*", "org.*", "com.*",*/ "design.team.nothing.Preprocessor"));
 //		}else if(prop.containsKey("classlist")){
 //			String[] arrayOfClasses = prop.getProperty("classlist").split(" ");
 //			for(String s : arrayOfClasses){
@@ -66,20 +66,20 @@ public class SootClassAnalyzer extends AbstractAnalyzer {
 		if (prop.containsKey("exclude")) {
 			sb.addExclusions(Arrays.asList(prop.getProperty("exclude").split(" ")));
 		}
-		sb.addExclusion("csse374.*");
+//		sb.addExclusion("csse374.*");
 		//other configs
 		//build scene
 		Scene scene = sb.build();
 		ArrayList<SootClass> classesToRemove = new ArrayList<SootClass>();
 	
-		for (SootClass c : scene.getClasses()){
-			if (c.getName().contains("soot.")){
-				classesToRemove.add(c);
-			}
-		}
-		for (SootClass c : classesToRemove){
-			scene.removeClass(c);
-		}
+//		for (SootClass c : scene.getClasses()){
+//			if (c.getName().contains("soot.")){
+//				classesToRemove.add(c);
+//			}
+//		}
+//		for (SootClass c : classesToRemove){
+//			scene.removeClass(c);
+//		}
 		
 		if (prop.containsKey("exclude")){
 			Collection<SootClass> classesRem = new HashSet<SootClass>();

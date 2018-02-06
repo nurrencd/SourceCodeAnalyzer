@@ -105,7 +105,7 @@ public class SootClassAnalyzer extends AbstractAnalyzer {
 				scene.removeClass(c);
 			}
 		}
-
+		
 		if (prop.containsKey("classlist")){
 			Collection<SootClass> classesRem = new HashSet<SootClass>();
 			String[] clazzes = prop.getProperty("classlist").split(" ");
@@ -133,6 +133,17 @@ public class SootClassAnalyzer extends AbstractAnalyzer {
 				scene.removeClass(c);
 			}
 		}
+		
+//		if (prop.containsKey("add")) {
+//			String[] clazzes = prop.getProperty("add").split(" ");
+//			for (String s : clazzes) {
+//				try {
+//					SootClass c = scene.loadClassAndSupport(s);
+//				} catch (Exception e) {
+//					System.out.println("Could not load class: " + s);
+//				}
+//			}
+//		}
 		
 		data.put("scene", scene);
 		Collection<SootClass> classesToStore = new ArrayList<>();

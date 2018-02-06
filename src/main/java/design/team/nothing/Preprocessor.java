@@ -83,6 +83,13 @@ public class Preprocessor {
 		
 		AbstractAnalyzer cGen = new ClassCodeGenAnalyzer();
 
+		if (config.containsKey("exclude")) {
+			String[] exclusions = config.getProperty("exclude").split(" ");
+			for (String str : exclusions) {
+				Filter f = new ExclusionFilter(str);
+				cGen.addFilter(f);
+			}
+		}
 		listOfAnalyzers.add(cGen);
 		if (config.containsKey("filters")) {
 			String instructions = config.getProperty("filters");
@@ -112,6 +119,16 @@ public class Preprocessor {
 				try {
 					//Look in bin directory
 					AbstractAnalyzer analyzer = (AbstractAnalyzer) Class.forName(p).newInstance();
+					if (config.containsKey("exclude")) {
+						String[] exclusions = config.getProperty("exclude").split(" ");
+						for (String str : exclusions) {
+							Filter f = new ExclusionFilter(str);
+							analyzer.addFilter(f);
+						}
+					}
+					if (!config.containsKey("java")) {
+						analyzer.addFilter(new JDKFilter());
+					}
 					listOfAnalyzers.add(analyzer);
 				} catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
 					// TODO Auto-generated catch block

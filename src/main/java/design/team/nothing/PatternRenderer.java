@@ -108,8 +108,12 @@ public abstract class PatternRenderer {
 				sb.append("T ");
 			}
 			sb.append(m.getName() + "(");
-			for (GenericType gt : me.getParameterTypes()) {
-				sb.append(gt.toString() + ", ");
+			try {
+				for (GenericType gt : me.getParameterTypes()) {
+					sb.append(gt.toString() + ", ");
+				}
+			} catch(Exception e) {
+				sb.append("T, ");
 			}
 			sb.delete(sb.length()-2, sb.length());
 			sb.append(")");
@@ -133,7 +137,11 @@ public abstract class PatternRenderer {
 		if (t == null || t.toString().contains("TV") || t.toString().contains("TT;")) {
 			code.append(f.getType().toQuotedString() + " ");
 		} else {
+			try {
 			code.append(new FieldEvaluator(t.toString()).getType().toString() + " ");
+			} catch (Exception e) {
+				code.append("T ");
+			}
 		}
 		code.append(f.getName());
 		return code.toString();

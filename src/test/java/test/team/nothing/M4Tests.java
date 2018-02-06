@@ -27,5 +27,14 @@ public class M4Tests {
 		AnalyzerChain analyzerCollection = pre.makePileline(args, data);
 		analyzerCollection.run(data);
 	}
+	
+	@Test
+	public void AdapterTest() {
+		String[] args = new String[] { "-config", "PropertiesFiles/M4Adapter" };
+		Preprocessor pre = new Preprocessor();
+		Data data = new Data();
+		AnalyzerChain analyzerCollection = pre.makePileline(args, data);
+		analyzerCollection.run(data);
+	}
 
 }

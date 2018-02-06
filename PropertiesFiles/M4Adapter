@@ -1,0 +1,6 @@
+path=C:/Users/moormaet/workspace/CSSE 374/Lab7-1/bin
+uml=true
+main=problem.client.App
+pattern=design.team.nothing.AdapterAnalyzer
+recursive=true
+java=true

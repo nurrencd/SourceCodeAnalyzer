@@ -33,23 +33,24 @@ public class ClassCodeGenAnalyzer extends AbstractAnalyzer {
 
 			String patternType = "";
 			PatternRenderer current = defaul;
-
+			
 			if (!this.applyFilters(c) || !this.checkClasses(data, c)) {
-
+					Pattern pattern = null;
 				for (Pattern p : this.getPatterns(data)) {
-
+					
 					Collection<String> patternKeys = p.getClassKeys();
 					for (String key : patternKeys) {
 
 						// System.out.println(p.getAppliedRelationships(s));
 						if (p.getAppliedClasses(key).contains(c)) {
+							pattern = p;
 							patternType = key;
 							current = p.getRenderer();
 						}
 					}
 				}
 
-				code.append(current.generateClassCode(c, patternType, prop) + "\n");
+				code.append(current.generateClassCode(c, patternType, prop, pattern) + "\n");
 			}
 		}
 

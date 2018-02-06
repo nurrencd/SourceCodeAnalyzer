@@ -1,7 +1,9 @@
 package design.team.nothing;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import soot.Scene;
 import soot.SootClass;
@@ -30,6 +32,16 @@ public class DecoratorAnalyzer extends AbstractAnalyzer{
 //					System.out.println("FOUND A DECORATORRRRRRRRRRRRRRRRRRRRR");
 					pattern.addClass("decorator", sc);
 					pattern.addClass("component", savedField);
+					List<SootMethod> listSM = new ArrayList<>();
+					for(SootMethod sm: savedField.getMethods()){
+						if(sc.getMethodUnsafe(sm.getSubSignature()) == null){
+							listSM.add(sm);
+						}
+					}
+					if(listSM.size() != 0){
+						SootClass tempSootClass = addBadDecorator(listSM, sc);
+						pattern.addClass("baddecorator", tempSootClass);
+					}
 					for (Relationship r : relationships) {
 						System.out.println("SavedField: " + this.savedField.getName());
 						if (r.to.getName().equals(savedField.getName())
@@ -60,6 +72,17 @@ public class DecoratorAnalyzer extends AbstractAnalyzer{
 		return data;
 	}
 	
+	private SootClass addBadDecorator(List<SootMethod> listSM, SootClass sc) {
+		SootClass sootClass = new SootClass("teamNothing");
+		for(SootMethod sm : listSM){
+			sootClass.addMethod(sm);
+		}
+		
+		
+		return sootClass;
+		
+	}
+
 	public boolean checkDecorator(CallGraph cg, SootClass sc, SootClass superSC, Scene scene) {
 		boolean hasItself = false;
 		for(SootField sf: sc.getFields()){

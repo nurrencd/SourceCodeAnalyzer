@@ -16,8 +16,10 @@ import soot.tagkit.Tag;
 public abstract class PatternRenderer {
 	
 	protected String patternType;
+	protected Pattern pattern;
 	
-	public String generateClassCode(SootClass c, String patternType, Properties prop) {
+	public String generateClassCode(SootClass c, String patternType, Properties prop, Pattern pattern) {
+		this.pattern = pattern;
 		this.patternType = patternType;
 		StringBuilder code = new StringBuilder();
 		code.append(generateClassSignature(c) + " ");
@@ -37,10 +39,15 @@ public abstract class PatternRenderer {
 			code.append("\n");
 		}
 		code.append(generateExtraSignatures(c));
-		code.append("\n}");
+		code.append("\n}\n");
+		code.append(generateNotes(c));
 		return code.toString();
 	}
 	
+	private String generateNotes(SootClass c) {
+		return "";
+	}
+
 	public String generateRelationshipCode(Relationship r) {
 		StringBuilder sb = new StringBuilder();
 		if (r.type == RelationshipType.DEPENDENCY_ONE_TO_MANY) {

@@ -22,16 +22,39 @@ public class DecoratorAnalyzer extends AbstractAnalyzer{
 	public Data analyze(Data data) {
 		PatternRenderer pr = new DecoratorRenderer();
 		Pattern pattern = new Pattern(pr);
+		Collection<SootClass> classesToAdd = new HashSet<>();
 		Collection<SootClass> classes = data.get("classes", Collection.class);
 		Collection<Relationship> relationships = data.get("relationships", Collection.class);
 		Scene scene = data.get("scene", Scene.class);
 		CallGraph cg = scene.getCallGraph();
+		generateDecorators(pattern, classesToAdd, classes, relationships, scene, cg);
+		while (classesToAdd.size() != 0) {
+			for (SootClass c : classesToAdd) {
+				classes.add(c);
+			}
+			classesToAdd.clear();
+			generateDecorators(pattern, classesToAdd, classes, relationships, scene, cg);
+		}
+		data.put("decorator", pattern);
+		return data;
+	}
+
+	private void generateDecorators(Pattern pattern, Collection<SootClass> classesToAdd, Collection<SootClass> classes,
+			Collection<Relationship> relationships, Scene scene, CallGraph cg) {
 		for(SootClass sc : classes){
 			if(sc.hasSuperclass()){
 				SootClass superSC = sc.getSuperclass();
 				if(checkDecorator(cg, sc, superSC, scene)){
 //					System.out.println("FOUND A DECORATORRRRRRRRRRRRRRRRRRRRR");
+					if (savedField.getName().equals("java.lang.Object")) {
+						continue;
+					}
 					pattern.addClass("decorator", sc);
+					if (!classes.contains(savedField)) {
+						//SootClass added = scene.loadClassAndSupport(savedField.getName());
+						//System.out.println("added: " + added.getName());
+						classesToAdd.add(savedField);
+					}
 					pattern.addClass("component", savedField);
 					Collection<SootMethod> listSM = new HashSet<>();
 					for(SootMethod sm: savedField.getMethods()){
@@ -60,7 +83,20 @@ public class DecoratorAnalyzer extends AbstractAnalyzer{
 			}
 			for (SootClass interfaze : sc.getInterfaces()) {
 				if(checkDecorator(cg, sc, interfaze, scene)){
+					if (savedField.getName().equals("java.lang.Object")) {
+						continue;
+					}
 					pattern.addClass("decorator", sc);
+//					if (!scene.containsClass(savedField.getName())) {
+//						SootClass added = scene.loadClassAndSupport(savedField.getName());
+//						System.out.println("added: " + added.getName());
+//						classes.add(added);
+//					}
+					if (!classes.contains(savedField)) {
+						//SootClass added = scene.loadClassAndSupport(savedField.getName());
+						//System.out.println("added: " + added.getName());
+						classesToAdd.add(savedField);
+					}
 					pattern.addClass("component", savedField);
 					for (Relationship r : relationships) {
 						if (r.to.getName().equals(this.savedField.getName())
@@ -73,8 +109,6 @@ public class DecoratorAnalyzer extends AbstractAnalyzer{
 				}
 			}
 		}
-		data.put("decorator", pattern);
-		return data;
 	}
 	
 	private SootClass addBadDecorator(Collection<SootMethod> listSM, SootClass sc) {

@@ -12,6 +12,7 @@ import csse374.revengd.soot.MainMethodMatcher;
 import csse374.revengd.soot.SceneBuilder;
 import soot.Scene;
 import soot.SootClass;
+import soot.SootResolver;
 
 public class SootClassAnalyzer extends AbstractAnalyzer {
 	private List<Filter> filters;
@@ -69,8 +70,42 @@ public class SootClassAnalyzer extends AbstractAnalyzer {
 //		sb.addExclusion("csse374.*");
 		//other configs
 		//build scene
+		sb.addClass("java.io.InputStreamReader");
+		sb.addClass("java.awt.event.MouseAdapter");
+		if (prop.containsKey("classlist")){
+			Collection<SootClass> classesRem = new HashSet<SootClass>();
+			String[] clazzes = prop.getProperty("classlist").split(" ");
+			for (String str : clazzes){
+				if (!str.contains("java")){
+					continue;
+				}
+				sb.addClass(str);
+				//scene.addClass(c);
+				try {
+					//SootClass c = SootResolver.v().resolveClass(str, SootClass.SIGNATURES);
+//					/scene.addClass(c);
+				}catch(Exception e){	
+					System.out.println("Failed to load: " + str);
+				}
+			}
+//			for (SootClass c : scene.getClasses()){
+//				boolean rm = true;
+//				for (String s : clazzes){
+//					if (c.getName().equals(s)){
+//						rm = false;
+//					}
+//				}
+//				if (rm){
+//					classesRem.add(c);
+//				}
+//			}
+//			for (SootClass c : classesRem){
+//				scene.removeClass(c);
+//			}
+		}
 		Scene scene = sb.build();
 		ArrayList<SootClass> classesToRemove = new ArrayList<SootClass>();
+		System.out.println("CHecking class: " + scene.containsClass("java.io.InputStreamReader"));
 	
 //		for (SootClass c : scene.getClasses()){
 //			if (c.getName().contains("soot.")){
@@ -113,25 +148,35 @@ public class SootClassAnalyzer extends AbstractAnalyzer {
 				if (!str.contains("java")){
 					continue;
 				}
+				if (scene.containsClass(str)) {
+					continue;
+				}
+				//scene.addBasicClass("java.io.InputStreamReader", SootClass.HIERARCHY);
+				scene.loadClassAndSupport("java.awt.event.MouseAdapter");
+				//SootClass c = SootResolver.v().makeClassRef(str);
+				System.out.println("CHecking class: " + scene.containsClass(str));
+				//scene.addClass(c);
 				try {
-					scene.loadClassAndSupport(str);
+					//SootClass c = SootResolver.v().resolveClass(str, SootClass.SIGNATURES);
+//					/scene.addClass(c);
 				}catch(Exception e){	
+					System.out.println("Failed to load: " + str);
 				}
 			}
-			for (SootClass c : scene.getClasses()){
-				boolean rm = true;
-				for (String s : clazzes){
-					if (c.getName().equals(s)){
-						rm = false;
-					}
-				}
-				if (rm){
-					classesRem.add(c);
-				}
-			}
-			for (SootClass c : classesRem){
-				scene.removeClass(c);
-			}
+//			for (SootClass c : scene.getClasses()){
+//				boolean rm = true;
+//				for (String s : clazzes){
+//					if (c.getName().equals(s)){
+//						rm = false;
+//					}
+//				}
+//				if (rm){
+//					classesRem.add(c);
+//				}
+//			}
+//			for (SootClass c : classesRem){
+//				scene.removeClass(c);
+//			}
 		}
 		
 //		if (prop.containsKey("add")) {
@@ -149,7 +194,12 @@ public class SootClassAnalyzer extends AbstractAnalyzer {
 		Collection<SootClass> classesToStore = new ArrayList<>();
 		if (prop.containsKey("classlist")){
 			for (SootClass c : scene.getClasses()){
-				classesToStore.add(c);
+				for (String str : prop.getProperty("classlist").split(" ")) {
+					if (c.getName().contains(str)) {
+						System.out.println("Named: " + c.getName());
+						classesToStore.add(c);
+					}
+				}
 			}
 		}else {
 			for (SootClass c : scene.getApplicationClasses()){

@@ -36,6 +36,15 @@ public class M4Tests {
 		AnalyzerChain analyzerCollection = pre.makePileline(args, data);
 		analyzerCollection.run(data);
 	}
+	
+	@Test
+	public void DecoratorAdapterTest() {
+		String[] args = new String[] { "-config", "PropertiesFiles/AdapterDecoratorMerge" };
+		Preprocessor pre = new Preprocessor();
+		Data data = new Data();
+		AnalyzerChain analyzerCollection = pre.makePileline(args, data);
+		analyzerCollection.run(data);
+	}
 
 	@Test
 	public void BadDecoratorTest() {

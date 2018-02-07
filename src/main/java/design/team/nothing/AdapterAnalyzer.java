@@ -16,6 +16,8 @@ import soot.util.Chain;
 
 public class AdapterAnalyzer extends AbstractAnalyzer{
 
+	Collection<SootClass> classesToAdd = new HashSet<>();
+	
 	@Override
 	public Data analyze(Data data) {
 		PatternRenderer pr = new AdapterRenderer();
@@ -70,8 +72,19 @@ public class AdapterAnalyzer extends AbstractAnalyzer{
 						}
 					}
 					if (adaptedInterface) {
+						if (!scene.containsClass(interfaze.getName())) {
+							System.out.println("New Interface Added: " + interfaze.getName());
+							scene.loadClassAndSupport(interfaze.getName());
+							classesToAdd.add(interfaze);
+						}
 						pattern.addClass("target", interfaze);
+						
 						pattern.addClass("adapter", sc);
+						if (!classes.contains(candidate.getName())) {
+							System.out.println("New Class Added: " + candidate.getName());
+							scene.loadClassAndSupport(candidate.getName());
+							classesToAdd.add(candidate);
+						}
 						pattern.addClass("adaptee", candidate);
 						System.out.println("Candidate: " + candidate.getName());
 						for (Relationship r : relationships) {
@@ -85,6 +98,9 @@ public class AdapterAnalyzer extends AbstractAnalyzer{
 					}
 				}
 			}
+		}
+		for (SootClass c : classesToAdd) {
+			classes.add(c);
 		}
 		data.put("adapter", pattern);
 		return data;

@@ -2,6 +2,7 @@ package design.team.nothing;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
@@ -32,9 +33,13 @@ public class DecoratorAnalyzer extends AbstractAnalyzer{
 //					System.out.println("FOUND A DECORATORRRRRRRRRRRRRRRRRRRRR");
 					pattern.addClass("decorator", sc);
 					pattern.addClass("component", savedField);
-					List<SootMethod> listSM = new ArrayList<>();
+					Collection<SootMethod> listSM = new HashSet<>();
 					for(SootMethod sm: savedField.getMethods()){
-						if(sc.getMethodUnsafe(sm.getSubSignature()) == null){
+						if (sm.isConstructor()) {
+							continue;
+						}
+						
+						if(!sc.declaresMethod(sm.getSubSignature())){
 							listSM.add(sm);
 						}
 					}
@@ -72,15 +77,17 @@ public class DecoratorAnalyzer extends AbstractAnalyzer{
 		return data;
 	}
 	
-	private SootClass addBadDecorator(List<SootMethod> listSM, SootClass sc) {
-		SootClass sootClass = new SootClass("teamNothing");
+	private SootClass addBadDecorator(Collection<SootMethod> listSM, SootClass sc) {
+		SootClass sootClass = new SootClass(sc.getName());
 		for(SootMethod sm : listSM){
-			sootClass.addMethod(sm);
+			System.out.println(sc.getName() + ":  " + sm.getSubSignature());
+			if (!sootClass.declaresMethod(sm.getSubSignature())) {
+				SootMethod m = new SootMethod(sm.getName(), sm.getParameterTypes(), sm.getReturnType());
+				sootClass.addMethod(m);
+			}
 		}
 		
-		
 		return sootClass;
-		
 	}
 
 	public boolean checkDecorator(CallGraph cg, SootClass sc, SootClass superSC, Scene scene) {
@@ -94,7 +101,19 @@ public class DecoratorAnalyzer extends AbstractAnalyzer{
 			}
 		}
 		if(!hasItself){
-			return false;
+			if (sc.hasSuperclass()) {
+				for(SootField sf: sc.getSuperclass().getFields()){
+					if(isSubclassOf(superSC, scene.getSootClass(sf.getType().toString()))){
+						savedField = scene.getSootClass(sf.getType().toString());
+						System.out.println("Decorator has a field of itself!");
+						System.out.println("savedField: " + savedField.getName());
+						hasItself = true;
+					}
+				}
+			}
+			if (!hasItself) {
+				return false;
+			}
 		}
 		boolean constructorFound = true;
 		boolean isDecorater = true;

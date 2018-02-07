@@ -1,0 +1,5 @@
+path=C:/Users/moormaet/workspace/CSSE 374/3-1LiveCodingStarbuzzPlus/bin
+uml=true
+main=StarbuzzCoffee
+exclude=csse374.* headfirst.*
+pattern=design.team.nothing.DecoratorAnalyzer

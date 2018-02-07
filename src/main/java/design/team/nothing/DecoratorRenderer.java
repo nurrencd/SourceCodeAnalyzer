@@ -40,7 +40,7 @@ public class DecoratorRenderer extends PatternRenderer{
 			if(sc.getName().equals(c.getName())){
 				for(SootMethod sm: sc.getMethods()){	
 					String methodSig = this.generateMethodSignature(sm);
-					methodSig= methodSig.substring(0, 4) + "<font color = #FF0000> " + methodSig.substring(4) + " </font> /n";
+					methodSig= methodSig.substring(0, 4) + "<font color = #FF0000> " + methodSig.substring(4) + " </font> \n";
 					sb.append(methodSig);
 				}
 			}

@@ -37,4 +37,13 @@ public class M4Tests {
 		analyzerCollection.run(data);
 	}
 
+	@Test
+	public void BadDecoratorTest() {
+		String[] args = new String[] { "-config", "PropertiesFiles/M4BadDecorator" };
+		Preprocessor pre = new Preprocessor();
+		Data data = new Data();
+		AnalyzerChain analyzerCollection = pre.makePileline(args, data);
+		analyzerCollection.run(data);
+	}
+	
 }

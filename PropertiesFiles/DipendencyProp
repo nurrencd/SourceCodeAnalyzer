@@ -1,5 +1,5 @@
 path=C:/Users/moormaet/workspace/CSSE 374/LiveCoding 5-1/bin
 uml=true
 main=headfirst.factory.pizzaaf.solution2.PizzaTestDrive
-exclude=puzzle.* headfirst.factory.pizzaaf.solution.*
+exclude=puzzle.* headfirst.factory.pizzaaf.solution.* headfirst.factory.pizzaaf.PizzaStore headfirst.factory.pizzaaf.NY* headfirst.factory.pizzaaf.Ch* headfirst.factory.pizzaaf.Pizz*  
 pattern=design.team.nothing.DependencyInversionAnalyzer

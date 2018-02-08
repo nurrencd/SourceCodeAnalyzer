@@ -5,7 +5,10 @@ public class DependencyInversionRenderer extends PatternRenderer{
 	@Override
 	public String getClassModification(String patternType) {
 		// TODO Auto-generated method stub
-		return "#purple";
+		if (patternType.equals("dependency")) {
+			return "#purple";
+		}
+		return "#green";
 	}
 
 	@Override

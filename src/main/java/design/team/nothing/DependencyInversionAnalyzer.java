@@ -26,11 +26,14 @@ public class DependencyInversionAnalyzer extends AbstractAnalyzer{
 					Edge edge = it.next();
 					SootMethod to = edge.tgt().method();
 					SootClass toClass = to.getDeclaringClass();
-					if (!toClass.isConcrete()) {
+					if (!toClass.isConcrete() || toClass.isAbstract() || this.applyFilters(toClass)) {
 						continue;
 					}
-					if (toClass.hasSuperclass() && toClass.getSuperclass().declaresMethod(to.getSubSignature())) {
-						pattern.addClass("dependencyInversion", toClass);
+					
+					if (toClass.hasSuperclass() && toClass.getSuperclass().declaresMethod(to.getSubSignature())
+							&& !toClass.getSuperclass().getName().equals(c.getName())) {
+						System.out.println("DI Violation: " + c.getName() + " depends on " + toClass.getName());
+						pattern.addClass("dependency", toClass);
 						pattern.addClass("dependencyInversion", c);
 						for (Relationship r : relationships) {
 							if (r.to.getName().equals(toClass.getName())

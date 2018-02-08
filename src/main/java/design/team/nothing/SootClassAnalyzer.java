@@ -30,9 +30,7 @@ public class SootClassAnalyzer extends AbstractAnalyzer {
 		Properties prop = data.get("properties", Properties.class);
 		Collection<SootClass> classes = data.get("classes", Collection.class);
 
-		System.out.println(path.toString());
 		SceneBuilder sb = SceneBuilder.create();
-		System.out.println("In SootClass");
 		//if(prop.containsKey("main")){
 			String mainClass = prop.getProperty("main");
 			System.out.println(mainClass);
@@ -70,8 +68,6 @@ public class SootClassAnalyzer extends AbstractAnalyzer {
 //		sb.addExclusion("csse374.*");
 		//other configs
 		//build scene
-		sb.addClass("java.io.InputStreamReader");
-		sb.addClass("java.awt.event.MouseAdapter");
 		if (prop.containsKey("classlist")){
 			Collection<SootClass> classesRem = new HashSet<SootClass>();
 			String[] clazzes = prop.getProperty("classlist").split(" ");
@@ -139,30 +135,10 @@ public class SootClassAnalyzer extends AbstractAnalyzer {
 			for (SootClass c : classesRem){
 				scene.removeClass(c);
 			}
+			
 		}
 		
-		if (prop.containsKey("classlist")){
-			Collection<SootClass> classesRem = new HashSet<SootClass>();
-			String[] clazzes = prop.getProperty("classlist").split(" ");
-			for (String str : clazzes){
-				if (!str.contains("java")){
-					continue;
-				}
-				if (scene.containsClass(str)) {
-					continue;
-				}
-				//scene.addBasicClass("java.io.InputStreamReader", SootClass.HIERARCHY);
-				scene.loadClassAndSupport("java.awt.event.MouseAdapter");
-				//SootClass c = SootResolver.v().makeClassRef(str);
-				System.out.println("CHecking class: " + scene.containsClass(str));
-				//scene.addClass(c);
-				try {
-					//SootClass c = SootResolver.v().resolveClass(str, SootClass.SIGNATURES);
-//					/scene.addClass(c);
-				}catch(Exception e){	
-					System.out.println("Failed to load: " + str);
-				}
-			}
+		
 //			for (SootClass c : scene.getClasses()){
 //				boolean rm = true;
 //				for (String s : clazzes){
@@ -177,7 +153,6 @@ public class SootClassAnalyzer extends AbstractAnalyzer {
 //			for (SootClass c : classesRem){
 //				scene.removeClass(c);
 //			}
-		}
 		
 //		if (prop.containsKey("add")) {
 //			String[] clazzes = prop.getProperty("add").split(" ");
@@ -196,7 +171,6 @@ public class SootClassAnalyzer extends AbstractAnalyzer {
 			for (SootClass c : scene.getClasses()){
 				for (String str : prop.getProperty("classlist").split(" ")) {
 					if (c.getName().contains(str)) {
-						System.out.println("Named: " + c.getName());
 						classesToStore.add(c);
 					}
 				}

@@ -2,5 +2,5 @@ path=C:/Users/moormaet/workspace/CSSE 374/Lab7-1/bin
 uml=true
 main=problem.client.App
 pattern=design.team.nothing.AdapterAnalyzer design.team.nothing.DecoratorAnalyzer
-classlist=java.io.InputStreamReader java.io.OutputStreamWriter MouseAdapter
+classlist=java.io.InputStreamReader java.io.OutputStreamWriter java.awt.event.MouseAdapter
 java=true

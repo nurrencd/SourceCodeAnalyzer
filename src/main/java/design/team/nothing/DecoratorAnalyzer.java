@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
+import design.team.nothing.Relationship.RelationshipType;
 import soot.Scene;
 import soot.SootClass;
 import soot.SootField;
@@ -17,11 +18,12 @@ import soot.jimple.toolkits.callgraph.Edge;
 public class DecoratorAnalyzer extends AbstractAnalyzer{
 
 	private SootClass savedField;
+	private Pattern pattern;
 
 	@Override
 	public Data analyze(Data data) {
 		PatternRenderer pr = new DecoratorRenderer();
-		Pattern pattern = new Pattern(pr);
+		pattern = new Pattern(pr);
 		Collection<SootClass> classesToAdd = new HashSet<>();
 		Collection<SootClass> classes = data.get("classes", Collection.class);
 		Collection<Relationship> relationships = data.get("relationships", Collection.class);
@@ -44,7 +46,7 @@ public class DecoratorAnalyzer extends AbstractAnalyzer{
 		for(SootClass sc : classes){
 			if(sc.hasSuperclass()){
 				SootClass superSC = sc.getSuperclass();
-				if(checkDecorator(cg, sc, superSC, scene)){
+				if(checkDecorator(cg, sc, superSC, scene, relationships)){
 //					System.out.println("FOUND A DECORATORRRRRRRRRRRRRRRRRRRRR");
 					if (savedField.getName().equals("java.lang.Object")) {
 						continue;
@@ -81,7 +83,7 @@ public class DecoratorAnalyzer extends AbstractAnalyzer{
 				}
 			}
 			for (SootClass interfaze : sc.getInterfaces()) {
-				if(checkDecorator(cg, sc, interfaze, scene)){
+				if(checkDecorator(cg, sc, interfaze, scene, relationships)){
 					if (savedField.getName().equals("java.lang.Object")) {
 						continue;
 					}
@@ -100,8 +102,8 @@ public class DecoratorAnalyzer extends AbstractAnalyzer{
 					for (Relationship r : relationships) {
 						if (r.to.getName().equals(this.savedField.getName())
 								&& r.from.getName().equals(sc.getName())
-								&&(r.type==Relationship.RelationshipType.ASSOCIATION_ONE_TO_ONE
-								|| r.type==Relationship.RelationshipType.DEPENDENCY_ONE_TO_ONE)){
+								&& !(r.type != RelationshipType.IMPLEMENTATION 
+								|| r.type == RelationshipType.INHERITANCE)){
 							pattern.addRelationship("decorates", r);
 						}
 						
@@ -124,7 +126,7 @@ public class DecoratorAnalyzer extends AbstractAnalyzer{
 		return sootClass;
 	}
 
-	public boolean checkDecorator(CallGraph cg, SootClass sc, SootClass superSC, Scene scene) {
+	public boolean checkDecorator(CallGraph cg, SootClass sc, SootClass superSC, Scene scene, Collection<Relationship> relationships) {
 		boolean hasItself = false;
 		for(SootField sf: sc.getFields()){
 			if(isSubclassOf(superSC, scene.getSootClass(sf.getType().toString()))){
@@ -147,6 +149,16 @@ public class DecoratorAnalyzer extends AbstractAnalyzer{
 			}
 			if (!hasItself) {
 				return false;
+			}else {
+				pattern.addClass("decorator", sc.getSuperclass());
+				for (Relationship r : relationships) {
+					if (r.to.getName().equals(this.savedField.getName())
+							&& r.from.getName().equals(sc.getSuperclass().getName())
+							&& !(r.type == RelationshipType.IMPLEMENTATION 
+							|| r.type == RelationshipType.INHERITANCE)){
+						pattern.addRelationship("decorates", r);
+					}
+				}
 			}
 		}
 		boolean constructorFound = true;

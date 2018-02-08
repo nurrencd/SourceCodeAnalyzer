@@ -19,7 +19,7 @@ public class DecoratorRenderer extends PatternRenderer{
 
 	@Override
 	public String getRelationshipModification() {
-		
+		System.out.println("Drawing Decorator Relationship");
 		return "#green : << decorates >>";
 	}
 	

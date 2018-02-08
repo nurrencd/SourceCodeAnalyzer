@@ -51,8 +51,6 @@ public class DecoratorAnalyzer extends AbstractAnalyzer{
 					}
 					pattern.addClass("decorator", sc);
 					if (!classes.contains(savedField)) {
-						//SootClass added = scene.loadClassAndSupport(savedField.getName());
-						//System.out.println("added: " + added.getName());
 						classesToAdd.add(savedField);
 					}
 					pattern.addClass("component", savedField);
@@ -74,7 +72,8 @@ public class DecoratorAnalyzer extends AbstractAnalyzer{
 						System.out.println("SavedField: " + this.savedField.getName());
 						if (r.to.getName().equals(savedField.getName())
 								&& r.from.getName().equals(sc.getName())
-								&&r.type==Relationship.RelationshipType.ASSOCIATION_ONE_TO_ONE){
+								&& (r.type==Relationship.RelationshipType.ASSOCIATION_ONE_TO_ONE
+								|| r.type==Relationship.RelationshipType.DEPENDENCY_ONE_TO_ONE)){
 							pattern.addRelationship("decorates", r);
 						}
 						
@@ -101,7 +100,8 @@ public class DecoratorAnalyzer extends AbstractAnalyzer{
 					for (Relationship r : relationships) {
 						if (r.to.getName().equals(this.savedField.getName())
 								&& r.from.getName().equals(sc.getName())
-								&&r.type==Relationship.RelationshipType.ASSOCIATION_ONE_TO_ONE){
+								&&(r.type==Relationship.RelationshipType.ASSOCIATION_ONE_TO_ONE
+								|| r.type==Relationship.RelationshipType.DEPENDENCY_ONE_TO_ONE)){
 							pattern.addRelationship("decorates", r);
 						}
 						

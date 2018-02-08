@@ -46,7 +46,7 @@ public class Milestone2Tests {
 				"-m",
 				"problem.AppLauncherApplication",
 				"-e",
-				"headfirst.*",
+				"headfirst.*"
 			};
 			String path = args[0];
 			Preprocessor pre = new Preprocessor();

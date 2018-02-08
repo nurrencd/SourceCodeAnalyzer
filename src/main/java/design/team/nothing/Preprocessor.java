@@ -2,6 +2,9 @@ package design.team.nothing;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InvalidClassException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -51,7 +54,33 @@ public class Preprocessor {
 		}
 
 		if (config.containsKey("sequence")) {
-			AbstractAnalyzer seqAnal = new SequenceDiagramAnalyzer((String) config.get("sequence"));
+			AbstractAnalyzer seqAnal = null;
+			if (!config.containsKey("sequenceanalyzer")) {
+				seqAnal = new SequenceDiagramAnalyzer((String) config.get("sequence"));
+			}else {
+				String p = config.getProperty("sequenceanalyzer");
+				try {
+					Class<? extends AbstractAnalyzer> clazz = (Class<? extends AbstractAnalyzer>) Class.forName(p);
+					Constructor<? extends AbstractAnalyzer> cons = clazz.getConstructor(String.class);
+					seqAnal = cons.newInstance((String) config.get("sequence"));
+					//seqAnal = (AbstractAnalyzer) Class.forName(p).newInstance();
+				} catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (NoSuchMethodException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (SecurityException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IllegalArgumentException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 			listOfAnalyzers.add(seqAnal);
 			if (!config.containsKey("java")) {
 				Filter jdk = new JDKFilter();

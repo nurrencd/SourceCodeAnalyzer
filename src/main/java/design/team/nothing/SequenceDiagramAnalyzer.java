@@ -58,7 +58,6 @@ public class SequenceDiagramAnalyzer extends AbstractAnalyzer {
 	}
 
 	private String recursiveBuilder(SootMethod m, int depth, Scene scene) {
-//		System.out.println(depth + " of " + this.maxDepth);
 		StringBuilder sb = new StringBuilder();
 		if (depth >= this.maxDepth) { // Default based on specs
 			return "";
@@ -158,12 +157,10 @@ public class SequenceDiagramAnalyzer extends AbstractAnalyzer {
 				rightClass = chosenOne.getDeclaringClass();
 			}
 		}
-		sb.append(m.getDeclaringClass().getName() + " -> " + rightClass.getName() + " : " + rightMethod.getSubSignature());
-		sb.append('\n');
+		sb.append(this.genCallArrow(m, rightMethod));
 		sb.append(recursiveBuilder(rightMethod, depth+1,scene));
 		sb.append('\n');
-		sb.append(m.getDeclaringClass().getName() + " <-- " + rightClass.getName());
-		sb.append('\n');
+		sb.append(this.genReturnArrow(rightMethod, m));
 	}
 
 	private SootMethod resolveAbstractMethod(Scene scene, SootMethod rightMethod) {
@@ -223,6 +220,20 @@ public class SequenceDiagramAnalyzer extends AbstractAnalyzer {
 				drawArrows(m, depth, scene, sb, rightMethod, rightClass);
 			}
 		}
+	}
+	
+	public String genCallArrow(SootMethod from, SootMethod to) {
+		StringBuilder sb = new StringBuilder();
+		sb.append(from.getDeclaringClass().getName() + " -> " + to.getDeclaringClass().getName() + " : " + to.getSubSignature());
+		sb.append('\n');
+		return sb.toString();
+	}
+	
+	public String genReturnArrow(SootMethod from, SootMethod to) {
+		StringBuilder sb = new StringBuilder();
+		sb.append(to.getDeclaringClass().getName() + " <-- " + from.getDeclaringClass().getName());
+		sb.append('\n');
+		return sb.toString();
 	}
 
 }

@@ -1,7 +1,7 @@
 path=C:/Users/moormaet/workspace/CSSE 374/Lab7-1/bin
 uml=true
 main=problem.client.App
-pattern=design.team.nothing.AdapterAnalyzer
+pattern=design.team.nothing.AdapterAnalyzer design.team.nothing.DecoratorAnalyzer
 exclude=java.lang* java.n* boolean void int String long java.time
 recursive=true
 java=true

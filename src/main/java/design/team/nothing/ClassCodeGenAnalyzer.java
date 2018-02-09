@@ -58,7 +58,7 @@ public class ClassCodeGenAnalyzer extends AbstractAnalyzer {
 		for (Relationship r : relationships) {
 			if (data.get("properties", Properties.class).getProperty("classlist") != null) {
 
-				if ((this.applyFilters(r.from) || this.applyFilters(r.to))
+				if ((this.applyFilters(r.from) && this.applyFilters(r.to))
 						&& (this.checkClasses(data, r.to) || this.checkClasses(data, r.from))) {
 					continue;
 				}
@@ -85,7 +85,7 @@ public class ClassCodeGenAnalyzer extends AbstractAnalyzer {
 			code.append(current.generateRelationshipCode(r));
 		}
 		code.append("@enduml");
-		// System.out.println(code.toString());
+		//System.out.println(code.toString());
 		try {
 			FileCreator fc = new FileCreator();
 			fc.getSVG(code.toString());

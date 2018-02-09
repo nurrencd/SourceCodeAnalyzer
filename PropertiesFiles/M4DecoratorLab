@@ -2,6 +2,6 @@ path=C:/Users/moormaet/workspace/CSSE 374/Lab3-1/bin
 uml=true
 main=problem.TextEditorApp
 exclude=csse374.* headfirst.*
-pattern=design.team.nothing.DecoratorAnalyzer
+pattern=design.team.nothing.AdapterAnalyzer design.team.nothing.DecoratorAnalyzer
 recursive=true
 java=true

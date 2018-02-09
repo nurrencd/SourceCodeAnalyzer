@@ -28,10 +28,12 @@ public class SequenceDiagramAnalyzer extends AbstractAnalyzer {
 	private Unit unit;
 	private String mSig;
 	private int maxDepth;
+	private ArrowGenerationStrategy strategy;
 
-	public SequenceDiagramAnalyzer(String mSig) {
+	public SequenceDiagramAnalyzer(String mSig, ArrowGenerationStrategy strategy) {
 		this.maxDepth = DEFAULT_DEPTH;
 		this.mSig = mSig;
+		this.strategy = strategy;
 	}
 
 	@Override
@@ -63,8 +65,6 @@ public class SequenceDiagramAnalyzer extends AbstractAnalyzer {
 			return "";
 		}
 		
-		sb.append("activate " + m.getDeclaringClass().getName());
-		sb.append("\n");
 		if (m.hasActiveBody()) {
 			
 			genConcreteMethod(m, depth, scene, sb);
@@ -93,8 +93,6 @@ public class SequenceDiagramAnalyzer extends AbstractAnalyzer {
 			}
 		}
 		
-		sb.append("deactivate " + m.getDeclaringClass().getName());
-		sb.append("\n");
 		return sb.toString();
 	}
 
@@ -223,17 +221,11 @@ public class SequenceDiagramAnalyzer extends AbstractAnalyzer {
 	}
 	
 	public String genCallArrow(SootMethod from, SootMethod to) {
-		StringBuilder sb = new StringBuilder();
-		sb.append(from.getDeclaringClass().getName() + " -> " + to.getDeclaringClass().getName() + " : " + to.getSubSignature());
-		sb.append('\n');
-		return sb.toString();
+		return this.strategy.genCallArrow(from, to);
 	}
 	
 	public String genReturnArrow(SootMethod from, SootMethod to) {
-		StringBuilder sb = new StringBuilder();
-		sb.append(to.getDeclaringClass().getName() + " <-- " + from.getDeclaringClass().getName());
-		sb.append('\n');
-		return sb.toString();
+		return this.strategy.genReturnArrow(from, to);
 	}
 
 }

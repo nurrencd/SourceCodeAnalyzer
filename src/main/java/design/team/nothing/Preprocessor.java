@@ -56,27 +56,21 @@ public class Preprocessor {
 		if (config.containsKey("sequence")) {
 			AbstractAnalyzer seqAnal = null;
 			if (!config.containsKey("sequenceanalyzer")) {
-				seqAnal = new SequenceDiagramAnalyzer((String) config.get("sequence"));
+				ArrowGenerationStrategy arr = new DefaultArrowStrategy();
+				seqAnal = new SequenceDiagramAnalyzer((String) config.get("sequence"), arr);
 			}else {
 				String p = config.getProperty("sequenceanalyzer");
 				try {
-					Class<? extends AbstractAnalyzer> clazz = (Class<? extends AbstractAnalyzer>) Class.forName(p);
-					Constructor<? extends AbstractAnalyzer> cons = clazz.getConstructor(String.class);
-					seqAnal = cons.newInstance((String) config.get("sequence"));
+					ArrowGenerationStrategy clazz = (ArrowGenerationStrategy) Class.forName(p).newInstance();
+					seqAnal = new SequenceDiagramAnalyzer((String) config.get("sequence"), clazz);
 					//seqAnal = (AbstractAnalyzer) Class.forName(p).newInstance();
 				} catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (NoSuchMethodException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (SecurityException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (IllegalArgumentException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (InvocationTargetException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}

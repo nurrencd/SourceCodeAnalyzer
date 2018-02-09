@@ -1,10 +1,18 @@
 package design.team.nothing;
 
-public class test extends SequenceDiagramAnalyzer {
+import soot.SootMethod;
 
-	public test(String mSig) {
-		super(mSig);
-		// TODO Auto-generated constructor stub
+public class test implements ArrowGenerationStrategy {
+
+	@Override
+	public String genCallArrow(SootMethod from, SootMethod to) {
+		return "meme";
 	}
+
+	@Override
+	public String genReturnArrow(SootMethod from, SootMethod to) {
+		return "Supreme";
+	}
+
 
 }

@@ -4,4 +4,3 @@ main=headfirst.designpatterns.observer.weather.WeatherStation
 depth=20
 resolutionstrategy=design.team.nothing.SingleResolutionStrategy
 algorithms=design.team.nothing.CallGraphAlgorithm
-sequenceanalyzer=design.team.nothing.test

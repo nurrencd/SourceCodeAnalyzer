@@ -150,7 +150,6 @@ public class DependencyAnalyzer extends AbstractAnalyzer {
 			return;
 		}
 		MethodEvaluator eval = new MethodEvaluator(tag.toString());
-		System.out.println(c.getName() + " " + tag.toString());
 		List<GenericType> generic;
 		try {
 			generic = eval.getParameterTypes();

@@ -173,7 +173,6 @@ public class Preprocessor {
 				flags.get(currentFlag).add(str);
 			}
 		}
-		System.out.println(flags.containsKey("-path"));
 		Properties prop = new Properties();
 		if (flags.containsKey("-config")){
 			Path path = Paths.get(flags.get("-config").get(0));
@@ -192,7 +191,6 @@ public class Preprocessor {
 				if (prop.containsKey(key)){
 					prop.setProperty(key, genString(flags.get("-" + key)));
 				}else {
-					System.out.println("Has Key -" + key );
 					prop.setProperty(key, genString(flags.get("-" + key)));
 				}
 			}
@@ -209,7 +207,6 @@ public class Preprocessor {
 		}
 		String end = sb.toString();
 		end = end.trim();
-		System.out.println(end + "!!");
 		return end;
 	}
 	

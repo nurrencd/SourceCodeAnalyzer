@@ -101,7 +101,6 @@ public class SootClassAnalyzer extends AbstractAnalyzer {
 		}
 		Scene scene = sb.build();
 		ArrayList<SootClass> classesToRemove = new ArrayList<SootClass>();
-		System.out.println("CHecking class: " + scene.containsClass("java.io.InputStreamReader"));
 	
 //		for (SootClass c : scene.getClasses()){
 //			if (c.getName().contains("soot.")){

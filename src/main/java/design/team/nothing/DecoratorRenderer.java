@@ -11,7 +11,6 @@ public class DecoratorRenderer extends PatternRenderer{
 	@Override
 	public String getClassModification(String patternType) {
 		if(patternType.equals("component")){
-			System.out.println("Found a component.");
 			return "<< component >> #green";
 		}
 		return "<< decorator >> #green";
@@ -19,7 +18,6 @@ public class DecoratorRenderer extends PatternRenderer{
 
 	@Override
 	public String getRelationshipModification() {
-		System.out.println("Drawing Decorator Relationship");
 		return "#green : << decorates >>";
 	}
 	

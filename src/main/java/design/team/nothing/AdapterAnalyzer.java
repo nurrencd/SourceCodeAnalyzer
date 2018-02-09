@@ -55,15 +55,12 @@ public class AdapterAnalyzer extends AbstractAnalyzer{
 						if (localMethod.getExceptions().size() >= 1) {
 							continue;
 						}
-						System.out.println(localMethod.getSignature());
 						Iterator<Edge> edges = cg.edgesOutOf(localMethod);
 						
 						boolean edgeFound = true;
 						while (edges.hasNext()) {
 							Edge e = edges.next();
-							System.out.println("Hello: " + e.tgt().method().getDeclaringClass().getName());
 							if (e.tgt().method().getDeclaringClass().getName().equals(candidate.getName())) {
-								System.out.println("EDGE FOUND YAYAYAY!");
 								edgeFound = true;
 							}
 						}
@@ -73,7 +70,6 @@ public class AdapterAnalyzer extends AbstractAnalyzer{
 					}
 					if (adaptedInterface) {
 						if (!scene.containsClass(interfaze.getName())) {
-							System.out.println("New Interface Added: " + interfaze.getName());
 							scene.loadClassAndSupport(interfaze.getName());
 							classesToAdd.add(interfaze);
 						}
@@ -81,12 +77,10 @@ public class AdapterAnalyzer extends AbstractAnalyzer{
 						
 						pattern.addClass("adapter", sc);
 						if (!classes.contains(candidate.getName())) {
-							System.out.println("New Class Added: " + candidate.getName());
 							scene.loadClassAndSupport(candidate.getName());
 							classesToAdd.add(candidate);
 						}
 						pattern.addClass("adaptee", candidate);
-						System.out.println("Candidate: " + candidate.getName());
 						for (Relationship r : relationships) {
 							if (r.to.getName().equals(candidate.getName())
 									&& r.from.getName().equals(sc.getName())){

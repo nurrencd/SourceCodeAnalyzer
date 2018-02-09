@@ -26,7 +26,6 @@ public class AssociationAnalyzer extends AbstractAnalyzer{
 		Properties p = data.get("properties", Properties.class);
 		while(it.hasNext()){
 			SootClass c = it.next();
-			System.out.println(c.getName());
 			Chain<SootField> chField = c.getFields();
 			if (!p.containsKey("classlist")) {
 				if (this.applyFilters(c)){

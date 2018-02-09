@@ -27,7 +27,6 @@ public class DependencyInversionAnalyzer extends AbstractAnalyzer{
 				continue;
 			}
 			if (!(r.to.isAbstract() || r.to.isInterface())) {
-				System.out.println(r.to.isInterface());
 				pattern.addClass("dependency", r.to);
 				pattern.addClass("dependencyInversion", r.from);
 				pattern.addRelationship("dependencyInversion", r);

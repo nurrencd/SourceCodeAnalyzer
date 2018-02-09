@@ -71,7 +71,6 @@ public class DecoratorAnalyzer extends AbstractAnalyzer{
 						pattern.addClass("baddecorator", tempSootClass);
 					}
 					for (Relationship r : relationships) {
-						System.out.println("SavedField: " + this.savedField.getName());
 						if (r.to.getName().equals(savedField.getName())
 								&& r.from.getName().equals(sc.getName())
 								&& (r.type==Relationship.RelationshipType.ASSOCIATION_ONE_TO_ONE
@@ -116,7 +115,6 @@ public class DecoratorAnalyzer extends AbstractAnalyzer{
 	private SootClass addBadDecorator(Collection<SootMethod> listSM, SootClass sc) {
 		SootClass sootClass = new SootClass(sc.getName());
 		for(SootMethod sm : listSM){
-			System.out.println(sc.getName() + ":  " + sm.getSubSignature());
 			if (!sootClass.declaresMethod(sm.getSubSignature())) {
 				SootMethod m = new SootMethod(sm.getName(), sm.getParameterTypes(), sm.getReturnType());
 				sootClass.addMethod(m);
@@ -131,8 +129,6 @@ public class DecoratorAnalyzer extends AbstractAnalyzer{
 		for(SootField sf: sc.getFields()){
 			if(isSubclassOf(superSC, scene.getSootClass(sf.getType().toString()))){
 				savedField = scene.getSootClass(sf.getType().toString());
-				System.out.println("Decorator has a field of itself!");
-				System.out.println("savedField: " + savedField.getName());
 				hasItself = true;
 			}
 		}
@@ -141,8 +137,6 @@ public class DecoratorAnalyzer extends AbstractAnalyzer{
 				for(SootField sf: sc.getSuperclass().getFields()){
 					if(isSubclassOf(superSC, scene.getSootClass(sf.getType().toString()))){
 						savedField = scene.getSootClass(sf.getType().toString());
-						System.out.println("Decorator has a field of itself!");
-						System.out.println("savedField: " + savedField.getName());
 						hasItself = true;
 					}
 				}
@@ -170,7 +164,6 @@ public class DecoratorAnalyzer extends AbstractAnalyzer{
 				for(Type parameterType : sm.getParameterTypes()){
 					if(isSubclassOf(scene.getSootClass(parameterType.toString()), savedField)){
 						validConstructor = true;
-						System.out.println("Found a VALID CONSTRUCTOR");
 					}
 				}
 //				System.out.println("END CONSTRUCTOR CHECK");
@@ -189,15 +182,11 @@ public class DecoratorAnalyzer extends AbstractAnalyzer{
 						edgeFound = true;
 					}
 				}
-				if (!edgeFound) {
-					System.out.println("Edge not found in method: " + sm.getSignature());
-				}
 				if(isDecorater){
 					isDecorater = edgeFound;
 				}
 			}
 		}
-		System.out.println("Is " + sc.getName() + " a decorator? " + isDecorater  + " " + constructorFound);
 		return isDecorater && constructorFound;
 	}
 	

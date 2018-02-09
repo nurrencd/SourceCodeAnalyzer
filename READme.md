@@ -8,7 +8,7 @@ Go to: https://graphviz.gitlab.io/_pages/Download/Download_windows.html
 
 Download the latest stable release of Graphviz.msi (note download the msi and not the zip for easy install)
 
-UML View of the project <a href=https://tinyurl.com/yacbwjob>here</a>
+UML View of the project <a href=https://tinyurl.com/ya6nvarc>here</a>
 
 **How to export file**
 

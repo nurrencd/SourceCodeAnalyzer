@@ -86,10 +86,10 @@ public class SequenceDiagramAnalyzer extends AbstractAnalyzer {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			SootMethod chosenOne = aa.resolve(m, this.unit, scene).get(0);
+			List<SootMethod> chosenOne = aa.resolve(m, this.unit, scene);
 //			genAbstractMethod(m, depth, scene, sb);
 			if(chosenOne!=null){
-				genConcreteMethod(chosenOne, depth, scene, sb);
+				genConcreteMethod(chosenOne.get(0), depth, scene, sb);
 			}
 		}
 		
@@ -178,8 +178,12 @@ public class SequenceDiagramAnalyzer extends AbstractAnalyzer {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		SootMethod chosenOne = aa.resolve(rightMethod, this.unit, scene).get(0);
-		return chosenOne;
+		List<SootMethod> chosenOne = aa.resolve(rightMethod, this.unit, scene);
+		
+		if (chosenOne == null) {
+			return null;
+		}
+		return chosenOne.get(0);
 	}
 
 	/**

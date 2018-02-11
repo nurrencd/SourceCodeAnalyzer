@@ -19,10 +19,11 @@ public class DecoratorAnalyzer extends AbstractAnalyzer{
 
 	private SootClass savedField;
 	private Pattern pattern;
+	List<SootClass> bad = new ArrayList<>();
 
 	@Override
 	public Data analyze(Data data) {
-		PatternRenderer pr = new DecoratorRenderer();
+		PatternRenderer pr = new DecoratorRenderer(bad);
 		pattern = new Pattern(pr);
 		Collection<SootClass> classesToAdd = new HashSet<>();
 		Collection<SootClass> classes = data.get("classes", Collection.class);
@@ -52,7 +53,13 @@ public class DecoratorAnalyzer extends AbstractAnalyzer{
 						continue;
 					}
 					pattern.addClass("decorator", sc);
-					if (!classes.contains(savedField)) {
+					boolean found = false;
+					for (SootClass c : classes) {
+						if (c.getName().equals(savedField.getName())) {
+							found = true;
+						}
+					}
+					if (!found) {
 						classesToAdd.add(savedField);
 					}
 					pattern.addClass("component", savedField);
@@ -62,13 +69,18 @@ public class DecoratorAnalyzer extends AbstractAnalyzer{
 							continue;
 						}
 						
+						if (sm.isPrivate()) {
+							continue;
+						}
+						
 						if(!sc.declaresMethod(sm.getSubSignature())){
 							listSM.add(sm);
 						}
 					}
 					if(listSM.size() != 0){
 						SootClass tempSootClass = addBadDecorator(listSM, sc);
-						pattern.addClass("baddecorator", tempSootClass);
+						//pattern.addClass("baddecorator", tempSootClass);
+						bad.add(tempSootClass);
 					}
 					for (Relationship r : relationships) {
 						if (r.to.getName().equals(savedField.getName())
@@ -127,16 +139,18 @@ public class DecoratorAnalyzer extends AbstractAnalyzer{
 	public boolean checkDecorator(CallGraph cg, SootClass sc, SootClass superSC, Scene scene, Collection<Relationship> relationships) {
 		boolean hasItself = false;
 		for(SootField sf: sc.getFields()){
-			if(isSubclassOf(superSC, scene.getSootClass(sf.getType().toString()))){
-				savedField = scene.getSootClass(sf.getType().toString());
+			SootClass c;
+			if((c = intersect(superSC, scene.getSootClass(sf.getType().toString()))) != null){
+				savedField = c;
 				hasItself = true;
 			}
 		}
 		if(!hasItself){
 			if (sc.hasSuperclass()) {
 				for(SootField sf: sc.getSuperclass().getFields()){
-					if(isSubclassOf(superSC, scene.getSootClass(sf.getType().toString()))){
-						savedField = scene.getSootClass(sf.getType().toString());
+					SootClass c;
+					if((c = intersect(superSC, scene.getSootClass(sf.getType().toString()))) != null){
+						savedField = c;
 						hasItself = true;
 					}
 				}
@@ -159,10 +173,11 @@ public class DecoratorAnalyzer extends AbstractAnalyzer{
 		boolean isDecorater = true;
 		for(SootMethod sm: sc.getMethods()){
 			if(sm.isConstructor()){
-				boolean validConstructor = false;
+				boolean validConstructor = true;
 //				System.out.println("START CONSTRUCTOR CHECK");
 				for(Type parameterType : sm.getParameterTypes()){
-					if(isSubclassOf(scene.getSootClass(parameterType.toString()), savedField)){
+					SootClass c;
+					if((c = intersect(scene.getSootClass(parameterType.toString()), savedField)) != null){
 						validConstructor = true;
 					}
 				}
@@ -190,6 +205,69 @@ public class DecoratorAnalyzer extends AbstractAnalyzer{
 		return isDecorater && constructorFound;
 	}
 	
+	private boolean haveCommonParent(SootClass child, SootClass parent) {
+		SootClass current = parent;
+		while (!current.getName().equals("java.lang.Object")) {
+			if (isSubclassOf(child, current)) {
+				return true;
+			}
+			if (!current.hasSuperclass()) {
+				break;
+			}
+			current = parent.getSuperclass();
+		}
+		
+		return recursiveCheck(child, parent);
+	}
+	
+	private boolean recursiveCheck(SootClass child, SootClass interfaze) {
+		if (isSubclassOf(child, interfaze)) {
+			return true;
+		}
+		
+		for (SootClass c : interfaze.getInterfaces()) {
+			if (recursiveCheck(child, c)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private Collection<SootClass> genSupers(SootClass c){
+		Collection<SootClass> clazzes = new HashSet<SootClass>();
+		clazzes.add(c);
+		try {
+			if (c.hasSuperclass()) {
+				clazzes.addAll(genSupers(c.getSuperclass()));
+			}
+		} catch(Exception e) {
+		}
+		try {
+			for (SootClass interfaze : c.getInterfaces()) {
+				clazzes.addAll(genSupers(interfaze));
+			}
+		} catch(Exception e) {
+		}
+		
+		return clazzes;
+	}
+	
+	private SootClass intersect(SootClass c1, SootClass c2) {
+		Collection<SootClass> clazzes1 = genSupers(c1);
+		Collection<SootClass> clazzes2 = genSupers(c2);
+		
+		for (SootClass cl1 : clazzes1) {
+			for (SootClass cl2 : clazzes2) {
+				if (cl2.getName().equals(cl1.getName())) {
+					if (!cl2.getName().equals("java.lang.Object")) {
+						return cl2;
+					}
+				}
+			}
+		}
+		return null;
+	}
+	
 	private boolean isSubclassOf(SootClass child, SootClass parent) {
 //		System.out.println("Child: " + child.getName() + ", Parent: " + parent.getName());
 		if (child.getName().equals(parent.getName())) {
@@ -205,6 +283,7 @@ public class DecoratorAnalyzer extends AbstractAnalyzer{
 				return true;
 			}
 		}
+		
 		return isSubclass;
 	}
 

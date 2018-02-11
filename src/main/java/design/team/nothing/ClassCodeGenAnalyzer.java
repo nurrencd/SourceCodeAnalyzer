@@ -50,7 +50,7 @@ public class ClassCodeGenAnalyzer extends AbstractAnalyzer {
 					}
 				}
 
-				code.append(current.generateClassCode(c, patternType, prop, pattern) + "\n");
+				code.append(current.generateClassCode(c, patternType, prop) + "\n");
 			}
 		}
 

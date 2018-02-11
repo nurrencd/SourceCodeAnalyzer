@@ -72,17 +72,9 @@ public class SootClassAnalyzer extends AbstractAnalyzer {
 			Collection<SootClass> classesRem = new HashSet<SootClass>();
 			String[] clazzes = prop.getProperty("classlist").split(" ");
 			for (String str : clazzes){
-				if (!str.contains("java")){
-					continue;
-				}
+				
 				sb.addClass(str);
 				//scene.addClass(c);
-				try {
-					//SootClass c = SootResolver.v().resolveClass(str, SootClass.SIGNATURES);
-//					/scene.addClass(c);
-				}catch(Exception e){	
-					System.out.println("Failed to load: " + str);
-				}
 			}
 //			for (SootClass c : scene.getClasses()){
 //				boolean rm = true;
@@ -134,7 +126,6 @@ public class SootClassAnalyzer extends AbstractAnalyzer {
 			for (SootClass c : classesRem){
 				scene.removeClass(c);
 			}
-			
 		}
 		
 		

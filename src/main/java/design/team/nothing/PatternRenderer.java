@@ -2,6 +2,7 @@ package design.team.nothing;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Properties;
 
 import design.team.nothing.Relationship.RelationshipType;
@@ -17,9 +18,11 @@ public abstract class PatternRenderer {
 	
 	protected String patternType;
 	protected Pattern pattern;
+	protected SootClass currrent;
 	
-	public String generateClassCode(SootClass c, String patternType, Properties prop, Pattern pattern) {
+	public String generateClassCode(SootClass c, String patternType, Properties prop) {
 		this.pattern = pattern;
+		this.currrent = c;
 		this.patternType = patternType;
 		StringBuilder code = new StringBuilder();
 		code.append(generateClassSignature(c) + " ");
